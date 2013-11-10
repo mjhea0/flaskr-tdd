@@ -2,8 +2,6 @@
 
 As many of you know, Flaskr - a mini-blog-like-app - is the app you build for the official [tutorial](http://flask.pocoo.org/docs/tutorial/introduction/) for Flask, the awesome awesome, Python-based micro web framework. I've gone through the tutorial more times than I care to admit. Anyway, I wanted to take the tutorial a step further by adding test driven development and adding in a bit of jQuery. This post is that tutorial. Enjoy.
 
-> Before beginning, please note that all `{}`  tags in the Templates should be double tags `{{`
-
 ## Test Driven Development?
 
 ![tdd](https://raw.github.com/mjhea0/flaskr-tdd/master/static/tdd.png)
@@ -33,7 +31,7 @@ $ easy_install pip
 
 #### Now install [virtualenv](https://pypi.python.org/pypi/virtualenv) to create an isolated environment for development. 
 
-This is standard practice. Always, always, ALWAYS use virtualenv. If you don't, you will eventually run into problems with compability between different dependencies. Just do it.
+This is standard practice. Always, always, ALWAYS use virtualenv. If you don't, you will eventually run into problems with compatibility between different dependencies. Just do it.
 
 ```sh 
 $ pip install virtualenv
@@ -299,13 +297,13 @@ import tempfile
 class BasicTestCase(unittest.TestCase):
 
   def test_index(self):
-    """inital test. ensure flask was set up correctly"""
+    """initial test. ensure flask was set up correctly"""
     tester = app.app.test_client(self)
     response = tester.get('/', content_type='html/text')
     self.assertEqual(response.status_code, 200)
 
   def test_database(self):
-  	"""inital test. ensure that the database exists"""
+  	"""initial test. ensure that the database exists"""
 	tester = os.path.exists("flaskr.db")
   	self.assertEqual(tester, True)
 
@@ -372,7 +370,7 @@ If you run the tests now, all will fail except for `test_database`. Let's get th
 
 #### Show Entries
 
-First, add a View for diplaying the entires to "app.py".
+First, add a View for displaying the entires to "app.py".
 
 ```python
 @app.route('/')
@@ -389,23 +387,23 @@ Then add the "index.html" template to the "templates" folder.
 ```html
 <!doctype html>
 <title>Flaskr</title>
-<link rel=stylesheet type=text/css href="{ url_for('static', filename='style.css') }">
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
 <div class=page>
   <h1>Flaskr-TDD</h1>
   <div class=metanav>
   {% if not session.logged_in %}
-    <a href="{ url_for('login') }">log in</a>
+    <a href="{{ url_for('login') }}">log in</a>
   {% else %}
-    <a href="{ url_for('logout') }">log out</a>
+    <a href="{{ url_for('logout') }}">log out</a>
   {% endif %}
   </div>
   {% for message in get_flashed_messages() %}
-    <div class=flash>{ message }</div>
+    <div class=flash>{{ message }}</div>
   {% endfor %}
   {% block body %}{% endblock %}
 </div>
   {% if session.logged_in %}
-    <form action="{ url_for('add_entry') }" method=post class=add-entry>
+    <form action="{{ url_for('add_entry') }}" method=post class=add-entry>
       <dl>
         <dt>Title:
         <dd><input type=text size=30 name=title>
@@ -417,7 +415,7 @@ Then add the "index.html" template to the "templates" folder.
   {% endif %}
   <ul class=entries>
   {% for entry in entries %}
-    <li><h2>{ entry.title }</h2>{ entry.text|safe }
+    <li><h2>{{ entry.title }}</h2>{{ entry.text|safe }}
   {% else %}
     <li><em>No entries yet. Add some!</em>
   {% endfor %}
@@ -466,24 +464,24 @@ Add the template, "login.html":
 ```html
 <!doctype html>
 <title>Flaskr-TDD | Login</title>
-<link rel=stylesheet type=text/css href="{ url_for('static', filename='style.css') }">
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
 <div class=page>
   <h1>Flaskr</h1>
   <div class=metanav>
   {% if not session.logged_in %}
-    <a href="{ url_for('login') }">log in</a>
+    <a href="{{ url_for('login') }}">log in</a>
   {% else %}
-    <a href="{ url_for('logout') }">log out</a>
+    <a href="{{ url_for('logout') }}">log out</a>
   {% endif %}
   </div>
   {% for message in get_flashed_messages() %}
-    <div class=flash>{ message }</div>
+    <div class=flash>{{ message }}</div>
   {% endfor %}
   {% block body %}{% endblock %}
 </div>
   <h2>Login</h2>
-  {% if error %}<p class=error><strong>Error:</strong> { error }{% endif %}
-  <form action="{ url_for('login') }" method=post>
+  {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
+  <form action="{{ url_for('login') }}" method=post>
     <dl>
       <dt>Username:
       <dd><input type=text name=username>
@@ -583,7 +581,7 @@ Now let's add some simple jQuery.
 Open "index.html" and add a class to the `<li>` tag that displays each entry:
 
 ```html
-<li class=entry><h2>{ entry.title }</h2>{ entry.text|safe }
+<li class=entry><h2>{{ entry.title }}</h2>{{ entry.text|safe }}
 ```
 
 Also add the following scripts to the `<head>`:
@@ -591,7 +589,7 @@ Also add the following scripts to the `<head>`:
 ```html
 <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-<script type=text/javascript src="{url_for('static', filename='main.js') }"></script>
+<script type=text/javascript src="{{url_for('static', filename='main.js') }}"></script>
 ```
 
 Finally, create a "main.js" file in your "static" directory and add the following code:
@@ -670,11 +668,3 @@ $ heroku open
 ## Conclusion
 
 Want my code? Grab it [here](https://github.com/mjhea0/flaskr-tdd). View my app on [Heroku](http://flaskr-tdd.herokuapp.com/). Cheers!
-
-
-
-
-
-
-
-
