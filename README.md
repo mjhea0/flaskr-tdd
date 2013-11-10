@@ -603,7 +603,7 @@ $(function() {
 });
 ```
 
-Test this out by adding two new entries, click on one of them. It should be removed from the DOM.
+Test this out by adding two new entries, click on one of them. It should be removed from the DOM. But wait?! Hit refresh. Why are the posts still there? Well, because they are not being removed from the database. This is what AJAX is for. If you're new to AJAX, this could be a nice weekend project. Once someone figures it out, issue a pull request. Cheers!
 
 ## Heroku
 
