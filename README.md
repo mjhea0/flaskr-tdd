@@ -667,4 +667,6 @@ $ heroku open
 
 ## Conclusion
 
-Want my code? Grab it [here](https://github.com/mjhea0/flaskr-tdd). View my app on [Heroku](http://flaskr-tdd.herokuapp.com/). Cheers!
+1. Want my code? Grab it [here](https://github.com/mjhea0/flaskr-tdd). 
+2. View my app on [Heroku](http://flaskr-tdd.herokuapp.com/). Cheers!
+3. Want more Flask fun? Check out [Real Python](http://www.realpython.com)
