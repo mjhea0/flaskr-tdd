@@ -2,7 +2,7 @@
 
 As many of you know, Flaskr - a mini-blog-like-app - is the app you build for the official [tutorial](http://flask.pocoo.org/docs/tutorial/introduction/) for Flask, the awesome, Python-based micro web framework. I've gone through the tutorial more times than I care to admit. Anyway, I wanted to take the tutorial a step further by adding test driven development and adding in a bit of jQuery. This post is that tutorial. Enjoy.
 
-Also, if you are completely new to Flask and/or web development in general, it's important to grasp these basic fundamentals:
+Also, if you are completely new to Flask and/or web development in general, it's important to grasp these basic fundamental concepts:
 
 1. The difference between GET and POST request and how functions within the app handle each.
 2. What a "request" is.
@@ -465,6 +465,8 @@ def logout():
     return redirect(url_for('index'))
 ```
 
+In the above `login()` function, the decorator indicates that the route can accept either a GET or POST request. Put simply, a request is initiated by the end user when they access the `/login` url. The difference between these requests is simple: GET is used for simply accessing a webpage, while POST is used when information is sent to the server. Thus, when a user simply accesses the `/login` url, they are using a GET request, but when they attempt to login, a POST request is used.
+
 Add the template, "login.html":
 
 ```html
@@ -676,3 +678,7 @@ $ heroku open
 1. Want my code? Grab it [here](https://github.com/mjhea0/flaskr-tdd). 
 2. View my app on [Heroku](http://flaskr-tdd.herokuapp.com/). Cheers!
 3. Want more Flask fun? Check out [Real Python](http://www.realpython.com)
+
+## Change Log
+
+- 11/11/2013: Added information on requests.
