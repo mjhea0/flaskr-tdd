@@ -12,7 +12,7 @@ Also, if you are completely new to Flask and/or web development in general, it's
 
 ![tdd](https://raw.github.com/mjhea0/flaskr-tdd/master/static/tdd.png)
 
-Test Driven Development (TDD) is an iterative development cycle that emphasizes writing automated tests before writing the actual feature of function. Put another away, TDD combines building and testing. This process not only helps ensure correctness of the code - but also helps to indirectly evolve the design and architecture of the project at hand. 
+Test Driven Development (TDD) is an iterative development cycle that emphasizes writing automated tests before writing the actual feature of function. Put another way, TDD combines building and testing. This process not only helps ensure correctness of the code - but also helps to indirectly evolve the design and architecture of the project at hand. 
 
 TDD usually follows the "Red-Green-Refactor" cycle, as shown in the image above:
 
@@ -248,7 +248,7 @@ class BasicTestCase(unittest.TestCase):
 
   def test_database(self):
 	tester = os.path.exists("flaskr.db")
-  	self.assertEqual(tester, True)
+  	self.assertTrue(tester)
 
 if __name__ == '__main__':
     unittest.main()
