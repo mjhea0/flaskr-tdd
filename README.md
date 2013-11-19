@@ -682,3 +682,4 @@ $ heroku open
 ## Change Log
 
 - 11/11/2013: Added information on requests.
+- 11/19/2013: Fixed typo. Updated unit tests.
