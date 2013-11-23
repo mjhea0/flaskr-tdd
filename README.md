@@ -27,6 +27,7 @@ TDD usually follows the "Red-Green-Refactor" cycle, as shown in the image above:
 
 ```sh
 $ mkdir flaskr-tdd
+$ cd flaskr-tdd
 ```
 
 Install pip, which is a [package management](http://en.wikipedia.org/wiki/Package_management_system) system for Python, similar to gem or npm for Ruby and Node, respectively. 
