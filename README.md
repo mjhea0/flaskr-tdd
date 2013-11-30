@@ -283,7 +283,14 @@ def close_db(error):
         g.sqlite_db.close()
 ```
 
-Run "app.py", then run the test again. Does it pass?
+Now it is possible to create a database by starting up a Python shell and importing and calling the init_db function:
+
+```python
+>>> from app import init_db
+>>> init_db()
+```
+
+Close the shell, then run the test again. Does it pass?
 
 ## Templates and Views
 
