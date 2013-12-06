@@ -681,6 +681,110 @@ $ heroku open
 
 #### TEST!
 
+## More Color
+
+Let's go ahead and update the styles to Bootstrap 3. 
+
+First, comment out the styles in "style.css".
+
+Remove that stylesheet - 
+
+`<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">` 
+
+- from both "index.html" and "login.html". 
+
+Then add this stylesheet to both files:
+
+`<link rel=stylesheet type=text/css href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">`
+
+Replace the code in "index.html" with:
+
+```html
+<!doctype html>
+<html>
+  <head>
+    <title>Flaskr-TDD | Entries</title>
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script type=text/javascript src="{{url_for('static', filename='main.js') }}"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Flaskr</h1>
+      {% for message in get_flashed_messages() %}
+        <div class="flash">{{ message }}</div>
+      {% endfor %}
+      <h3>Login</h3>
+      {% if error %}<p class="error"><strong>Error:</strong> {{ error }}{% endif %}
+      <form action="{{ url_for('login') }}" method="post">
+        <dl>
+          <dt>Username:
+          <dd><input type="text" name="username">
+          <dt>Password:
+          <dd><input type="password" name="password">
+          <br>
+          <br>
+          <dd><input type="submit" class="btn btn-default" value="Login">
+          <span>Use "admin" for username and password</span>
+        </dl>
+      </form>
+    </div>
+  </body>
+</html>
+```
+
+And replace the code in "login.html" with:
+
+```html
+<!doctype html>
+<html>
+  <head>
+    <title>Flaskr-TDD | Entries</title>
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script type=text/javascript src="{{url_for('static', filename='main.js') }}"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Flaskr-TDD</h1>
+      {% if not session.logged_in %}
+        <a href="{{ url_for('login') }}">log in</a>
+      {% else %}
+        <a href="{{ url_for('logout') }}">log out</a>
+      {% endif %}
+      {% for message in get_flashed_messages() %}
+        <div class="flash">{{ message }}</div>
+      {% endfor %}
+      {% if session.logged_in %}
+        <form action="{{ url_for('add_entry') }}" method="post" class="add-entry">
+          <dl>
+            <dt>Title:
+            <dd><input type="text" size="30" name="title">
+            <dt>Text:
+            <dd><textarea name="text" rows="5" cols="40"></textarea>
+            <br>
+            <br>
+            <dd><input type="submit" class="btn btn-default" value="Share">
+          </dl>
+        </form>
+      {% endif %}
+      <br>
+      <ul class="entries">
+      {% for entry in entries %}
+        <li class="entry"><h2>{{ entry.title }}</h2>{{ entry.text|safe }}
+      {% else %}
+        <li><em>No entries yet. Add some!</em>
+      {% endfor %}
+      </ul>
+    </div>
+  </body>
+</html>
+```
+
+#### Commit your code, then PUSH the new version to Heroku!
+
 ## Conclusion
 
 1. Want my code? Grab it [here](https://github.com/mjhea0/flaskr-tdd). 
@@ -692,3 +796,4 @@ $ heroku open
 - 11/11/2013: Added information on requests.
 - 11/19/2013: Fixed typo. Updated unit tests.
 - 11/29/2013: Updated unit tests.
+- 12/06/2013: Added Bootstrap 3 styles
