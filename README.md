@@ -691,7 +691,7 @@ Remove that stylesheet -
 
 `<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">` 
 
-- from both "index.html" and "login.html". 
+-from both "index.html" and "login.html". 
 
 Then add this stylesheet to both files:
 
