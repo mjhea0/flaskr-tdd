@@ -286,6 +286,13 @@ def close_db(error):
         g.sqlite_db.close()
 ```
 
+And add our `init_db()` function at the bottom of `app.py` to make sure we start the server each time with a fresh database.
+```python
+if __name__ == '__main__':
+    init_db()
+    app.run()
+```
+
 Now it is possible to create a database by starting up a Python shell and importing and calling the init_db function:
 
 ```python
