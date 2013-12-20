@@ -260,7 +260,10 @@ Run it to make sure it fails. Now add the following code to "app.py".
 ```python
 # connect to database
 def connect_db():
-    return sqlite3.connect(app.config['DATABASE'])
+    """Connects to the database."""
+    rv = sqlite3.connect(app.config['DATABASE'])
+    rv.row_factory = sqlite3.Row
+    return rv
 
 # create the database
 def init_db():
