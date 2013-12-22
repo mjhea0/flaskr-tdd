@@ -573,7 +573,7 @@ Perfect.
 
 ## Add some color
 
-Save the following styles to "styles.css" in the "static" folder.
+Save the following styles to "style.css" in the "static" folder.
 
 ```css
 body            { font-family: sans-serif; background: #eee; }
