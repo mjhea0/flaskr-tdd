@@ -260,7 +260,10 @@ Run it to make sure it fails. Now add the following code to "app.py".
 ```python
 # connect to database
 def connect_db():
-    return sqlite3.connect(app.config['DATABASE'])
+    """Connects to the database."""
+    rv = sqlite3.connect(app.config['DATABASE'])
+    rv.row_factory = sqlite3.Row
+    return rv
 
 # create the database
 def init_db():
@@ -281,6 +284,13 @@ def get_db():
 def close_db(error):
     if hasattr(g, 'sqlite_db'):
         g.sqlite_db.close()
+```
+
+And add our `init_db()` function at the bottom of `app.py` to make sure we start the server each time with a fresh database.
+```python
+if __name__ == '__main__':
+    init_db()
+    app.run()
 ```
 
 Now it is possible to create a database by starting up a Python shell and importing and calling the init_db function:
@@ -563,7 +573,7 @@ Perfect.
 
 ## Add some color
 
-Save the following styles to "styles.css" in the "static" folder.
+Save the following styles to "style.css" in the "static" folder.
 
 ```css
 body            { font-family: sans-serif; background: #eee; }
