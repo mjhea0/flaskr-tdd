@@ -199,7 +199,7 @@ So, we are expecting a 404 error. Run the test. This will fail.
 # imports
 import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, \
-     abort, render_template, flash
+     abort, render_template, flash, jsonify
 
 # configuration
 DATABASE = 'flaskr.db'
@@ -391,7 +391,7 @@ First, add a View for displaying the entires to "app.py".
 def show_entries():
 	"""Searches the database for entries, then displays them."""
     db = get_db()
-    cur = db.execute('select title, text from entries order by id desc')
+    cur = db.execute('select * from entries order by id desc')
     entries = cur.fetchall()
     return render_template('index.html', entries=entries)
 ```
@@ -597,7 +597,7 @@ Now let's add some simple jQuery.
 Open "index.html" and add a class to the `<li>` tag that displays each entry:
 
 ```html
-<li class=entry><h2>{{ entry.title }}</h2>{{ entry.text|safe }}
+<li class="entry"><h2 id={{ entry.id }}>{{ entry.title }}</h2>{{ entry.text|safe }}
 ```
 
 Also add the following scripts to the `<head>`:
@@ -608,18 +608,59 @@ Also add the following scripts to the `<head>`:
 <script type=text/javascript src="{{url_for('static', filename='main.js') }}"></script>
 ```
 
-Finally, create a "main.js" file in your "static" directory and add the following code:
+Create a "main.js" file in your "static" directory and add the following code:
 
 ```javascript
 $(function() {
   console.log( "ready!" );
   $('.entry').on('click', function(){
-  	$(this).remove();
+    var entry = this;
+    var post_id = $(this).find('h2').attr('id');
+    $.ajax({
+      type:'GET',
+      url: '/delete' + '/' + post_id,
+      context: entry,
+      success:function(result){
+        if(result['status'] === 1){
+          $(this).remove();
+          console.log(result);
+        }
+      }
+    });
   });
 });
+
 ```
 
-Test this out by adding two new entries, click on one of them. It should be removed from the DOM. But wait?! Hit refresh. Why are the posts still there? Well, because they are not being removed from the database. This is what AJAX is for. If you're new to AJAX, this could be a nice weekend project. Once someone figures it out, issue a pull request. Cheers!
+Add a new function to "app.py" to remove the post from the database:
+
+```python
+@app.route('/delete/<post_id>', methods=['GET'])
+def delete_entry(post_id):
+    '''Delete post from database'''
+    result = { 'status':0, 'message': 'Error'  }
+    try:
+        db = get_db()
+        db.execute('delete from entries where id=' + post_id)
+        db.commit()
+        result = { 'status':1, 'message': "Post Deleted" }
+    except Exception as e:
+        result = { 'status':0, 'message': repr(e) }
+
+    return jsonify(result)
+```
+
+Finally, add a new test:
+
+```python
+def test_delete_message(self):
+    """Ensure the messages are being deleted"""
+    rv = self.app.get('/delete/1')
+    data = json.loads(rv.data)
+    self.assertEqual(data['status'], 1)
+```
+
+Test this out by adding two new entries, click on one of them. It should be removed from the DOM as well as the database. Double check this. (Thanks to [Srijan](https://github.com/srijanss) for updating this.)
 
 ## Heroku
 
