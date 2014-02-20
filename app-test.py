@@ -2,7 +2,7 @@ import app
 import unittest
 import os
 import tempfile
-
+from flask import json
 
 class BasicTestCase(unittest.TestCase):
 
@@ -71,6 +71,12 @@ class FlaskrTestCase(unittest.TestCase):
         self.assertNotIn(b'No entries here so far', rv.data)
         self.assertIn(b'&lt;Hello&gt;', rv.data)
         self.assertIn(b'<strong>HTML</strong> allowed here', rv.data)
+
+    def test_delete_message(self):
+        """Ensure the messages are being deleted"""
+        rv = self.app.get('/delete/1')
+        data = json.loads(rv.data)
+        self.assertEqual(data['status'], 1)
 
 
 if __name__ == '__main__':
