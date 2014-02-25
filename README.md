@@ -8,6 +8,15 @@ Also, if you are completely new to Flask and/or web development in general, it's
 2. What a "request" is.
 3. How HTML pages are rendered and/or returned to the end user.
 
+### Change Log
+
+- 11/11/2013: Added information on requests.
+- 11/19/2013: Fixed typo. Updated unit tests.
+- 11/29/2013: Updated unit tests.
+- 12/06/2013: Added Bootstrap 3 styles
+- 02/20/2014: Completed AJAX.
+- 02/25/2014: Upgrated to SQLAlchemy.
+
 ## Test Driven Development?
 
 ![tdd](https://raw.github.com/mjhea0/flaskr-tdd/master/static/tdd.png)
@@ -834,6 +843,20 @@ And replace the code in "login.html" with:
 </html>
 ```
 
+## Upgrade to SQLAlchemy
+
+Time to upgrade to [Flask-SQLAlchemy](http://pythonhosted.org/Flask-SQLAlchemy/), in order to better manage our database. 
+
+#### Setup
+
+Start by installing Flask-SQLAlchemy:
+
+```sh     
+$ pip install Flask-SQLAlchemy==1.0
+```
+
+
+
 #### Commit your code, then PUSH the new version to Heroku!
 
 ## Conclusion
@@ -841,10 +864,3 @@ And replace the code in "login.html" with:
 1. Want my code? Grab it [here](https://github.com/mjhea0/flaskr-tdd). 
 2. View my app on [Heroku](http://flaskr-tdd.herokuapp.com/). Cheers!
 3. Want more Flask fun? Check out [Real Python](http://www.realpython.com)
-
-## Change Log
-
-- 11/11/2013: Added information on requests.
-- 11/19/2013: Fixed typo. Updated unit tests.
-- 11/29/2013: Updated unit tests.
-- 12/06/2013: Added Bootstrap 3 styles
