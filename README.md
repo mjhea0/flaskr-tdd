@@ -985,7 +985,7 @@ if __name__ == '__main__':
     app.run()
 ```
 
-Notice the changes in the config at the top, as well the means in which we're now accessing and manipulating the the database in each function - via SQLAlchemy instead of vanilla SQL.
+Notice the changes in the config at the top, as well the means in which we're now accessing and manipulating the database in each function - via SQLAlchemy instead of vanilla SQL.
 
 #### index.html
 
