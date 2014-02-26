@@ -871,7 +871,7 @@ db.create_all()
 db.session.commit()
 ```
 
-This file will be used to create our new database. Go ahead and delete the old one along with the "schema.sql" file. Next add a "models.py" file:
+This file will be used to create our new database. Go ahead and delete the old .db along with the "schema.sql" file. Next add a "models.py" file:
 
 ```python
 from app import db
