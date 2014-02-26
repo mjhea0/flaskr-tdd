@@ -34,7 +34,7 @@
       <br>
       <ul class="entries">
       {% for entry in entries %}
-        <li class="entry"><h2 id={{ entry.id }}>{{ entry.title }}</h2>{{ entry.text|safe }}
+        <li class="entry"><h2 id={{ entry.post_id }}>{{ entry.title }}</h2>{{ entry.text|safe }}
       {% else %}
         <li><em>No entries yet. Add some!</em>
       {% endfor %}

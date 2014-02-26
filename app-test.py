@@ -1,14 +1,17 @@
-import app
+from app import app, db
 import unittest
 import os
 import tempfile
 from flask import json
 
+
+TEST_DB = 'test.db'
+
 class BasicTestCase(unittest.TestCase):
 
     def test_index(self):
         """inital test. ensure flask was set up correctly"""
-        tester = app.app.test_client(self)
+        tester = app.test_client(self)
         response = tester.get('/', content_type='html/text')
         self.assertEqual(response.status_code, 200)
 
@@ -20,17 +23,19 @@ class BasicTestCase(unittest.TestCase):
 
 class FlaskrTestCase(unittest.TestCase):
 
+
     def setUp(self):
         """Set up a blank temp database before each test"""
-        self.db_fd, app.app.config['DATABASE'] = tempfile.mkstemp()
-        app.app.config['TESTING'] = True
-        self.app = app.app.test_client()
-        app.init_db()
+        basedir = os.path.abspath(os.path.dirname(__file__))
+        app.config['TESTING'] = True
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
+                os.path.join(basedir, TEST_DB)
+        self.app = app.test_client()
+        db.create_all()
 
     def tearDown(self):
         """Destroy blank temp database after each test"""
-        os.close(self.db_fd)
-        os.unlink(app.app.config['DATABASE'])
+        db.drop_all()
 
     def login(self, username, password):
         """Login helper function"""
@@ -52,18 +57,18 @@ class FlaskrTestCase(unittest.TestCase):
 
     def test_login_logout(self):
         """Test login and logout using helper functions"""
-        rv = self.login(app.app.config['USERNAME'], app.app.config['PASSWORD'])
+        rv = self.login(app.config['USERNAME'], app.config['PASSWORD'])
         self.assertIn(b'You were logged in', rv.data)
         rv = self.logout()
         self.assertIn(b'You were logged out', rv.data)
-        rv = self.login(app.app.config['USERNAME'] + 'x', app.app.config['PASSWORD'])
+        rv = self.login(app.config['USERNAME'] + 'x', app.config['PASSWORD'])
         self.assertIn(b'Invalid username', rv.data)
-        rv = self.login(app.app.config['USERNAME'], app.app.config['PASSWORD'] + 'x')
+        rv = self.login(app.config['USERNAME'], app.config['PASSWORD'] + 'x')
         self.assertIn(b'Invalid password', rv.data)
 
     def test_messages(self):
         """Ensure that user can post messages"""
-        self.login(app.app.config['USERNAME'], app.app.config['PASSWORD'])
+        self.login(app.config['USERNAME'], app.config['PASSWORD'])
         rv = self.app.post('/add', data=dict(
             title='<Hello>',
             text='<strong>HTML</strong> allowed here'

@@ -1,8 +1,10 @@
 $(function() {
   console.log( "ready!" );
   $('.entry').on('click', function(){
+    console.log("test")
     var entry = this;
     var post_id = $(this).find('h2').attr('id');
+    console.log(post_id)
     $.ajax({
       type:'GET',
       url: '/delete' + '/' + post_id,
