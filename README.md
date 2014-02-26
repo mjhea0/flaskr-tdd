@@ -995,7 +995,7 @@ Update this line:
 <li class="entry"><h2 id={{ entry.post_id }}>{{ entry.title }}</h2>{{ entry.text|safe }}
 ```
 
-Pay attention to the `post_id`. Check the database to ensure that their is a matching field.
+Pay attention to the `post_id`. Check the database to ensure that there is a matching field.
 
 #### Tests
 
