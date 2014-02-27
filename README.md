@@ -757,7 +757,7 @@ Then add this stylesheet to both files:
 
 `<link rel=stylesheet type=text/css href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">`
 
-Replace the code in "index.html" with:
+Replace the code in "login.html" with:
 
 ```html
 <!doctype html>
@@ -794,7 +794,7 @@ Replace the code in "index.html" with:
 </html>
 ```
 
-And replace the code in "login.html" with:
+And replace the code in "index.html" with:
 
 ```html
 <!doctype html>
@@ -986,6 +986,11 @@ if __name__ == '__main__':
 ```
 
 Notice the changes in the config at the top, as well the means in which we're now accessing and manipulating the database in each function - via SQLAlchemy instead of vanilla SQL.
+
+Run `create_db.py` to create the initial database:
+```sh
+$ python create_db.py
+```
 
 #### index.html
 
