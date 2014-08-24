@@ -21,7 +21,7 @@ Also, if you are completely new to Flask and/or web development in general, it's
 
 ![tdd](https://raw.github.com/mjhea0/flaskr-tdd/master/static/tdd.png)
 
-Test Driven Development (TDD) is an iterative development cycle that emphasizes writing automated tests before writing the actual feature of function. Put another way, TDD combines building and testing. This process not only helps ensure correctness of the code - but also helps to indirectly evolve the design and architecture of the project at hand. 
+Test Driven Development (TDD) is an iterative development cycle that emphasizes writing automated tests before writing the actual feature of function. Put another way, TDD combines building and testing. This process not only helps ensure correctness of the code - but also helps to indirectly evolve the design and architecture of the project at hand.
 
 TDD usually follows the "Red-Green-Refactor" cycle, as shown in the image above:
 
@@ -39,17 +39,17 @@ $ mkdir flaskr-tdd
 $ cd flaskr-tdd
 ```
 
-Install pip, which is a [package management](http://en.wikipedia.org/wiki/Package_management_system) system for Python, similar to gem or npm for Ruby and Node, respectively. 
+Install pip, which is a [package management](http://en.wikipedia.org/wiki/Package_management_system) system for Python, similar to gem or npm for Ruby and Node, respectively.
 
 ```sh
 $ easy_install pip
 ```
 
-#### Now install [virtualenv](https://pypi.python.org/pypi/virtualenv) to create an isolated environment for development. 
+#### Now install [virtualenv](https://pypi.python.org/pypi/virtualenv) to create an isolated environment for development.
 
 This is standard practice. Always, always, ALWAYS use virtualenv. If you don't, you will eventually run into problems with compatibility between different dependencies. Just do it.
 
-```sh 
+```sh
 $ pip install virtualenv
 ```
 
@@ -70,7 +70,7 @@ $ pip install Flask
 
 ## First Test
 
-Let's start with a simple "hello, world" app. 
+Let's start with a simple "hello, world" app.
 
 #### Create a test file:
 
@@ -238,7 +238,7 @@ Launch the server. You should see the 404 error because no routes or views are s
 
 ## Database Setup
 
-Essentially, we want to open a database connection, create the database/schema if it doesn't already exist, then close the connection each time the application is ran. 
+Essentially, we want to open a database connection, create the database/schema if it doesn't already exist, then close the connection each time the application is ran.
 
 How do we test for the existence of a file?
 
@@ -743,15 +743,15 @@ $ heroku open
 
 ## More Color
 
-Let's go ahead and update the styles to Bootstrap 3. 
+Let's go ahead and update the styles to Bootstrap 3.
 
 First, comment out the styles in "style.css".
 
-Remove that stylesheet - 
+Remove that stylesheet -
 
-`<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">` 
+`<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">`
 
--from both "index.html" and "login.html". 
+-from both "index.html" and "login.html".
 
 Then add this stylesheet to both files:
 
@@ -845,13 +845,13 @@ And replace the code in "login.html" with:
 
 ## Upgrade to SQLAlchemy
 
-Time to upgrade to [Flask-SQLAlchemy](http://pythonhosted.org/Flask-SQLAlchemy/), in order to better manage our database. 
+Time to upgrade to [Flask-SQLAlchemy](http://pythonhosted.org/Flask-SQLAlchemy/), in order to better manage our database.
 
 #### Setup
 
 Start by installing Flask-SQLAlchemy:
 
-```sh     
+```sh
 $ pip install Flask-SQLAlchemy
 ```
 
@@ -876,6 +876,7 @@ This file will be used to create our new database. Go ahead and delete the old .
 ```python
 from app import db
 
+
 class Flaskr(db.Model):
 
     __tablename__ = "flaskr"
@@ -883,7 +884,6 @@ class Flaskr(db.Model):
     post_id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
     text = db.Column(db.String, nullable=False)
-
 
     def __init__(self, title, text):
         self.title = title
@@ -901,7 +901,7 @@ from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, flash, jsonify
 from flask.ext.sqlalchemy import SQLAlchemy
 import os
-    
+
 # grabs the folder where the script runs
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -914,7 +914,7 @@ PASSWORD = 'admin'
 
 # defines the full path for the database
 DATABASE_PATH = os.path.join(basedir, DATABASE)
-    
+
 # the database uri
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + DATABASE_PATH
 
@@ -1098,6 +1098,6 @@ We're mostly updating the `setUp()` and `tearDown()` methods. Pay close attentio
 
 ## Conclusion
 
-1. Want my code? Grab it [here](https://github.com/mjhea0/flaskr-tdd). 
+1. Want my code? Grab it [here](https://github.com/mjhea0/flaskr-tdd).
 2. View my app on [Heroku](http://flaskr-tdd.herokuapp.com/). Cheers!
 3. Want more Flask fun? Check out [Real Python](http://www.realpython.com)

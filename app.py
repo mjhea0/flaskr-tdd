@@ -1,9 +1,9 @@
 # imports
-from flask import Flask, request, session, g, redirect, url_for, \
-     abort, render_template, flash, jsonify
+from flask import Flask, request, session, redirect, url_for, \
+    abort, render_template, flash, jsonify
 from flask.ext.sqlalchemy import SQLAlchemy
 import os
-    
+
 # grabs the folder where the script runs
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -16,7 +16,7 @@ PASSWORD = 'admin'
 
 # defines the full path for the database
 DATABASE_PATH = os.path.join(basedir, DATABASE)
-    
+
 # the database uri
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + DATABASE_PATH
 
@@ -26,6 +26,7 @@ app.config.from_object(__name__)
 db = SQLAlchemy(app)
 
 import models
+
 
 @app.route('/')
 def index():
@@ -69,18 +70,19 @@ def logout():
     flash('You were logged out')
     return redirect(url_for('index'))
 
+
 @app.route('/delete/<int:post_id>', methods=['GET'])
 def delete_entry(post_id):
     """Deletes post from database"""
-    result = { 'status':0, 'message': 'Error'  }
+    result = {'status': 0, 'message': 'Error'}
     try:
         new_id = post_id
         db.session.query(models.Flaskr).filter_by(post_id=new_id).delete()
         db.session.commit()
-        result = { 'status':1, 'message': "Post Deleted" }
+        result = {'status': 1, 'message': "Post Deleted"}
         flash('The entry was deleted.')
     except Exception as e:
-        result = { 'status':0, 'message': repr(e) }
+        result = {'status': 0, 'message': repr(e)}
     return jsonify(result)
 
 if __name__ == '__main__':
