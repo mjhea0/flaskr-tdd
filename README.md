@@ -16,6 +16,7 @@ Also, if you are completely new to Flask and/or web development in general, it's
 - 12/06/2013: Added Bootstrap 3 styles
 - 02/20/2014: Completed AJAX.
 - 02/25/2014: Upgraded to SQLAlchemy.
+- 08/24/2014: PEP8 updates. 
 
 ## Test Driven Development?
 
