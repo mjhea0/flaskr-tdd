@@ -239,7 +239,7 @@ Launch the server. You should see the 404 error because no routes or views are s
 
 ## Database Setup
 
-Essentially, we want to open a database connection, create the database/schema if it doesn't already exist, then close the connection each time the application is ran.
+Essentially, we want to open a database connection, create the database/schema if it doesn't already exist, then close the connection each time a test is ran.
 
 How do we test for the existence of a file?
 
