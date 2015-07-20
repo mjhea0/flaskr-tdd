@@ -16,7 +16,11 @@ Also, if you are completely new to Flask and/or web development in general, it's
 - 12/06/2013: Added Bootstrap 3 styles
 - 02/20/2014: Completed AJAX.
 - 02/25/2014: Upgraded to SQLAlchemy.
-- 08/24/2014: PEP8 updates. 
+- 08/24/2014: PEP8 updates.
+
+### Todo
+
+- Upgrade to Python 3!
 
 ## Test Driven Development?
 
@@ -1105,5 +1109,6 @@ We're mostly updating the `setUp()` and `tearDown()` methods. Pay close attentio
 ## Conclusion
 
 1. Want my code? Grab it [here](https://github.com/mjhea0/flaskr-tdd).
-2. View my app on [Heroku](http://flaskr-tdd.herokuapp.com/). Cheers!
-3. Want more Flask fun? Check out [Real Python](http://www.realpython.com)
+1. View my app on [Heroku](http://flaskr-tdd.herokuapp.com/). Cheers!
+1. Want more Flask fun? Check out [Real Python](http://www.realpython.com)
+1. Want something else added to this tutorial? Add an issue to the repo. Cheers!
