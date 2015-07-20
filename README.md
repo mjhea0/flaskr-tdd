@@ -8,6 +8,8 @@ Also, if you are completely new to Flask and/or web development in general, it's
 2. What a "request" is.
 3. How HTML pages are rendered and/or returned to the end user.
 
+> **NOTE**: This tutorial is powered by **[Real Python](https://realpython.com). Please support this open source project by purchasing our [courses](http://www.realpython.com/courses) to learn Python and web development with Django and Flask!
+
 ### Change Log
 
 - 11/11/2013: Added information on requests.
