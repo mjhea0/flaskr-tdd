@@ -183,65 +183,64 @@ Let's start with a simple "hello, world" app.
 
   This will setup a single table with three fields - "id", "title", and "text". SQLite will be used for our RDMS since it's built in to the standard Python library and requires no configuration.
 
-HERE
-
 ## Second Test
 
-Let's create the basic file for running our application. But first we need to write a test.
+Let's create the basic file for running our application. Before that though, we need to write a test first.
 
-Simply alter "app-test.py":
+1. Simply alter *app-test.py*:
 
-```python
-from app import app
+  ```python
+  from app import app
 
-import unittest
-
-class BasicTestCase(unittest.TestCase):
-
-  def test_index(self):
-    tester = app.test_client(self)
-    response = tester.get('/', content_type='html/text')
-    self.assertEqual(response.status_code, 404)
-
-if __name__ == '__main__':
-    unittest.main()
-```
-
-So, we are expecting a 404 error. Run the test. This will fail.
-
-#### Update app.py
-
-```python
-# imports
-import sqlite3
-from flask import Flask, request, session, g, redirect, url_for, \
-     abort, render_template, flash, jsonify
-
-# configuration
-DATABASE = 'flaskr.db'
-DEBUG = True
-SECRET_KEY = 'my_precious'
-USERNAME = 'admin'
-PASSWORD = 'admin'
-
-# create and initialize app
-app = Flask(__name__)
-app.config.from_object(__name__)
+  import unittest
 
 
-if __name__ == '__main__':
-    app.run()
-```
+  class BasicTestCase(unittest.TestCase):
 
-Here, we add in all required imports, create a configuration section for global variables, initialize the app, and then finally run the app.
+      def test_index(self):
+          tester = app.test_client(self)
+          response = tester.get('/', content_type='html/text')
+          self.assertEqual(response.status_code, 404)
 
-#### Run it
+  if __name__ == '__main__':
+      unittest.main()
+  ```
 
-```sh
-$ python app.py
-```
+  So, we are expecting a 404 error. Run the test. This will fail. Why does this fail? Simple. We are expecting a 404, but we actually get a 200 back since the route exists.
 
-Launch the server. You should see the 404 error because no routes or views are setup. Return to the terminal. Kill the server. Now run the unit test. It should pass.
+1. Update *app.py*:
+
+  ```python
+  # imports
+  import sqlite3
+  from flask import Flask, request, session, g, redirect, url_for, \
+       abort, render_template, flash, jsonify
+
+  # configuration
+  DATABASE = 'flaskr.db'
+  DEBUG = True
+  SECRET_KEY = 'my_precious'
+  USERNAME = 'admin'
+  PASSWORD = 'admin'
+
+  # create and initialize app
+  app = Flask(__name__)
+  app.config.from_object(__name__)
+
+
+  if __name__ == '__main__':
+      app.run()
+  ```
+
+  Here, we add in all required imports, create a configuration section for global variables, initialize the app, and then finally run the app.
+
+1. Run it:
+
+  ```sh
+  $ python app.py
+  ```
+
+  Launch the server. You should see the 404 error because no routes or views are setup. Return to the terminal. Kill the server. Now run the unit test. It should pass.
 
 ## Database Setup
 
