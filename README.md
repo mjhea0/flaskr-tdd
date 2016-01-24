@@ -12,6 +12,7 @@ Also, if you are completely new to Flask and/or web development in general, it's
 
 ### Change Log
 
+- 01/24/2016: Updated to Python 3!
 - 08/24/2014: PEP8 updates.
 - 02/25/2014: Upgraded to SQLAlchemy.
 - 02/20/2014: Completed AJAX.
@@ -19,10 +20,6 @@ Also, if you are completely new to Flask and/or web development in general, it's
 - 11/29/2013: Updated unit tests.
 - 11/19/2013: Fixed typo. Updated unit tests.
 - 11/11/2013: Added information on requests.
-
-### Todo
-
-- Upgrade to Python 3!
 
 ## Test Driven Development?
 
