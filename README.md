@@ -12,13 +12,13 @@ Also, if you are completely new to Flask and/or web development in general, it's
 
 ### Change Log
 
-- 11/11/2013: Added information on requests.
-- 11/19/2013: Fixed typo. Updated unit tests.
-- 11/29/2013: Updated unit tests.
-- 12/06/2013: Added Bootstrap 3 styles
-- 02/20/2014: Completed AJAX.
-- 02/25/2014: Upgraded to SQLAlchemy.
 - 08/24/2014: PEP8 updates.
+- 02/25/2014: Upgraded to SQLAlchemy.
+- 02/20/2014: Completed AJAX.
+- 12/06/2013: Added Bootstrap 3 styles
+- 11/29/2013: Updated unit tests.
+- 11/19/2013: Fixed typo. Updated unit tests.
+- 11/11/2013: Added information on requests.
 
 ### Todo
 
