@@ -327,30 +327,32 @@ Essentially, we want to open a database connection, create the database based on
 
 Next, we need to set up the Templates and associated Views, which define the routes. Think about this from a user standpoint. We need to log users in and out. Once logged in, users need to be able to post. Finally, we need to display posts.
 
-Write some tests for this.
+Write some tests for this first.
 
-#### Unit Tests
+### Unit Tests
 
 Take a look at the final code. I added docstrings for explanation.
 
 ```python
-import app
 import unittest
 import os
 import tempfile
+import app
+
 
 class BasicTestCase(unittest.TestCase):
 
-  def test_index(self):
-    """initial test. ensure flask was set up correctly"""
-    tester = app.app.test_client(self)
-    response = tester.get('/', content_type='html/text')
-    self.assertEqual(response.status_code, 200)
+    def test_index(self):
+        """initial test. ensure flask was set up correctly"""
+        tester = app.app.test_client(self)
+        response = tester.get('/', content_type='html/text')
+        self.assertEqual(response.status_code, 200)
 
-  def test_database(self):
-  	"""initial test. ensure that the database exists"""
-	tester = os.path.exists("flaskr.db")
-  	self.assertEqual(tester, True)
+    def test_database(self):
+        """initial test. ensure that the database exists"""
+        tester = os.path.exists("flaskr.db")
+        self.assertEqual(tester, True)
+
 
 class FlaskrTestCase(unittest.TestCase):
 
@@ -367,14 +369,14 @@ class FlaskrTestCase(unittest.TestCase):
         os.unlink(app.app.config['DATABASE'])
 
     def login(self, username, password):
-    	"""Login helper function"""
+        """Login helper function"""
         return self.app.post('/login', data=dict(
             username=username,
             password=password
         ), follow_redirects=True)
 
     def logout(self):
-    	"""Logout helper function"""
+        """Logout helper function"""
         return self.app.get('/logout', follow_redirects=True)
 
     # assert functions
@@ -386,18 +388,30 @@ class FlaskrTestCase(unittest.TestCase):
 
     def test_login_logout(self):
         """Test login and logout using helper functions"""
-        rv = self.login(app.app.config['USERNAME'],app.app.config['PASSWORD'])
+        rv = self.login(
+            app.app.config['USERNAME'],
+            app.app.config['PASSWORD']
+        )
         assert b'You were logged in' in rv.data
         rv = self.logout()
         assert b'You were logged out' in rv.data
-        rv = self.login(app.app.config['USERNAME'] + 'x',app.app.config['PASSWORD'])
+        rv = self.login(
+            app.app.config['USERNAME'] + 'x',
+            app.app.config['PASSWORD']
+        )
         assert b'Invalid username' in rv.data
-        rv = self.login(app.app.config['USERNAME'],app.app.config['PASSWORD'] + 'x')
+        rv = self.login(
+            app.app.config['USERNAME'],
+            app.app.config['PASSWORD'] + 'x'
+        )
         assert b'Invalid password' in rv.data
 
     def test_messages(self):
         """Ensure that user can post messages"""
-        self.login(app.app.config['USERNAME'],app.app.config['PASSWORD'])
+        self.login(
+            app.app.config['USERNAME'],
+            app.app.config['PASSWORD']
+        )
         rv = self.app.post('/add', data=dict(
             title='<Hello>',
             text='<strong>HTML</strong> allowed here'
@@ -411,186 +425,259 @@ if __name__ == '__main__':
     unittest.main()
 ```
 
-If you run the tests now, all will fail except for `test_database`. Let's get these all green, one at a time.
-
-#### Show Entries
-
-First, add a View for displaying the entires to "app.py".
-
-```python
-@app.route('/')
-def show_entries():
-	"""Searches the database for entries, then displays them."""
-    db = get_db()
-    cur = db.execute('select * from entries order by id desc')
-    entries = cur.fetchall()
-    return render_template('index.html', entries=entries)
-```
-
-Then add the "index.html" template to the "templates" folder.
-
-```html
-<!doctype html>
-<title>Flaskr</title>
-<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
-<div class=page>
-  <h1>Flaskr-TDD</h1>
-  <div class=metanav>
-  {% if not session.logged_in %}
-    <a href="{{ url_for('login') }}">log in</a>
-  {% else %}
-    <a href="{{ url_for('logout') }}">log out</a>
-  {% endif %}
-  </div>
-  {% for message in get_flashed_messages() %}
-    <div class=flash>{{ message }}</div>
-  {% endfor %}
-  {% block body %}{% endblock %}
-</div>
-  {% if session.logged_in %}
-    <form action="{{ url_for('add_entry') }}" method=post class=add-entry>
-      <dl>
-        <dt>Title:
-        <dd><input type=text size=30 name=title>
-        <dt>Text:
-        <dd><textarea name=text rows=5 cols=40></textarea>
-        <dd><input type=submit value=Share>
-      </dl>
-    </form>
-  {% endif %}
-  <ul class=entries>
-  {% for entry in entries %}
-    <li><h2>{{ entry.title }}</h2>{{ entry.text|safe }}
-  {% else %}
-    <li><em>No entries yet. Add some!</em>
-  {% endfor %}
-  </ul>
-  ```
-
-Run the tests now. You should see:
+If you run the tests now, all will fail except for `test_database()`:
 
 ```sh
-Ran 5 tests in 0.046s
+python app-test.py
+.FFFF
+======================================================================
+FAIL: test_index (__main__.BasicTestCase)
+initial test. ensure flask was set up correctly
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "app-test.py", line 13, in test_index
+    self.assertEqual(response.status_code, 200)
+AssertionError: 404 != 200
 
-FAILED (failures=1, errors=2)
-```
-
-#### User Login and Logout
-
-Update "app.py":
-
-```python
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    """User login/authentication/session management."""
-    error = None
-    if request.method == 'POST':
-        if request.form['username'] != app.config['USERNAME']:
-            error = 'Invalid username'
-        elif request.form['password'] != app.config['PASSWORD']:
-            error = 'Invalid password'
-        else:
-            session['logged_in'] = True
-            flash('You were logged in')
-            return redirect(url_for('index'))
-    return render_template('login.html', error=error)
-
-
-@app.route('/logout')
-def logout():
-	"""User logout/authentication/session management."""
-    session.pop('logged_in', None)
-    flash('You were logged out')
-    return redirect(url_for('index'))
-```
-
-In the above `login()` function, the decorator indicates that the route can accept either a GET or POST request. Put simply, a request is initiated by the end user when they access the `/login` url. The difference between these requests is simple: GET is used for simply accessing a webpage, while POST is used when information is sent to the server. Thus, when a user simply accesses the `/login` url, they are using a GET request, but when they attempt to login, a POST request is used.
-
-Add the template, "login.html":
-
-```html
-<!doctype html>
-<title>Flaskr-TDD | Login</title>
-<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
-<div class=page>
-  <h1>Flaskr</h1>
-  <div class=metanav>
-  {% if not session.logged_in %}
-    <a href="{{ url_for('login') }}">log in</a>
-  {% else %}
-    <a href="{{ url_for('logout') }}">log out</a>
-  {% endif %}
-  </div>
-  {% for message in get_flashed_messages() %}
-    <div class=flash>{{ message }}</div>
-  {% endfor %}
-  {% block body %}{% endblock %}
-</div>
-  <h2>Login</h2>
-  {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
-  <form action="{{ url_for('login') }}" method=post>
-    <dl>
-      <dt>Username:
-      <dd><input type=text name=username>
-      <dt>Password:
-      <dd><input type=password name=password>
-      <dd><input type=submit value=Login>
-    </dl>
-  </form>
-  ```
-
-
-Run the tests again. Same results as last time, right?
-
-Look at one of the errors - `BuildError: ('index', {}, None)`
-
-Essentially, we are trying to redirect to the `index()` function, which does not exist. Rename the `show_entries()` function as `index()` then retest.
-
-Next, add in a View for adding entries:
-
-```python
-@app.route('/add', methods=['POST'])
-def add_entry():
-    """Add new post to database."""
-    if not session.get('logged_in'):
-        abort(401)
-    db = get_db()
-    db.execute('insert into entries (title, text) values (?, ?)',
-                 [request.form['title'], request.form['text']])
-    db.commit()
-    flash('New entry was successfully posted')
-    return redirect(url_for('index'))
-```
-
-Retest.
-
-Now you should see:
-
-```sh
 ======================================================================
 FAIL: test_empty_db (__main__.FlaskrTestCase)
 Ensure database is blank
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "app-test.py", line 49, in test_empty_db
+  File "app-test.py", line 51, in test_empty_db
     assert b'No entries here so far' in rv.data
 AssertionError
 
+======================================================================
+FAIL: test_login_logout (__main__.FlaskrTestCase)
+Test login and logout using helper functions
 ----------------------------------------------------------------------
-Ran 5 tests in 0.072s
+Traceback (most recent call last):
+  File "app-test.py", line 59, in test_login_logout
+    assert b'You were logged in' in rv.data
+AssertionError
 
-FAILED (failures=1)
+======================================================================
+FAIL: test_messages (__main__.FlaskrTestCase)
+Ensure that user can post messages
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "app-test.py", line 84, in test_messages
+    assert b'&lt;Hello&gt;' in rv.data
+AssertionError
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.088s
+
+FAILED (failures=4)
 ```
 
-This error is asserting that when the route `/` is hit, the message "No entries here so far" is returned. Check the "index.html" Template. The message actually reads "No entries yet. Add some!". So update the test and then retest:
+Let's get these all green, one at a time...
 
-```sh
-Ran 5 tests in 0.076s
+### Show Entries
 
-OK
-```
+1. First, add a View for displaying the entires to *app.py*:
 
-Perfect.
+  ```python
+  @app.route('/')
+  def show_entries():
+      """Searches the database for entries, then displays them."""
+      db = get_db()
+      cur = db.execute('select * from entries order by id desc')
+      entries = cur.fetchall()
+      return render_template('index.html', entries=entries)
+  ```
+
+1. Then add the *index.html* template to the "templates" folder:
+
+  ```html
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <title>Flaskr</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+
+    <div class="page">
+      <h1>Flaskr-TDD</h1>
+      <div class="metanav">
+        {% if not session.logged_in %}
+          <a href="{{ url_for('login') }}">log in</a>
+        {% else %}
+          <a href="{{ url_for('logout') }}">log out</a>
+        {% endif %}
+      </div>
+      {% for message in get_flashed_messages() %}
+        <div class="flash">{{ message }}</div>
+      {% endfor %}
+      {% block body %}{% endblock %}
+    </div>
+
+    {% if session.logged_in %}
+      <form action="{{ url_for('add_entry') }}" method="post" class="add-entry">
+        <dl>
+          <dt>Title:
+          <dd><input type="text" size="30" name="title">
+          <dt>Text:
+          <dd><textarea name="text" rows="5" cols="40"></textarea>
+          <dd><input type="submit" value="Share">
+        </dl>
+      </form>
+    {% endif %}
+    <ul class="entries">
+      {% for entry in entries %}
+        <li><h2>{{ entry.title }}</h2>{{ entry.text|safe }}</li>
+      {% else %}
+        <li><em>No entries yet. Add some!</em></li>
+      {% endfor %}
+    </ul>
+  <body>
+  </html>
+  ```
+
+1. Run the tests now. You should see:
+
+  ```sh
+  Ran 5 tests in 0.131s
+
+  FAILED (failures=2, errors=2)
+  ```
+
+### User Login and Logout
+
+1. Update *app.py*:
+
+  ```python
+  @app.route('/login', methods=['GET', 'POST'])
+  def login():
+      """User login/authentication/session management."""
+      error = None
+      if request.method == 'POST':
+          if request.form['username'] != app.config['USERNAME']:
+              error = 'Invalid username'
+          elif request.form['password'] != app.config['PASSWORD']:
+              error = 'Invalid password'
+          else:
+              session['logged_in'] = True
+              flash('You were logged in')
+              return redirect(url_for('index'))
+      return render_template('login.html', error=error)
+
+
+  @app.route('/logout')
+  def logout():
+      """User logout/authentication/session management."""
+      session.pop('logged_in', None)
+      flash('You were logged out')
+      return redirect(url_for('index'))
+  ```
+
+  In the above `login()` function, the decorator indicates that the route can accept either a GET or POST request. Put simply, a request is initiated by the end user when they access the `/login` url. The difference between these requests is simple - GET is used for simply accessing a webpage, while POST is used when information is sent to the server. Thus, when a user simply accesses the `/login` url, they are using a GET request, but when they attempt to login, a POST request is used.
+
+1. Add the template, "login.html":
+
+  ```html
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <title>Flaskr-TDD | Login</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+
+    <div class="page">
+      <h1>Flaskr</h1>
+      <div class="metanav">
+        {% if not session.logged_in %}
+          <a href="{{ url_for('login') }}">log in</a>
+        {% else %}
+          <a href="{{ url_for('logout') }}">log out</a>
+        {% endif %}
+      </div>
+      {% for message in get_flashed_messages() %}
+        <div class="flash">{{ message }}</div>
+      {% endfor %}
+      {% block body %}{% endblock %}
+    </div>
+
+    <h2>Login</h2>
+    {% if error %}
+      <p class="error"><strong>Error:</strong> {{ error }}
+    {% endif %}
+    <form action="{{ url_for('login') }}" method="post">
+      <dl>
+        <dt>Username:
+        <dd><input type="text" name="username">
+        <dt>Password:
+        <dd><input type="password" name="password">
+        <dd><input type="submit" value="Login">
+      </dl>
+    </form>
+
+  </body>
+  </html>
+  ```
+
+1. Run the tests again.
+
+  You should still see some errors! Look at one of the errors - `werkzeug.routing.BuildError: Could not build url for endpoint 'index'. Did you mean 'login' instead?`
+
+  Essentially, we are trying to redirect to the `index()` function, which does not exist. Rename the `show_entries()` function to `index()` within *app.py* then re-test:
+
+  ```sh
+  Ran 5 tests in 0.070s
+
+  FAILED (failures=1, errors=2)
+  ```
+
+1. Next, add in a View for adding entries:
+
+  ```python
+  @app.route('/add', methods=['POST'])
+  def add_entry():
+      """Add new post to database."""
+      if not session.get('logged_in'):
+          abort(401)
+      db = get_db()
+      db.execute(
+          'insert into entries (title, text) values (?, ?)',
+          [request.form['title'], request.form['text']]
+      )
+      db.commit()
+      flash('New entry was successfully posted')
+      return redirect(url_for('index'))
+  ```
+
+1. Retest.
+
+  Now you should see:
+
+  ```sh
+  ======================================================================
+  FAIL: test_empty_db (__main__.FlaskrTestCase)
+  Ensure database is blank
+  ----------------------------------------------------------------------
+  Traceback (most recent call last):
+    File "app-test.py", line 49, in test_empty_db
+      assert b'No entries here so far' in rv.data
+  AssertionError
+
+  ----------------------------------------------------------------------
+  Ran 5 tests in 0.072s
+
+  FAILED (failures=1)
+  ```
+
+  This error is asserting that when the route `/` is hit, the message "No entries here so far" is returned. Check the *index.html* Template. The message actually reads "No entries yet. Add some!". So update the test and then retest:
+
+  ```sh
+  Ran 5 tests in 0.156s
+
+  OK
+  ```
+
+  Perfect.
 
 ## Add some color
 
