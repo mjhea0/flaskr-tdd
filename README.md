@@ -68,89 +68,94 @@ Along with Python, this also installed-
   $ pip3 install Flask
   ```
 
-HERE
-
 ## First Test
 
 Let's start with a simple "hello, world" app.
 
-#### Create a test file:
+1. Create a test file:
 
-```sh
-$ touch app-test.py
-```
+  ```sh
+  $ touch app-test.py
+  ```
 
-Open this file in a text editor. I use [Sublime](http://www.sublimetext.com/). Add the following code:
+  Open this file in your favorite text editor. (I use [Sublime](http://www.sublimetext.com/).) Add the following code:
 
-```python
-from app import app
+  ```python
+  from app import app
 
-import unittest
+  import unittest
 
-class BasicTestCase(unittest.TestCase):
 
-  def test_index(self):
-    tester = app.test_client(self)
-    response = tester.get('/', content_type='html/text')
-    self.assertEqual(response.status_code, 200)
-    self.assertEqual(response.data, "Hello, World!")
+  class BasicTestCase(unittest.TestCase):
 
-if __name__ == '__main__':
-    unittest.main()
-```
+      def test_index(self):
+          tester = app.test_client(self)
+          response = tester.get('/', content_type='html/text')
+          self.assertEqual(response.status_code, 200)
+          self.assertEqual(response.data, b'Hello, World!')
 
-Essentially, we're testing whether the response that we get back is "200" and that "Hello, World!" is displayed.
 
-#### Run the test
+  if __name__ == '__main__':
+      unittest.main()
+  ```
 
-```sh
-$ python app-test.py
-```
+  Essentially, we're testing whether the response that we get back is "200" and that "Hello, World!" is displayed.
 
-If all goes well, this will fail.
+1. Run the test
 
-#### Now add the code for this to pass.
+  ```sh
+  $ python app-test.py
+  ```
 
-```sh
-$ touch app.py
-```
+  If all goes well, this will fail.
 
-Code:
+1. Now add the code for this to pass.
 
-```python
-from flask import Flask
-app = Flask(__name__)
+  ```sh
+  $ touch app.py
+  ```
 
-@app.route("/")
-def hello():
-    return "Hello, World!"
+  Code:
 
-if __name__ == "__main__":
-    app.run()
-```
+  ```python
+  from flask import Flask
 
-Run the app:
+  app = Flask(__name__)
 
-```sh
-$ python app.py
-```
 
-Then Navigate to [http://localhost:5000/](http://localhost:5000/). You should see "Hello, World!" on your screen.
+  @app.route("/")
+  def hello():
+      return "Hello, World!"
 
-Return to the terminal. Kill the server with Ctrl+C.
 
-Run the test again:
+  if __name__ == "__main__":
+      app.run()
+  ```
 
-```sh
-$ python app-test.py
-.
-----------------------------------------------------------------------
-Ran 1 test in 0.016s
+1. Run the app:
 
-OK
-```
+  ```sh
+  $ python app.py
+  ```
 
-Nice.
+  Then Navigate to [http://localhost:5000/](http://localhost:5000/). You should see "Hello, World!" on your screen.
+
+  Return to the terminal. Kill the server with Ctrl+C.
+
+1. Run the test again:
+
+  ```sh
+  $ python app-test.py
+  .
+  ----------------------------------------------------------------------
+  Ran 1 test in 0.016s
+
+  OK
+  ```
+
+  Nice.
+
+HERE
 
 ## Flaskr Setup
 
