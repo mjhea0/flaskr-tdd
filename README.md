@@ -8,7 +8,7 @@ Also, if you are completely new to Flask and/or web development in general, it's
 1. What a "request" is.
 1. How HTML pages are rendered and/or returned to the end user.
 
-> **NOTE**: This tutorial is powered by **[Real Python](https://realpython.com). Please support this open source project by purchasing our [courses](http://www.realpython.com/courses) to learn Python and web development with Django and Flask!
+> **NOTE**: This tutorial is powered by **[Real Python](https://realpython.com)**. Please support this open source project by purchasing our [courses](http://www.realpython.com/courses) to learn Python and web development with Django and Flask!
 
 ### Change Log
 
@@ -34,43 +34,41 @@ TDD usually follows the "Red-Green-Refactor" cycle, as shown in the image above:
 3. Write just enough code for the test to pass
 4. Refactor code and retest, again and again (if necessary)
 
+## Download Python
+
+Before beginning make sure you have the latest version of [Python 3.5](https://www.python.org/downloads/release/python-350/) installed, which you can download from http://www.python.org/download/.
+
+> **NOTE**: This tutorial uses Python v3.5.1.
+
+Along with Python, this also installed-
+- [pip](https://pip.pypa.io/en/stable/) - a [package management](http://en.wikipedia.org/wiki/Package_management_system) system for Python, similar to gem or npm for Ruby and Node, respectively.
+- [pyvenv](https://docs.python.org/3/library/venv.html) - used to create isolated environments for development. This is standard practice. Always, always, ALWAYS utilize virtual environments. If you don't, you will eventually run into problems with compatibility between different dependencies. Just do it.
+
 ## Project Setup
 
-#### Create a new directory to store the project.
+1. Create a new directory to store the project:
 
-```sh
-$ mkdir flaskr-tdd
-$ cd flaskr-tdd
-```
+  ```sh
+  $ mkdir flaskr-tdd
+  $ cd flaskr-tdd
+  ```
 
-Install pip, which is a [package management](http://en.wikipedia.org/wiki/Package_management_system) system for Python, similar to gem or npm for Ruby and Node, respectively.
+1. Create and activate your virtual env:
 
-```sh
-$ easy_install pip
-```
+  ```sh
+  $ pyvenv-3.5 env
+  $ source env/bin/activate
+  ```
 
-#### Now install [virtualenv](https://pypi.python.org/pypi/virtualenv) to create an isolated environment for development.
+  > **NOTE**: You know that you are in a virtual env, as the actual "env" is now show before the $ in your terminal - (env). To exit the virtual environment, use the command `deactivate`, then you can reactivate by navigating back to the directory and running - `source env/bin/activate`.
 
-This is standard practice. Always, always, ALWAYS use virtualenv. If you don't, you will eventually run into problems with compatibility between different dependencies. Just do it.
+1. Install Flask with pip:
 
-```sh
-$ pip install virtualenv
-```
+  ```sh
+  $ pip3 install Flask
+  ```
 
-#### Activate your virtualenv.
-
-```sh
-$ virtualenv --no-site-packages env
-$ source env/bin/activate
-```
-
-> You know that you are in a virtual env, as the actual "env" is now show before the $ in your terminal - (env). To exit the virtual environment, use the command `deactivate`, then you can reactivate by navigating back to the directory and running - `source env/bin/activate`.
-
-#### Install Flask.
-
-```sh
-$ pip install Flask
-```
+HERE
 
 ## First Test
 
