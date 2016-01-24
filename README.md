@@ -155,37 +155,37 @@ Let's start with a simple "hello, world" app.
 
   Nice.
 
-HERE
-
 ## Flaskr Setup
 
-#### Add structure.
+1. Add structure
 
-Add two folders, "static" and "templates", in the project root. Your file structure should now look like this:
+  Add two folders, "static" and "templates", in the project root. Your file structure should now look like this:
 
-```sh
-├── app-test.py
-├── app.py
-├── static
-└── templates
-```
+  ```sh
+  ├── app-test.py
+  ├── app.py
+  ├── static
+  └── templates
+  ```
 
-#### SQL Schema
+1. SQL Schema
 
-Create a new file called "schema.sql" and add the following code:
+  Create a new file called "schema.sql" and add the following code:
 
-```python
-drop table if exists entries;
-create table entries (
-  id integer primary key autoincrement,
-  title text not null,
-  text text not null
-);
-```
+  ```python
+  drop table if exists entries;
+  create table entries (
+    id integer primary key autoincrement,
+    title text not null,
+    text text not null
+  );
+  ```
 
-This will setup a single table with three fields - "id", "title", and "text". SQLite will be used for our RDMS since it's built in to the standard Python library and requires no configuration.
+  This will setup a single table with three fields - "id", "title", and "text". SQLite will be used for our RDMS since it's built in to the standard Python library and requires no configuration.
 
-#### Second Test
+HERE
+
+## Second Test
 
 Let's create the basic file for running our application. But first we need to write a test.
 
