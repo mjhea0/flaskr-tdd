@@ -244,78 +244,84 @@ Let's create the basic file for running our application. Before that though, we 
 
 ## Database Setup
 
-Essentially, we want to open a database connection, create the database/schema if it doesn't already exist, then close the connection each time a test is ran.
+Essentially, we want to open a database connection, create the database based on the schema if it doesn't already exist, then close the connection each time a test is ran.
 
-How do we test for the existence of a file?
+1. How do we test for the existence of a file? Update *app-test.py*:
 
-Update "app-test.py"
+  ```python
+  import unittest
+  import os
+  from app import app
 
-```python
-from app import app
-import unittest
-import os
 
-class BasicTestCase(unittest.TestCase):
+  class BasicTestCase(unittest.TestCase):
 
-  def test_index(self):
-    tester = app.test_client(self)
-    response = tester.get('/', content_type='html/text')
-    self.assertEqual(response.status_code, 404)
+      def test_index(self):
+          tester = app.test_client(self)
+          response = tester.get('/', content_type='html/text')
+          self.assertEqual(response.status_code, 404)
 
-  def test_database(self):
-	tester = os.path.exists("flaskr.db")
-  	self.assertTrue(tester)
+      def test_database(self):
+          tester = os.path.exists("flaskr.db")
+          self.assertTrue(tester)
 
-if __name__ == '__main__':
-    unittest.main()
-```
 
-Run it to make sure it fails. Now add the following code to "app.py".
+  if __name__ == '__main__':
+      unittest.main()
+  ```
 
-```python
-# connect to database
-def connect_db():
-    """Connects to the database."""
-    rv = sqlite3.connect(app.config['DATABASE'])
-    rv.row_factory = sqlite3.Row
-    return rv
+  Run it to make sure it fails, indicating that the database does not exist.
 
-# create the database
-def init_db():
-    with app.app_context():
-        db = get_db()
-        with app.open_resource('schema.sql', mode='r') as f:
-            db.cursor().executescript(f.read())
-        db.commit()
+1. Now add the following code to *app.py*:
 
-# open database connection
-def get_db():
-    if not hasattr(g, 'sqlite_db'):
-        g.sqlite_db = connect_db()
-    return g.sqlite_db
+  ```python
+  # connect to database
+  def connect_db():
+      """Connects to the database."""
+      rv = sqlite3.connect(app.config['DATABASE'])
+      rv.row_factory = sqlite3.Row
+      return rv
 
-# close database connection
-@app.teardown_appcontext
-def close_db(error):
-    if hasattr(g, 'sqlite_db'):
-        g.sqlite_db.close()
-```
 
-And add our `init_db()` function at the bottom of `app.py` to make sure we start the server each time with a fresh database.
-```python
-if __name__ == '__main__':
-    init_db()
-    app.run()
-```
+  # create the database
+  def init_db():
+      with app.app_context():
+          db = get_db()
+          with app.open_resource('schema.sql', mode='r') as f:
+              db.cursor().executescript(f.read())
+          db.commit()
 
-Now it is possible to create a database by starting up a Python shell and importing and calling the init_db function:
 
-```python
->>> from app import init_db
->>> init_db()
-```
+  # open database connection
+  def get_db():
+      if not hasattr(g, 'sqlite_db'):
+          g.sqlite_db = connect_db()
+      return g.sqlite_db
 
-Close the shell, then run the test again. Does it pass?
+
+  # close database connection
+  @app.teardown_appcontext
+  def close_db(error):
+      if hasattr(g, 'sqlite_db'):
+          g.sqlite_db.close()
+  ```
+
+  And add the `init_db()` function at the bottom of `app.py` to make sure we start the server each time with a fresh database:
+
+  ```python
+  if __name__ == '__main__':
+      init_db()
+      app.run()
+  ```
+
+  Now it is possible to create a database by starting up a Python shell and importing and calling the `init_db()` function:
+
+  ```python
+  >>> from app import init_db
+  >>> init_db()
+  ```
+
+  Close the shell, then run the test again. Does it pass? Now we know that the database has been created.
 
 ## Templates and Views
 
