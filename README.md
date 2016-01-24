@@ -1,12 +1,12 @@
 # Flaskr - Intro to Flask, Test Driven Development, and jQuery
 
-As many of you know, Flaskr - a mini-blog-like-app - is the app you build for the official [tutorial](http://flask.pocoo.org/docs/tutorial/introduction/) for Flask, the awesome, Python-based micro web framework. I've gone through the tutorial more times than I care to admit. Anyway, I wanted to take the tutorial a step further by adding test driven development and adding in a bit of jQuery. This post is that tutorial. Enjoy.
+As many of you know, Flaskr - a mini-blog-like-app - is the app you build for the official [tutorial](http://flask.pocoo.org/docs/tutorial/introduction/) for Flask, the awesome, Python-based micro web framework. I've gone through the tutorial more times than I care to admit. Anyway, I wanted to take the tutorial a step further by adding test driven development and a bit of jQuery. This post is that tutorial. Enjoy.
 
 Also, if you are completely new to Flask and/or web development in general, it's important to grasp these basic fundamental concepts:
 
-1. The difference between GET and POST request and how functions within the app handle each.
-2. What a "request" is.
-3. How HTML pages are rendered and/or returned to the end user.
+1. The difference between GET and POST requests and how functions within the app handle each.
+1. What a "request" is.
+1. How HTML pages are rendered and/or returned to the end user.
 
 > **NOTE**: This tutorial is powered by **[Real Python](https://realpython.com). Please support this open source project by purchasing our [courses](http://www.realpython.com/courses) to learn Python and web development with Django and Flask!
 
