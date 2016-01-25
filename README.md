@@ -500,6 +500,7 @@ Let's get these all green, one at a time...
   <body>
 
     <div class="page">
+
       <h1>Flaskr-TDD</h1>
       <div class="metanav">
         {% if not session.logged_in %}
@@ -512,27 +513,29 @@ Let's get these all green, one at a time...
         <div class="flash">{{ message }}</div>
       {% endfor %}
       {% block body %}{% endblock %}
+
+      {% if session.logged_in %}
+        <form action="{{ url_for('add_entry') }}" method="post" class="add-entry">
+          <dl>
+            <dt>Title:</dt>
+            <dd><input type="text" size="30" name="title"></dd>
+            <dt>Text:</dt>
+            <dd><textarea name="text" rows="5" cols="40"></textarea></dd>
+            <dd><input type="submit" value="Share"></dd>
+          </dl>
+        </form>
+      {% endif %}
+      <ul class="entries">
+        {% for entry in entries %}
+          <li><h2>{{ entry.title }}</h2>{{ entry.text|safe }}</li>
+        {% else %}
+          <li><em>No entries yet. Add some!</em></li>
+        {% endfor %}
+      </ul>
+
     </div>
 
-    {% if session.logged_in %}
-      <form action="{{ url_for('add_entry') }}" method="post" class="add-entry">
-        <dl>
-          <dt>Title:
-          <dd><input type="text" size="30" name="title">
-          <dt>Text:
-          <dd><textarea name="text" rows="5" cols="40"></textarea>
-          <dd><input type="submit" value="Share">
-        </dl>
-      </form>
-    {% endif %}
-    <ul class="entries">
-      {% for entry in entries %}
-        <li><h2>{{ entry.title }}</h2>{{ entry.text|safe }}</li>
-      {% else %}
-        <li><em>No entries yet. Add some!</em></li>
-      {% endfor %}
-    </ul>
-  <body>
+  </body>
   </html>
   ```
 
@@ -587,6 +590,7 @@ Let's get these all green, one at a time...
   <body>
 
     <div class="page">
+
       <h1>Flaskr</h1>
       <div class="metanav">
         {% if not session.logged_in %}
@@ -599,21 +603,22 @@ Let's get these all green, one at a time...
         <div class="flash">{{ message }}</div>
       {% endfor %}
       {% block body %}{% endblock %}
-    </div>
 
-    <h2>Login</h2>
-    {% if error %}
-      <p class="error"><strong>Error:</strong> {{ error }}
-    {% endif %}
-    <form action="{{ url_for('login') }}" method="post">
-      <dl>
-        <dt>Username:
-        <dd><input type="text" name="username">
-        <dt>Password:
-        <dd><input type="password" name="password">
-        <dd><input type="submit" value="Login">
-      </dl>
-    </form>
+      <h2>Login</h2>
+      {% if error %}
+        <p class="error"><strong>Error:</strong> {{ error }}</p>
+      {% endif %}
+      <form action="{{ url_for('login') }}" method="post">
+        <dl>
+          <dt>Username:</dt>
+          <dd><input type="text" name="username"></dd>
+          <dt>Password:</dt>
+          <dd><input type="password" name="password"></dd>
+          <dd><input type="submit" value="Login"></dd>
+        </dl>
+      </form>
+
+    </div>
 
   </body>
   </html>
@@ -757,11 +762,9 @@ h2 {
 }
 ```
 
-HERE
-
 ## Test
 
-Run you app, log in (user/pass = "admin"), post, log out. Then run your tests to ensure that they still pass.
+Run you app, log in (username/password = "admin"), post, log out. Then run your tests to ensure that they still pass.
 
 ## jQuery
 
