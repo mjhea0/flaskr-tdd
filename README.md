@@ -779,9 +779,9 @@ Now let's add some jQuery to make the site slightly more interactive.
   Now we can use jQuery to target each `<li`>. First, we need to add the following scripts to the document just before the closing body tag:
 
   ```html
-  <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-  <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-  <script type=text/javascript src="{{url_for('static', filename='main.js') }}"></script>
+  <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="{{url_for('static', filename='main.js') }}"></script>
   ```
 
 1. Create a *main.js* file in your "static" directory and add the following code:
@@ -855,7 +855,7 @@ Now let's add some jQuery to make the site slightly more interactive.
 
 ## Deployment
 
-With the app in working-state, let's shift gears and deploy the app to [Heroku](https://www.heroku.com).
+With the app in a working-state, let's shift gears and deploy the app to [Heroku](https://www.heroku.com).
 
 1. To do this, first sign up and then install the [Heroku Toolbelt](https://toolbelt.heroku.com/).
 
@@ -914,7 +914,9 @@ With the app in working-state, let's shift gears and deploy the app to [Heroku](
   $ heroku open
   ```
 
-#### TEST!
+## Test (again!)
+
+Let's test this in the cloud. Run `heroku open` to open the app in the browser.
 
 ## More Color
 
@@ -930,7 +932,7 @@ Remove that stylesheet -
 
 Then add this stylesheet to both files:
 
-`<link rel=stylesheet type=text/css href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">`
+`<link rel=stylesheet type=text/css href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">`
 
 Replace the code in "login.html" with:
 
@@ -939,9 +941,9 @@ Replace the code in "login.html" with:
 <html>
   <head>
     <title>Flaskr-TDD | Entries</title>
-    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
     <script type=text/javascript src="{{url_for('static', filename='main.js') }}"></script>
   </head>
   <body>
@@ -976,9 +978,9 @@ And replace the code in "index.html" with:
 <html>
   <head>
     <title>Flaskr-TDD | Entries</title>
-    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
     <script type=text/javascript src="{{url_for('static', filename='main.js') }}"></script>
   </head>
   <body>
