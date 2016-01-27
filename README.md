@@ -853,65 +853,66 @@ Now let's add some jQuery to make the site slightly more interactive.
   OK
   ```
 
-HERE
-
 ## Deployment
 
-To push this to Heroku, first install the [Heroku Toolbelt](https://toolbelt.heroku.com/).
+With the app in working-state, let's shift gears and deploy the app to [Heroku](https://www.heroku.com).
 
-Install a test server called gunicorn:
+1. To do this, first sign up and then install the [Heroku Toolbelt](https://toolbelt.heroku.com/).
 
-```sh
-$ pip install gunicorn
-```
+1. Next, install a web server called [gunicorn](http://gunicorn.org/):
 
-Create a Procfile:
+  ```sh
+  $ pip install gunicorn
+  ```
 
-```sh
-$ touch Procfile
-```
+1. Create a [Procfile](https://devcenter.heroku.com/articles/procfile) in the project root:
 
-And add the following code:
+  ```sh
+  $ touch Procfile
+  ```
 
-```sh
-web: gunicorn app:app
-```
+  And add the following code:
 
-Create a "requirements.txt" file to specify the external dependencies that need to be installed:
+  ```sh
+  web: gunicorn app:app
+  ```
 
-```sh
-$ pip freeze > requirements.txt
-```
+1. Create a *requirements.txt* file to specify the external dependencies that need to be installed for the app to work:
 
-Create a ".gitignore" file:
+  ```sh
+  $ pip freeze > requirements.txt
+  ```
 
-```sh
-$ touch .gitignore
-```
+1. Create a *.gitignore* file:
 
-And include the following code:
+  ```sh
+  $ touch .gitignore
+  ```
 
-```sh
-env
-*.pyc
-*.DS_Store
-```
+  And include the following files and folders (so they are not included in version control):
 
-Add a local Git repo:
+  ```sh
+  env
+  *.pyc
+  *.DS_Store
+  __pycache__
+  ```
 
-```sh
-$ git init
-$ git add .
-$ git commit -m "initial"
-```
+1. Add a local Git repo:
 
-Deploy to Heroku:
+  ```sh
+  $ git init
+  $ git add -A
+  $ git commit -m "initial"
+  ```
 
-```sh
-$ heroku create
-$ git push heroku master
-$ heroku open
-```
+1. Deploy to Heroku:
+
+  ```sh
+  $ heroku create
+  $ git push heroku master
+  $ heroku open
+  ```
 
 #### TEST!
 
