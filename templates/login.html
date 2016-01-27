@@ -1,32 +1,39 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-  <head>
-    <title>Flaskr-TDD | Entries</title>
-    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-    <script type=text/javascript src="{{url_for('static', filename='main.js') }}"></script>
-  </head>
-  <body>
-    <div class="container">
-      <h1>Flaskr</h1>
-      {% for message in get_flashed_messages() %}
-        <div class="flash">{{ message }}</div>
-      {% endfor %}
-      <h3>Login</h3>
-      {% if error %}<p class="error"><strong>Error:</strong> {{ error }}{% endif %}
-      <form action="{{ url_for('login') }}" method="post">
-        <dl>
-          <dt>Username:
-          <dd><input type="text" name="username">
-          <dt>Password:
-          <dd><input type="password" name="password">
-          <br>
-          <br>
-          <dd><input type="submit" class="btn btn-default" value="Login">
-          <span>Use "admin" for username and password</span>
-        </dl>
-      </form>
-    </div>
-  </body>
+<head>
+  <title>Flaskr-TDD | Login</title>
+  <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+</head>
+<body>
+
+  <div class="container">
+
+    <h1>Flaskr</h1>
+
+    {% for message in get_flashed_messages() %}
+      <div class="flash">{{ message }}</div>
+    {% endfor %}
+
+    <h3>Login</h3>
+
+    {% if error %}<p class="error"><strong>Error:</strong> {{ error }}{% endif %}</p>
+    <form action="{{ url_for('login') }}" method="post">
+      <dl>
+        <dt>Username:</dt>
+        <dd><input type="text" name="username"></dd>
+        <dt>Password:</dt>
+        <dd><input type="password" name="password"></dd>
+        <br><br>
+        <dd><input type="submit" class="btn btn-default" value="Login"></dd>
+        <span>Use "admin" for username and password</span>
+      </dl>
+    </form>
+
+  </div>
+
+  <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="{{url_for('static', filename='main.js') }}"></script>
+
+</body>
 </html>

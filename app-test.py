@@ -1,9 +1,8 @@
-from app import app, db
 import unittest
 import os
-import tempfile
 from flask import json
 
+from app import app, db
 
 TEST_DB = 'test.db'
 

@@ -1,6 +1,6 @@
 # imports
-from flask import Flask, request, session, redirect, url_for, \
-    abort, render_template, flash, jsonify
+from flask import Flask, request, session, g, redirect, url_for, \
+     abort, render_template, flash, jsonify
 from flask.ext.sqlalchemy import SQLAlchemy
 import os
 
@@ -84,6 +84,7 @@ def delete_entry(post_id):
     except Exception as e:
         result = {'status': 0, 'message': repr(e)}
     return jsonify(result)
+
 
 if __name__ == '__main__':
     app.run()
