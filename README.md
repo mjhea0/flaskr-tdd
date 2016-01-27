@@ -786,29 +786,29 @@ Now let's add some jQuery to make the site slightly more interactive.
 
 1. Create a *main.js* file in your "static" directory and add the following code:
 
-```javascript
-$(function() {
+  ```javascript
+  $(function() {
 
-  console.log( "ready!" ); // sanity check
+    console.log( "ready!" ); // sanity check
 
-  $('.entry').on('click', function() {
-    var entry = this;
-    var post_id = $(this).find('h2').attr('id');
-    $.ajax({
-      type:'GET',
-      url: '/delete' + '/' + post_id,
-      context: entry,
-      success:function(result) {
-        if(result.status === 1) {
-          $(this).remove();
-          console.log(result);
+    $('.entry').on('click', function() {
+      var entry = this;
+      var post_id = $(this).find('h2').attr('id');
+      $.ajax({
+        type:'GET',
+        url: '/delete' + '/' + post_id,
+        context: entry,
+        success:function(result) {
+          if(result.status === 1) {
+            $(this).remove();
+            console.log(result);
+          }
         }
-      }
+      });
     });
-  });
 
-});
-```
+  });
+  ```
 
 1. Add a new function in *app.py* to remove the post from the database:
 
