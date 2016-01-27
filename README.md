@@ -40,6 +40,15 @@ Also, if you are completely new to Flask and/or web development in general, it's
 1. [SQLAlchemy](#sqlalchemy)
 1. [Conclusion](#conclusion)
 
+### Requirements
+
+This tutorial utilizes the following requirements:
+
+1. Python v3.5.1
+1. Flask v0.10.1
+1. Flask-SQLAlchemy v2.1
+1. gunicorn v19.4.5
+
 ## Test Driven Development?
 
 ![tdd](https://raw.github.com/mjhea0/flaskr-tdd/master/static/tdd.png)
@@ -1325,8 +1334,5 @@ If all is well, update your requirements (`pip  freeze > requirements.txt`) comm
 
 1. Want my code? Grab it [here](https://github.com/mjhea0/flaskr-tdd).
 1. View my app on [Heroku](http://flaskr-tdd.herokuapp.com/). Cheers!
-1. Want more Flask fun? Check out [Real Python](http://www.realpython.com)
+1. Want more Flask fun? Check out [Real Python](http://www.realpython.com).
 1. Want something else added to this tutorial? Add an issue to the repo. Cheers!
-
-
-TOC, requirements
