@@ -1300,7 +1300,7 @@ We've mostly just updated the `setUp()` and `tearDown()` methods.
 
 Run the tests, and then manually test it by running the server and logging in and out, adding new entries, and deleting old entries.
 
-If all is well, commit your code, then PUSH the new version to Heroku!
+If all is well, update your requirements (`pip  freeze > requirements.txt`) commit your code, then PUSH the new version to Heroku!
 
 ## Conclusion
 
