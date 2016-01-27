@@ -1247,13 +1247,13 @@ TEST_DB = 'test.db'
 class BasicTestCase(unittest.TestCase):
 
     def test_index(self):
-        """inital test. ensure flask was set up correctly"""
+        """initial test. ensure flask was set up correctly"""
         tester = app.test_client(self)
         response = tester.get('/', content_type='html/text')
         self.assertEqual(response.status_code, 200)
 
     def test_database(self):
-        """inital test. ensure that the database exists"""
+        """initial test. ensure that the database exists"""
         tester = os.path.exists("flaskr.db")
         self.assertTrue(tester)
 
