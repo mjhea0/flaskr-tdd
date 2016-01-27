@@ -21,6 +21,25 @@ Also, if you are completely new to Flask and/or web development in general, it's
 - 11/19/2013: Fixed typo. Updated unit tests.
 - 11/11/2013: Added information on requests.
 
+### TOC
+
+1. [Test Driven Development?](#test-driven-development)
+1. [Download Python](#download-python)
+1. [Project Setup](#project-setup)
+1. [First Test](#first-test)
+1. [Flaskr Setup](#flask-setup)
+1. [Second Test](#second-test)
+1. [Database Setup](#database-setup)
+1. [Templates and Views](#templates-and-views)
+1. [Add Some Color](#add-some-color)
+1. [Test](#test)
+1. [jQuery](#jquery)
+1. [Deployment](#deployment)
+1. [Test (again!)](#test-again)
+1. [Bootstrap](#bootstrap)
+1. [SQLAlchemy](#sqlalchemy)
+1. [Conclusion](#conclusion)
+
 ## Test Driven Development?
 
 ![tdd](https://raw.github.com/mjhea0/flaskr-tdd/master/static/tdd.png)
@@ -684,7 +703,7 @@ Let's get these all green, one at a time...
 
   Perfect.
 
-## Add some color
+## Add Some Color
 
 Save the following styles to a new file called *style.css* in the "static" folder:
 
@@ -1308,3 +1327,6 @@ If all is well, update your requirements (`pip  freeze > requirements.txt`) comm
 1. View my app on [Heroku](http://flaskr-tdd.herokuapp.com/). Cheers!
 1. Want more Flask fun? Check out [Real Python](http://www.realpython.com)
 1. Want something else added to this tutorial? Add an issue to the repo. Cheers!
+
+
+TOC, requirements
