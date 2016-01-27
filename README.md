@@ -12,7 +12,7 @@ Also, if you are completely new to Flask and/or web development in general, it's
 
 ### Change Log
 
-- 01/24/2016: Updated to Python 3!
+- 01/24/2016: Updated to Python 3! (v3.5.1)
 - 08/24/2014: PEP8 updates.
 - 02/25/2014: Upgraded to SQLAlchemy.
 - 02/20/2014: Completed AJAX.
@@ -768,77 +768,94 @@ Run you app, log in (username/password = "admin"), post, log out. Then run your 
 
 ## jQuery
 
-Now let's add some simple jQuery.
+Now let's add some jQuery to make the site slightly more interactive.
 
-Open "index.html" and add a class to the `<li>` tag that displays each entry:
+1. Open *index.html* and update the first `<li`> like so:
 
-```html
-<li class="entry"><h2 id={{ entry.id }}>{{ entry.title }}</h2>{{ entry.text|safe }}
-```
+  ```html
+  <li class="entry"><h2 id={{ entry.id }}>{{ entry.title }}</h2>{{ entry.text|safe }}</li>
+  ```
 
-Also add the following scripts to the `<head>`:
+  Now we can use jQuery to target each `<li`>. First, we need to add the following scripts to the document just before the closing body tag:
 
-```html
-<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-<script type=text/javascript src="{{url_for('static', filename='main.js') }}"></script>
-```
+  ```html
+  <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+  <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script type=text/javascript src="{{url_for('static', filename='main.js') }}"></script>
+  ```
 
-Create a "main.js" file in your "static" directory and add the following code:
+1. Create a *main.js* file in your "static" directory and add the following code:
 
 ```javascript
 $(function() {
-  console.log( "ready!" );
-  $('.entry').on('click', function(){
+
+  console.log( "ready!" ); // sanity check
+
+  $('.entry').on('click', function() {
     var entry = this;
     var post_id = $(this).find('h2').attr('id');
     $.ajax({
       type:'GET',
       url: '/delete' + '/' + post_id,
       context: entry,
-      success:function(result){
-        if(result['status'] === 1){
+      success:function(result) {
+        if(result.status === 1) {
           $(this).remove();
           console.log(result);
         }
       }
     });
   });
+
 });
-
 ```
 
-Add a new function to "app.py" to remove the post from the database:
+1. Add a new function in *app.py* to remove the post from the database:
 
-```python
-@app.route('/delete/<post_id>', methods=['GET'])
-def delete_entry(post_id):
-    '''Delete post from database'''
-    result = { 'status':0, 'message': 'Error'  }
-    try:
-        db = get_db()
-        db.execute('delete from entries where id=' + post_id)
-        db.commit()
-        result = { 'status':1, 'message': "Post Deleted" }
-    except Exception as e:
-        result = { 'status':0, 'message': repr(e) }
+  ```python
+  @app.route('/delete/<post_id>', methods=['GET'])
+  def delete_entry(post_id):
+      '''Delete post from database'''
+      result = {'status': 0, 'message': 'Error'}
+      try:
+          db = get_db()
+          db.execute('delete from entries where id=' + post_id)
+          db.commit()
+          result = {'status': 1, 'message': "Post Deleted"}
+      except Exception as e:
+          result = {'status': 0, 'message': repr(e)}
 
-    return jsonify(result)
-```
+      return jsonify(result)
+  ```
 
-Finally, add a new test:
+1. Finally, add a new test:
 
-```python
-def test_delete_message(self):
-    """Ensure the messages are being deleted"""
-    rv = self.app.get('/delete/1')
-    data = json.loads(rv.data)
-    self.assertEqual(data['status'], 1)
-```
+  ```python
+  def test_delete_message(self):
+      """Ensure the messages are being deleted"""
+      rv = self.app.get('/delete/1')
+      data = json.loads((rv.data).decode('utf-8'))
+      self.assertEqual(data['status'], 1)
+  ```
 
-Test this out by adding two new entries, click on one of them. It should be removed from the DOM as well as the database. Double check this. (Thanks to [Srijan](https://github.com/srijanss) for updating this.)
+  Make sure to add the following import as well - `import json`
 
-## Heroku
+  Manually test this out by running the server and adding two new entries. Click on one of them. It should be removed from the DOM as well as the database. Double check this.
+
+  Then run your automated test suite. It should pass:
+
+  ```sh
+  $ python app-test.py
+  ......
+  ----------------------------------------------------------------------
+  Ran 6 tests in 0.132s
+
+  OK
+  ```
+
+HERE
+
+## Deployment
 
 To push this to Heroku, first install the [Heroku Toolbelt](https://toolbelt.heroku.com/).
 
