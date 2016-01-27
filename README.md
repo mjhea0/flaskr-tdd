@@ -918,7 +918,7 @@ With the app in a working-state, let's shift gears and deploy the app to [Heroku
 
 Let's test this in the cloud. Run `heroku open` to open the app in the browser.
 
-## More Color
+## Bootstrap
 
 Let's update the styles with Bootstrap 3.
 
@@ -1016,7 +1016,7 @@ Let's update the styles with Bootstrap 3.
 
       <ul class="entries">
         {% for entry in entries %}
-          <li class="entry"><h2>{{ entry.title }}</h2>{{ entry.text|safe }}</li>
+          <li class="entry"><h2 id={{ entry.id }}>{{ entry.title }}</h2>{{ entry.text|safe }}</li>
         {% else %}
           <li><em>No entries yet. Add some!</em></li>
         {% endfor %}
