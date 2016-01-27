@@ -2,24 +2,23 @@
 <html>
 <head>
   <title>Flaskr</title>
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
 </head>
 <body>
 
-  <div class="page">
+  <div class="container">
 
     <h1>Flaskr-TDD</h1>
-    <div class="metanav">
-      {% if not session.logged_in %}
-        <a href="{{ url_for('login') }}">log in</a>
-      {% else %}
-        <a href="{{ url_for('logout') }}">log out</a>
-      {% endif %}
-    </div>
+
+    {% if not session.logged_in %}
+      <a href="{{ url_for('login') }}">log in</a>
+    {% else %}
+      <a href="{{ url_for('logout') }}">log out</a>
+    {% endif %}
+
     {% for message in get_flashed_messages() %}
       <div class="flash">{{ message }}</div>
     {% endfor %}
-    {% block body %}{% endblock %}
 
     {% if session.logged_in %}
       <form action="{{ url_for('add_entry') }}" method="post" class="add-entry">
@@ -28,13 +27,17 @@
           <dd><input type="text" size="30" name="title"></dd>
           <dt>Text:</dt>
           <dd><textarea name="text" rows="5" cols="40"></textarea></dd>
-          <dd><input type="submit" value="Share"></dd>
+          <br><br>
+          <dd><input type="submit" class="btn btn-default" value="Share"></dd>
         </dl>
       </form>
     {% endif %}
+
+    <br>
+
     <ul class="entries">
       {% for entry in entries %}
-        <li class="entry"><h2 id={{ entry.id }}>{{ entry.title }}</h2>{{ entry.text|safe }}</li>
+        <li class="entry"><h2>{{ entry.title }}</h2>{{ entry.text|safe }}</li>
       {% else %}
         <li><em>No entries yet. Add some!</em></li>
       {% endfor %}

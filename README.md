@@ -920,105 +920,119 @@ Let's test this in the cloud. Run `heroku open` to open the app in the browser.
 
 ## More Color
 
-Let's go ahead and update the styles to Bootstrap 3.
+Let's update the styles with Bootstrap 3.
 
-First, comment out the styles in "style.css".
+1. First, remove the *style.css* stylesheet from both *index.html* and *login.html*.Then add this stylesheet to both files:
 
-Remove that stylesheet -
+  ```html
+  <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+  ```
 
-`<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">`
+  Now we have full access to all of the Bootstrap helper classes.
 
--from both "index.html" and "login.html".
+1. Replace the code in *login.html* with:
 
-Then add this stylesheet to both files:
-
-`<link rel=stylesheet type=text/css href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">`
-
-Replace the code in "login.html" with:
-
-```html
-<!doctype html>
-<html>
+  ```html
+  <!DOCTYPE html>
+  <html>
   <head>
-    <title>Flaskr-TDD | Entries</title>
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-    <script type=text/javascript src="{{url_for('static', filename='main.js') }}"></script>
+    <title>Flaskr-TDD | Login</title>
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
   </head>
   <body>
+
     <div class="container">
+
       <h1>Flaskr</h1>
+
       {% for message in get_flashed_messages() %}
         <div class="flash">{{ message }}</div>
       {% endfor %}
+
       <h3>Login</h3>
-      {% if error %}<p class="error"><strong>Error:</strong> {{ error }}{% endif %}
+
+      {% if error %}<p class="error"><strong>Error:</strong> {{ error }}{% endif %}</p>
       <form action="{{ url_for('login') }}" method="post">
         <dl>
-          <dt>Username:
-          <dd><input type="text" name="username">
-          <dt>Password:
-          <dd><input type="password" name="password">
-          <br>
-          <br>
-          <dd><input type="submit" class="btn btn-default" value="Login">
+          <dt>Username:</dt>
+          <dd><input type="text" name="username"></dd>
+          <dt>Password:</dt>
+          <dd><input type="password" name="password"></dd>
+          <br><br>
+          <dd><input type="submit" class="btn btn-default" value="Login"></dd>
           <span>Use "admin" for username and password</span>
         </dl>
       </form>
+
     </div>
-  </body>
-</html>
-```
 
-And replace the code in "index.html" with:
-
-```html
-<!doctype html>
-<html>
-  <head>
-    <title>Flaskr-TDD | Entries</title>
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-    <script type=text/javascript src="{{url_for('static', filename='main.js') }}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='main.js') }}"></script>
+
+  </body>
+  </html>
+  ```
+
+1. And replace the code in *index.html* with:
+
+  ```html
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <title>Flaskr</title>
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
   </head>
   <body>
+
     <div class="container">
+
       <h1>Flaskr-TDD</h1>
+
       {% if not session.logged_in %}
         <a href="{{ url_for('login') }}">log in</a>
       {% else %}
         <a href="{{ url_for('logout') }}">log out</a>
       {% endif %}
+
       {% for message in get_flashed_messages() %}
         <div class="flash">{{ message }}</div>
       {% endfor %}
+
       {% if session.logged_in %}
         <form action="{{ url_for('add_entry') }}" method="post" class="add-entry">
           <dl>
-            <dt>Title:
-            <dd><input type="text" size="30" name="title">
-            <dt>Text:
-            <dd><textarea name="text" rows="5" cols="40"></textarea>
-            <br>
-            <br>
-            <dd><input type="submit" class="btn btn-default" value="Share">
+            <dt>Title:</dt>
+            <dd><input type="text" size="30" name="title"></dd>
+            <dt>Text:</dt>
+            <dd><textarea name="text" rows="5" cols="40"></textarea></dd>
+            <br><br>
+            <dd><input type="submit" class="btn btn-default" value="Share"></dd>
           </dl>
         </form>
       {% endif %}
+
       <br>
+
       <ul class="entries">
-      {% for entry in entries %}
-        <li class="entry"><h2>{{ entry.title }}</h2>{{ entry.text|safe }}
-      {% else %}
-        <li><em>No entries yet. Add some!</em>
-      {% endfor %}
+        {% for entry in entries %}
+          <li class="entry"><h2>{{ entry.title }}</h2>{{ entry.text|safe }}</li>
+        {% else %}
+          <li><em>No entries yet. Add some!</em></li>
+        {% endfor %}
       </ul>
+
     </div>
+
+    <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='main.js') }}"></script>
+
   </body>
-</html>
-```
+  </html>
+  ```
+
+Check out your changes!
 
 ## Upgrade to SQLAlchemy
 
