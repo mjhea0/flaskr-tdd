@@ -21,13 +21,13 @@ Also, if you are completely new to Flask and/or web development in general, it's
 - 11/19/2013: Fixed typo. Updated unit tests.
 - 11/11/2013: Added information on requests.
 
-### TOC
+### Contents
 
 1. [Test Driven Development?](#test-driven-development)
 1. [Download Python](#download-python)
 1. [Project Setup](#project-setup)
 1. [First Test](#first-test)
-1. [Flaskr Setup](#flask-setup)
+1. [Flaskr Setup](#flaskr-setup)
 1. [Second Test](#second-test)
 1. [Database Setup](#database-setup)
 1. [Templates and Views](#templates-and-views)
