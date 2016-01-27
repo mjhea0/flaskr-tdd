@@ -1034,57 +1034,60 @@ Let's update the styles with Bootstrap 3.
 
 Check out your changes!
 
-## Upgrade to SQLAlchemy
+## SQLAlchemy
 
-Time to upgrade to [Flask-SQLAlchemy](http://pythonhosted.org/Flask-SQLAlchemy/), in order to better manage our database.
+Let's upgrade to [Flask-SQLAlchemy](http://pythonhosted.org/Flask-SQLAlchemy/), in order to better manage our database.
 
-#### Setup
+### Setup SQLAlchemy
 
-Start by installing Flask-SQLAlchemy:
+1. Start by installing Flask-SQLAlchemy:
 
-```sh
-$ pip install Flask-SQLAlchemy
-```
+  ```sh
+  $ pip install Flask-SQLAlchemy
+  ```
 
-Create a "db_create.py" file, then add the following code:
+1. Create a *create_db.py* file, then add the following code:
 
-```python
-# db_create.py
-
-
-from app import db
-from models import Flaskr
-
-# create the database and the db table
-db.create_all()
-
-# commit the changes
-db.session.commit()
-```
-
-This file will be used to create our new database. Go ahead and delete the old .db along with the "schema.sql" file. Next add a "models.py" file, which will be used to generate the new schema:
-
-```python
-from app import db
+  ```python
+  # create_db.py
 
 
-class Flaskr(db.Model):
+  from app import db
+  from models import Flaskr
 
-    __tablename__ = "flaskr"
 
-    post_id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String, nullable=False)
-    text = db.Column(db.String, nullable=False)
+  # create the database and the db table
+  db.create_all()
 
-    def __init__(self, title, text):
-        self.title = title
-        self.text = text
+  # commit the changes
+  db.session.commit()
+  ```
 
-    def __repr__(self):
-        return '<title {}>'.format(self.body)
-```
+  This file will be used to create our new database. Go ahead and delete the old .db (*flaskr.db*) along with the *schema.sql* file.
 
-#### Update app.py
+1. Next add a *models.py* file, which will be used to generate the new schema:
+
+  ```python
+  from app import db
+
+
+  class Flaskr(db.Model):
+
+      __tablename__ = "flaskr"
+
+      post_id = db.Column(db.Integer, primary_key=True)
+      title = db.Column(db.String, nullable=False)
+      text = db.Column(db.String, nullable=False)
+
+      def __init__(self, title, text):
+          self.title = title
+          self.text = text
+
+      def __repr__(self):
+          return '<title {}>'.format(self.body)
+  ```
+
+### Update *app.py*
 
 ```python
 # imports
@@ -1115,6 +1118,7 @@ app.config.from_object(__name__)
 db = SQLAlchemy(app)
 
 import models
+
 
 @app.route('/')
 def index():
@@ -1158,53 +1162,59 @@ def logout():
     flash('You were logged out')
     return redirect(url_for('index'))
 
+
 @app.route('/delete/<int:post_id>', methods=['GET'])
 def delete_entry(post_id):
     """Deletes post from database"""
-    result = { 'status':0, 'message': 'Error'  }
+    result = {'status': 0, 'message': 'Error'}
     try:
         new_id = post_id
         db.session.query(models.Flaskr).filter_by(post_id=new_id).delete()
         db.session.commit()
-        result = { 'status':1, 'message': "Post Deleted" }
+        result = {'status': 1, 'message': "Post Deleted"}
         flash('The entry was deleted.')
     except Exception as e:
-        result = { 'status':0, 'message': repr(e) }
+        result = {'status': 0, 'message': repr(e)}
     return jsonify(result)
+
 
 if __name__ == '__main__':
     app.run()
 ```
 
-Notice the changes in the config at the top, as well the means in which we're now accessing and manipulating the database in each function - via SQLAlchemy instead of vanilla SQL.
+Notice the changes in the config at the top, as well the means in which we're now accessing and manipulating the database in each view function - via SQLAlchemy instead of vanilla SQL.
 
-Run `create_db.py` to create the initial database:
+### Create the DB
+
+Run the following command to create the initial database:
+
 ```sh
 $ python create_db.py
 ```
 
-#### index.html
+### Update *index.html*
 
 Update this line:
 
 ```python
-<li class="entry"><h2 id={{ entry.post_id }}>{{ entry.title }}</h2>{{ entry.text|safe }}
+<li class="entry"><h2 id={{ entry.post_id }}>{{ entry.title }}</h2>{{ entry.text|safe }}</li>
 ```
 
 Pay attention to the `post_id`. Check the database to ensure that there is a matching field.
 
-#### Tests
+### Tests
 
 Finally, update the tests:
 
 ```python
-from app import app, db
 import unittest
 import os
-import tempfile
 from flask import json
 
+from app import app, db
+
 TEST_DB = 'test.db'
+
 
 class BasicTestCase(unittest.TestCase):
 
@@ -1222,13 +1232,12 @@ class BasicTestCase(unittest.TestCase):
 
 class FlaskrTestCase(unittest.TestCase):
 
-
     def setUp(self):
         """Set up a blank temp database before each test"""
         basedir = os.path.abspath(os.path.dirname(__file__))
         app.config['TESTING'] = True
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
-                os.path.join(basedir, TEST_DB)
+            os.path.join(basedir, TEST_DB)
         self.app = app.test_client()
         db.create_all()
 
@@ -1287,10 +1296,11 @@ if __name__ == '__main__':
     unittest.main()
 ```
 
-We're mostly updating the `setUp()` and `tearDown()` methods. Pay close attention to a few additional changes (`app.app` change to just `app.`)
+We've mostly just updated the `setUp()` and `tearDown()` methods.
 
+Run the tests, and then manually test it by running the server and logging in and out, adding new entries, and deleting old entries.
 
-#### Commit your code, then PUSH the new version to Heroku!
+If all is well, commit your code, then PUSH the new version to Heroku!
 
 ## Conclusion
 
