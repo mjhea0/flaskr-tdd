@@ -51,7 +51,7 @@ This tutorial utilizes the following requirements:
 
 ## Test Driven Development?
 
-![tdd](https://raw.github.com/mjhea0/flaskr-tdd/master/static/tdd.png)
+![tdd](https://raw.githubusercontent.com/mjhea0/flaskr-tdd/master/tdd.png)
 
 Test Driven Development (TDD) is an iterative development cycle that emphasizes writing automated tests before writing the actual feature of function. Put another way, TDD combines building and testing. This process not only helps ensure correctness of the code - but also helps to indirectly evolve the design and architecture of the project at hand.
 
