@@ -1,7 +1,7 @@
 # imports
 from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, flash, jsonify
-from flask_sqlalchemy import SQLAlchemy
+from flask.ext.sqlalchemy import SQLAlchemy
 import os
 
 # grabs the folder where the script runs
