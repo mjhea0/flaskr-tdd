@@ -3,8 +3,6 @@ image: python:3.5
 pages:
   script:
   - pip install -r requirements.txt
-  - pyvenv-3.5 env
-  - source env/bin/activate
   - python app-test.py
   artifacts:
     paths:
