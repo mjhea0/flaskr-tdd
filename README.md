@@ -1071,7 +1071,7 @@ Let's upgrade to [Flask-SQLAlchemy](http://pythonhosted.org/Flask-SQLAlchemy/), 
 1. Start by installing Flask-SQLAlchemy:
 
   ```sh
-  $ pip install Flask-SQLAlchemy
+  $ pip install Flask-SQLAlchemy==2.1
   ```
 
 1. Create a *create_db.py* file, then add the following code:
