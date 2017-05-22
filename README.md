@@ -504,7 +504,7 @@ Let's get these all green, one at a time...
 
 ### Show Entries
 
-1. First, add a View for displaying the entires to *app.py*:
+1. First, add a View for displaying the entries to *app.py*:
 
   ```python
   @app.route('/')
