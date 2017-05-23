@@ -504,7 +504,7 @@ Let's get these all green, one at a time...
 
 ### Show Entries
 
-1. First, add a View for displaying the entires to *app.py*:
+1. First, add a View for displaying the entries to *app.py*:
 
   ```python
   @app.route('/')
@@ -885,7 +885,7 @@ Now let's add some jQuery to make the site slightly more interactive.
 
 With the app in a working-state, let's shift gears and deploy the app to [Heroku](https://www.heroku.com).
 
-1. To do this, first sign up and then install the [Heroku Toolbelt](https://toolbelt.heroku.com/).
+1. To do this, first sign up and then install the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli).
 
 1. Next, install a web server called [gunicorn](http://gunicorn.org/):
 
