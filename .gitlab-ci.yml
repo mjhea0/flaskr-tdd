@@ -1,0 +1,11 @@
+image: python:3.5
+
+pages:
+  script:
+  - pip install -r requirements.txt
+  - python app-test.py
+  artifacts:
+    paths:
+    - public
+  only:
+  - master
