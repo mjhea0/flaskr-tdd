@@ -1,7 +1,7 @@
 # imports
 from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, flash, jsonify
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 import os
 
 # grabs the folder where the script runs
@@ -17,8 +17,9 @@ PASSWORD = 'admin'
 # defines the full path for the database
 DATABASE_PATH = os.path.join(basedir, DATABASE)
 
-# the database uri
+# database config
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + DATABASE_PATH
+SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 # create app
 app = Flask(__name__)
