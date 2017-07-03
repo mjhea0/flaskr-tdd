@@ -1,5 +1,7 @@
 # Flaskr - Intro to Flask, Test Driven Development, and jQuery
 
+!https://travis-ci.org/mjhea0/flaskr-tdd.svg?branch=master!:https://travis-ci.org/mjhea0/flaskr-tdd
+
 As many of you know, Flaskr - a mini-blog-like-app - is the app you build for the official [tutorial](http://flask.pocoo.org/docs/tutorial/introduction/) for Flask, the awesome, Python-based micro web framework. I've gone through the tutorial more times than I care to admit. Anyway, I wanted to take the tutorial a step further by adding test driven development and a bit of jQuery. This post is that tutorial. Enjoy.
 
 Also, if you are completely new to Flask and/or web development in general, it's important to grasp these basic fundamental concepts:
