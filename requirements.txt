@@ -1,8 +1,9 @@
-Flask==0.10.1
+click==6.7
+Flask==0.12.2
 Flask-SQLAlchemy==2.1
-gunicorn==19.4.5
+gunicorn==19.7.1
 itsdangerous==0.24
-Jinja2==2.8
-MarkupSafe==0.23
-SQLAlchemy==1.0.11
-Werkzeug==0.11.3
+Jinja2==2.9.6
+MarkupSafe==1.0
+SQLAlchemy==1.1.11
+Werkzeug==0.12.2

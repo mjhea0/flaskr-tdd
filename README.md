@@ -12,6 +12,7 @@ Also, if you are completely new to Flask and/or web development in general, it's
 
 ### Change Log
 
+- 07/03/2017: Updated to Python 3.6.1
 - 01/24/2016: Updated to Python 3! (v3.5.1)
 - 08/24/2014: PEP8 updates.
 - 02/25/2014: Upgraded to SQLAlchemy.
@@ -44,10 +45,10 @@ Also, if you are completely new to Flask and/or web development in general, it's
 
 This tutorial utilizes the following requirements:
 
-1. Python v3.5.1
-1. Flask v0.10.1
+1. Python v3.6.1
+1. Flask v0.12.2
 1. Flask-SQLAlchemy v2.1
-1. gunicorn v19.4.5
+1. gunicorn v19.7.1
 
 ## Test Driven Development?
 
@@ -64,9 +65,9 @@ TDD usually follows the "Red-Green-Refactor" cycle, as shown in the image above:
 
 ## Download Python
 
-Before beginning make sure you have the latest version of [Python 3.5](https://www.python.org/downloads/release/python-350/) installed, which you can download from http://www.python.org/download/.
+Before beginning make sure you have the latest version of [Python 3.6](https://www.python.org/downloads/release/python-360/) installed, which you can download from http://www.python.org/download/.
 
-> **NOTE**: This tutorial uses Python v3.5.1.
+> **NOTE**: This tutorial uses Python v3.6.1.
 
 Along with Python, this also installed-
 - [pip](https://pip.pypa.io/en/stable/) - a [package management](http://en.wikipedia.org/wiki/Package_management_system) system for Python, similar to gem or npm for Ruby and Node, respectively.
@@ -84,7 +85,7 @@ Along with Python, this also installed-
 1. Create and activate your virtual env:
 
   ```sh
-  $ pyvenv-3.5 env
+  $ python3 -m venv env
   $ source env/bin/activate
   ```
 
@@ -93,7 +94,7 @@ Along with Python, this also installed-
 1. Install Flask with pip:
 
   ```sh
-  $ pip3 install Flask
+  (env)$ pip install flask==0.12.2
   ```
 
 ## First Test
@@ -103,7 +104,7 @@ Let's start with a simple "hello, world" app.
 1. Create a test file:
 
   ```sh
-  $ touch app-test.py
+  (env)$ touch app-test.py
   ```
 
   Open this file in your favorite text editor. (I use [Sublime](http://www.sublimetext.com/).) Add the following code:
@@ -132,7 +133,7 @@ Let's start with a simple "hello, world" app.
 1. Run the test
 
   ```sh
-  $ python app-test.py
+  (env)$ python app-test.py
   ```
 
   If all goes well, this will fail.
@@ -140,7 +141,7 @@ Let's start with a simple "hello, world" app.
 1. Now add the code for this to pass.
 
   ```sh
-  $ touch app.py
+  (env)$ touch app.py
   ```
 
   Code:
@@ -163,7 +164,7 @@ Let's start with a simple "hello, world" app.
 1. Run the app:
 
   ```sh
-  $ python app.py
+  (env)$ python app.py
   ```
 
   Then Navigate to [http://localhost:5000/](http://localhost:5000/). You should see "Hello, World!" on your screen.
@@ -173,7 +174,7 @@ Let's start with a simple "hello, world" app.
 1. Run the test again:
 
   ```sh
-  $ python app-test.py
+  (env)$ python app-test.py
   .
   ----------------------------------------------------------------------
   Ran 1 test in 0.016s
@@ -265,7 +266,7 @@ Let's create the basic file for running our application. Before that though, we 
 1. Run it:
 
   ```sh
-  $ python app.py
+  (env)$ python app.py
   ```
 
   Launch the server. You should see the 404 error because no routes or views are setup. Return to the terminal. Kill the server. Now run the unit test. It should pass.
@@ -890,13 +891,13 @@ With the app in a working-state, let's shift gears and deploy the app to [Heroku
 1. Next, install a web server called [gunicorn](http://gunicorn.org/):
 
   ```sh
-  $ pip install gunicorn
+  (env)$ pip install gunicorn==19.7.1
   ```
 
 1. Create a [Procfile](https://devcenter.heroku.com/articles/procfile) in the project root:
 
   ```sh
-  $ touch Procfile
+  (env)$ touch Procfile
   ```
 
   And add the following code:
@@ -908,13 +909,13 @@ With the app in a working-state, let's shift gears and deploy the app to [Heroku
 1. Create a *requirements.txt* file to specify the external dependencies that need to be installed for the app to work:
 
   ```sh
-  $ pip freeze > requirements.txt
+  (env)$ pip freeze > requirements.txt
   ```
 
 1. Create a *.gitignore* file:
 
   ```sh
-  $ touch .gitignore
+  (env)$ touch .gitignore
   ```
 
   And include the following files and folders (so they are not included in version control):
@@ -929,17 +930,17 @@ With the app in a working-state, let's shift gears and deploy the app to [Heroku
 1. Add a local Git repo:
 
   ```sh
-  $ git init
-  $ git add -A
-  $ git commit -m "initial"
+  (env)$ git init
+  (env)$ git add -A
+  (env)$ git commit -m "initial"
   ```
 
 1. Deploy to Heroku:
 
   ```sh
-  $ heroku create
-  $ git push heroku master
-  $ heroku open
+  (env)$ heroku create
+  (env)$ git push heroku master
+  (env)$ heroku open
   ```
 
 ## Test (again!)
@@ -1121,7 +1122,7 @@ Let's upgrade to [Flask-SQLAlchemy](http://pythonhosted.org/Flask-SQLAlchemy/), 
 # imports
 from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, flash, jsonify
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 import os
 
 # grabs the folder where the script runs
@@ -1137,8 +1138,9 @@ PASSWORD = 'admin'
 # defines the full path for the database
 DATABASE_PATH = os.path.join(basedir, DATABASE)
 
-# the database uri
+# database config
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + DATABASE_PATH
+SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 # create app
 app = Flask(__name__)
@@ -1217,7 +1219,7 @@ Notice the changes in the config at the top, as well the means in which we're no
 Run the following command to create the initial database:
 
 ```sh
-$ python create_db.py
+(env)$ python create_db.py
 ```
 
 ### Update *index.html*
