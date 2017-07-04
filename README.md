@@ -91,7 +91,7 @@ Along with Python, this also installed-
   $ source env/bin/activate
   ```
 
-  > **NOTE**: You know that you are in a virtual env, as the actual "env" is now show before the $ in your terminal - (env). To exit the virtual environment, use the command `deactivate`, then you can reactivate by navigating back to the directory and running - `source env/bin/activate`.
+  > **NOTE**: You know that you are in a virtual env, as the actual "env" is now showing before the $ in your terminal - (env). To exit the virtual environment, use the command `deactivate`, then you can reactivate by navigating back to the directory and running - `source env/bin/activate`.
 
 1. Install Flask with pip:
 
