@@ -1351,7 +1351,7 @@ def search():
     if query:
         return render_template('search.html', entries=entries, query=query) 
     return render_template('search.html')
-    ```
+```
 
 ### Add search.html
 
@@ -1359,7 +1359,7 @@ In templates folder create search.html
 
 ```sh
   (env)$ touch search.html
-  ```
+```
 
 Now add the following code to search.html
 
@@ -1427,7 +1427,7 @@ Add a search button for better navigation
     {% else %}
       <button type="button" class="btn"><a href="{{ url_for('logout') }}">log out</a></button>
     {% endif %}
-    ```
+```
 
 ## Conclusion
 
