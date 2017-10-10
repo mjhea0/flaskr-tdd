@@ -14,6 +14,7 @@ Also, if you are completely new to Flask and/or web development in general, it's
 
 ### Change Log
 
+- 10/10/2017: Added Search Feature
 - 07/03/2017: Updated to Python 3.6.1
 - 01/24/2016: Updated to Python 3! (v3.5.1)
 - 08/24/2014: PEP8 updates.
@@ -41,6 +42,7 @@ Also, if you are completely new to Flask and/or web development in general, it's
 1. [Test (again!)](#test-again)
 1. [Bootstrap](#bootstrap)
 1. [SQLAlchemy](#sqlalchemy)
+1. [Search Page](#search)
 1. [Conclusion](#conclusion)
 
 ### Requirements
@@ -1333,6 +1335,99 @@ We've mostly just updated the `setUp()` and `tearDown()` methods.
 Run the tests, and then manually test it by running the server and logging in and out, adding new entries, and deleting old entries.
 
 If all is well, update your requirements (`pip  freeze > requirements.txt`) commit your code, then PUSH the new version to Heroku!
+
+## Search Page
+
+Let's add a search page to our blog. It will be a liitle nice feature which will be handy when we have many blog posts.
+
+### Update app.py
+
+```@app.route('/search/', methods=['GET'])
+def search():
+    query = request.args.get("query")
+    entries = db.session.query(models.Flaskr)
+    
+    print(query)
+    if query:
+        return render_template('search.html', entries=entries, query=query) 
+    return render_template('search.html')
+    ```
+
+### Add search.html
+
+In templates folder create search.html
+
+```sh
+  (env)$ touch search.html
+  ```
+
+Now add the following code to search.html
+
+```<!DOCTYPE html>
+<html>
+<head>
+  <title>Flaskr</title>
+  <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+</head>
+<body>
+
+  <div class="container">
+
+    <h1>Flaskr-TDD</h1>
+
+    <button type="button" class="btn"><a href="{{ url_for('index') }}"> Home </a></button>
+
+    {% if not session.logged_in %}
+      <button type="button" class="btn"><a href="{{ url_for('login') }}">log in</a></button>
+    {% else %}
+      <button type="button" class="btn"><a href="{{ url_for('logout') }}">log out</a></button>
+    {% endif %}
+
+    {% for message in get_flashed_messages() %}
+      <div class="flash">{{ message }}</div>
+    {% endfor %}
+
+
+    <form action="{{ url_for('search') }}" method="get">
+      <dl>
+        <dt>Search:</dt>
+        <dd><input type="text" name="query"></dd>
+        <br>
+        <dd><input type="submit" class="btn btn-default" value="Search"></dd>
+      </dl>
+    </form>
+
+    <ul class="entries">
+      {% for entry in entries %}
+        {% if query.lower() in entry.title.lower() or query.lower() in entry.text.lower() %}
+        <li class="entry"><h2 id={{ entry.post_id }}>{{ entry.title }}</h2>{{ entry.text|safe }}</li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+    
+  
+  </div>
+
+  <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="{{url_for('static', filename='main.js') }}"></script>
+
+</body>
+</html>
+```
+
+### Update index.html
+
+Add a search button for better navigation
+
+```<button type="button" class="btn"><a href="{{ url_for('search') }}">Search</a></button>
+
+    {% if not session.logged_in %}
+      <button type="button" class="btn"><a href="{{ url_for('login') }}">log in</a></button>
+    {% else %}
+      <button type="button" class="btn"><a href="{{ url_for('logout') }}">log out</a></button>
+    {% endif %}
+    ```
 
 ## Conclusion
 
