@@ -1,6 +1,5 @@
 import unittest
 import os
-import requests
 from flask import json
 
 from app import app, db
