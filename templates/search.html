@@ -10,7 +10,7 @@
 
     <h1>Flaskr-TDD</h1>
 
-    <button type="button" class="btn"><a href="{{ url_for('search') }}">Search</a></button>
+    <button type="button" class="btn"><a href="{{ url_for('index') }}"> Home </a></button>
 
     {% if not session.logged_in %}
       <button type="button" class="btn"><a href="{{ url_for('login') }}">log in</a></button>
@@ -22,29 +22,25 @@
       <div class="flash">{{ message }}</div>
     {% endfor %}
 
-    {% if session.logged_in %}
-      <form action="{{ url_for('add_entry') }}" method="post" class="add-entry">
-        <dl>
-          <dt>Title:</dt>
-          <dd><input type="text" size="30" name="title"></dd>
-          <dt>Text:</dt>
-          <dd><textarea name="text" rows="5" cols="40"></textarea></dd>
-          <br><br>
-          <dd><input type="submit" class="btn btn-default" value="Share"></dd>
-        </dl>
-      </form>
-    {% endif %}
 
-    <br>
+    <form action="{{ url_for('search') }}" method="get">
+      <dl>
+        <dt>Search:</dt>
+        <dd><input type="text" name="query"></dd>
+        <br>
+        <dd><input type="submit" class="btn btn-default" value="Search"></dd>
+      </dl>
+    </form>
 
     <ul class="entries">
       {% for entry in entries %}
+        {% if query.lower() in entry.title.lower() or query.lower() in entry.text.lower() %}
         <li class="entry"><h2 id={{ entry.post_id }}>{{ entry.title }}</h2>{{ entry.text|safe }}</li>
-      {% else %}
-        <li><em>No entries yet. Add some!</em></li>
+        {% endif %}
       {% endfor %}
     </ul>
-
+    
+  
   </div>
 
   <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
