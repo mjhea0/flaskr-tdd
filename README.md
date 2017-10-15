@@ -1338,32 +1338,33 @@ If all is well, update your requirements (`pip  freeze > requirements.txt`) comm
 
 ## Search Page
 
-Let's add a search page to our blog. It will be a liitle nice feature which will be handy when we have many blog posts.
+Let's add a search page to our blog. It will be a nice feature that will come in handy after we have a number of blog posts.
 
-### Update app.py
+### Update *app.py*
 
 ```@app.route('/search/', methods=['GET'])
 def search():
     query = request.args.get("query")
     entries = db.session.query(models.Flaskr)
-    
-    print(query)
     if query:
-        return render_template('search.html', entries=entries, query=query) 
+        return render_template('search.html', entries=entries, query=query)
     return render_template('search.html')
 ```
 
+> **NOTE**: Be sure to write a test for this on your own!
+
 ### Add search.html
 
-In templates folder create search.html
+In the "templates" folder create a new file called *search.html*:
 
 ```sh
-  (env)$ touch search.html
+(env)$ touch search.html
 ```
 
-Now add the following code to search.html
+Now add the following code to *search.html*:
 
-```<!DOCTYPE html>
+```html
+<!DOCTYPE html>
 <html>
 <head>
   <title>Flaskr</title>
@@ -1404,8 +1405,8 @@ Now add the following code to search.html
         {% endif %}
       {% endfor %}
     </ul>
-    
-  
+
+
   </div>
 
   <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
@@ -1416,17 +1417,12 @@ Now add the following code to search.html
 </html>
 ```
 
-### Update index.html
+### Update *index.html*
 
-Add a search button for better navigation
+Add a search button for better navigation just below `<h1>Flaskr-TDD</h1>`:
 
-```<button type="button" class="btn"><a href="{{ url_for('search') }}">Search</a></button>
-
-    {% if not session.logged_in %}
-      <button type="button" class="btn"><a href="{{ url_for('login') }}">log in</a></button>
-    {% else %}
-      <button type="button" class="btn"><a href="{{ url_for('logout') }}">log out</a></button>
-    {% endif %}
+```html
+<button type="button" class="btn"><a href="{{ url_for('search') }}">Search</a></button>
 ```
 
 ## Conclusion

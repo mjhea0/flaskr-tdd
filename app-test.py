@@ -82,7 +82,6 @@ class FlaskrTestCase(unittest.TestCase):
         response = tester.get('/search', content_type='html/text')
         self.assertEqual(response.status_code, 301)
 
-
     def test_delete_message(self):
         """Ensure the messages are being deleted"""
         rv = self.app.get('/delete/1')
