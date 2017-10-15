@@ -42,7 +42,7 @@ Also, if you are completely new to Flask and/or web development in general, it's
 1. [Test (again!)](#test-again)
 1. [Bootstrap](#bootstrap)
 1. [SQLAlchemy](#sqlalchemy)
-1. [Search Page](#search)
+1. [Search Page](#search-page)
 1. [Conclusion](#conclusion)
 
 ### Requirements
