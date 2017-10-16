@@ -2,12 +2,11 @@
 <html>
 <head>
   <title>Flaskr</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" 
-  integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
 </head>
 <body>
 
-  <div class="container-fluid">
+  <div class="container">
 
     <h1>Flaskr-TDD</h1>
 
@@ -19,15 +18,16 @@
       <a class="btn btn-warning" role="button" href="{{ url_for('logout') }}">log out</a>
     {% endif %}
 
-    {% for message in get_flashed_messages() %}
-      <div class="flash">{{ message }}</div>
-    {% endfor %}
+    <br><br>
 
+    {% for message in get_flashed_messages() %}
+      <div class="flash alert alert-success col-sm-4" role="success">{{ message }}</div>
+    {% endfor %}
 
     <form action="{{ url_for('search') }}" method="get" class="from-group">
       <dl>
         <dt>Search:</dt>
-        <dd><input type="text" name="query" class="form-control col-lg-2" ></dd>
+        <dd><input type="text" name="query" class="form-control col-sm-4" ></dd>
         <br>
         <dd><input type="submit" class="btn btn-info" value="Search" ></dd>
       </dl>
@@ -40,8 +40,8 @@
         {% endif %}
       {% endfor %}
     </ul>
-    
-  
+
+
   </div>
 
   <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>

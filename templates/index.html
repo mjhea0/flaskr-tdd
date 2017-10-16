@@ -2,12 +2,11 @@
 <html>
 <head>
   <title>Flaskr</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" 
-  integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
 </head>
 <body>
 
-  <div class="container-fluid">
+  <div class="container">
 
     <h1>Flaskr-TDD</h1>
 
@@ -19,19 +18,21 @@
       <a class="btn btn-warning" role="button" href="{{ url_for('logout') }}">log out</a>
     {% endif %}
 
+    <br><br>
+
     {% for message in get_flashed_messages() %}
-      <div class="flash alert alert-success col-lg-2" role="success">{{ message }}</div>
+      <div class="flash alert alert-success col-sm-4" role="success">{{ message }}</div>
     {% endfor %}
 
     {% if session.logged_in %}
       <form action="{{ url_for('add_entry') }}" method="post" class="add-entry form-group">
         <dl>
           <dt>Title:</dt>
-          <dd><input type="text" size="30" name="title" class="form-control col-lg-2"></dd>
+          <dd><input type="text" size="30" name="title" class="form-control col-sm-4"></dd>
           <dt>Text:</dt>
-          <dd><textarea name="text" rows="5" cols="40" class="form-control col-lg-2"></textarea></dd>
+          <dd><textarea name="text" rows="5" cols="40" class="form-control col-sm-4"></textarea></dd>
           <br><br>
-          <dd><input type="submit" class="btn btn-primary" value="Share" class="form-control"></dd>
+          <dd><input type="submit" class="btn btn-primary" value="Share"></dd>
         </dl>
       </form>
     {% endif %}

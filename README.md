@@ -12,8 +12,13 @@ Also, if you are completely new to Flask and/or web development in general, it's
 
 > **NOTE**: This tutorial is powered by **[Real Python](https://realpython.com)**. Please support this open source project by purchasing our [courses](http://www.realpython.com/courses) to learn Python and web development with Django and Flask!
 
+### What you're building
+
+![flaskr app](/flaskr-app.png)
+
 ### Change Log
 
+- 10/16/2017: Updated to Bootstrap 4
 - 10/10/2017: Added Search Feature
 - 07/03/2017: Updated to Python 3.6.1
 - 01/24/2016: Updated to Python 3! (v3.5.1)
@@ -953,12 +958,12 @@ Let's test this in the cloud. Run `heroku open` to open the app in the browser.
 
 ## Bootstrap
 
-Let's update the styles with Bootstrap 3.
+Let's update the styles with Bootstrap 4.
 
 1. First, remove the *style.css* stylesheet from both *index.html* and *login.html*.Then add this stylesheet to both files:
 
   ```html
-  <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
   ```
 
   Now we have full access to all of the Bootstrap helper classes.
@@ -970,7 +975,7 @@ Let's update the styles with Bootstrap 3.
   <html>
   <head>
     <title>Flaskr-TDD | Login</title>
-    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
   </head>
   <body>
 
@@ -978,21 +983,23 @@ Let's update the styles with Bootstrap 3.
 
       <h1>Flaskr</h1>
 
+      <br><br>
+
       {% for message in get_flashed_messages() %}
-        <div class="flash">{{ message }}</div>
+        <div class="flash alert alert-success col-sm-4" role="success">{{ message }}</div>
       {% endfor %}
 
       <h3>Login</h3>
 
-      {% if error %}<p class="error"><strong>Error:</strong> {{ error }}{% endif %}</p>
-      <form action="{{ url_for('login') }}" method="post">
+      {% if error %}<p class="alert alert-danger col-sm-4" role="danger"><strong>Error:</strong> {{ error }}{% endif %}</p>
+      <form action="{{ url_for('login') }}" method="post" class="form-group">
         <dl>
           <dt>Username:</dt>
-          <dd><input type="text" name="username"></dd>
+          <dd><input type="text" name="username" class="form-control col-sm-4"></dd>
           <dt>Password:</dt>
-          <dd><input type="password" name="password"></dd>
+          <dd><input type="password" name="password" class="form-control col-sm-4"></dd>
           <br><br>
-          <dd><input type="submit" class="btn btn-default" value="Login"></dd>
+          <dd><input type="submit" class="btn btn-primary" value="Login"></dd>
           <span>Use "admin" for username and password</span>
         </dl>
       </form>
@@ -1014,7 +1021,7 @@ Let's update the styles with Bootstrap 3.
   <html>
   <head>
     <title>Flaskr</title>
-    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
   </head>
   <body>
 
@@ -1023,24 +1030,26 @@ Let's update the styles with Bootstrap 3.
       <h1>Flaskr-TDD</h1>
 
       {% if not session.logged_in %}
-        <a href="{{ url_for('login') }}">log in</a>
+        <a class="btn btn-success" role="button" href="{{ url_for('login') }}">log in</a>
       {% else %}
-        <a href="{{ url_for('logout') }}">log out</a>
+        <a class="btn btn-warning" role="button" href="{{ url_for('logout') }}">log out</a>
       {% endif %}
 
+      <br><br>
+
       {% for message in get_flashed_messages() %}
-        <div class="flash">{{ message }}</div>
+        <div class="flash alert alert-success col-sm-4" role="success">{{ message }}</div>
       {% endfor %}
 
       {% if session.logged_in %}
-        <form action="{{ url_for('add_entry') }}" method="post" class="add-entry">
+        <form action="{{ url_for('add_entry') }}" method="post" class="add-entry form-group">
           <dl>
             <dt>Title:</dt>
-            <dd><input type="text" size="30" name="title"></dd>
+            <dd><input type="text" size="30" name="title" class="form-control col-sm-4"></dd>
             <dt>Text:</dt>
-            <dd><textarea name="text" rows="5" cols="40"></textarea></dd>
+            <dd><textarea name="text" rows="5" cols="40" class="form-control col-sm-4"></textarea></dd>
             <br><br>
-            <dd><input type="submit" class="btn btn-default" value="Share"></dd>
+            <dd><input type="submit" class="btn btn-primary" value="Share"></dd>
           </dl>
         </form>
       {% endif %}
@@ -1342,7 +1351,8 @@ Let's add a search page to our blog. It will be a nice feature that will come in
 
 ### Update *app.py*
 
-```@app.route('/search/', methods=['GET'])
+```python
+@app.route('/search/', methods=['GET'])
 def search():
     query = request.args.get("query")
     entries = db.session.query(models.Flaskr)
@@ -1368,7 +1378,7 @@ Now add the following code to *search.html*:
 <html>
 <head>
   <title>Flaskr</title>
-  <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
 </head>
 <body>
 
@@ -1376,25 +1386,26 @@ Now add the following code to *search.html*:
 
     <h1>Flaskr-TDD</h1>
 
-    <button type="button" class="btn"><a href="{{ url_for('index') }}"> Home </a></button>
+    <a class="btn btn-primary" role="button" href="{{ url_for('index') }}"> Home </a>
 
     {% if not session.logged_in %}
-      <button type="button" class="btn"><a href="{{ url_for('login') }}">log in</a></button>
+      <a class="btn btn-success" role="button" href="{{ url_for('login') }}">log in</a>
     {% else %}
-      <button type="button" class="btn"><a href="{{ url_for('logout') }}">log out</a></button>
+      <a class="btn btn-warning" role="button" href="{{ url_for('logout') }}">log out</a>
     {% endif %}
 
+    <br><br>
+
     {% for message in get_flashed_messages() %}
-      <div class="flash">{{ message }}</div>
+      <div class="flash alert alert-success col-sm-4" role="success">{{ message }}</div>
     {% endfor %}
 
-
-    <form action="{{ url_for('search') }}" method="get">
+    <form action="{{ url_for('search') }}" method="get" class="from-group">
       <dl>
         <dt>Search:</dt>
-        <dd><input type="text" name="query"></dd>
+        <dd><input type="text" name="query" class="form-control col-sm-4" ></dd>
         <br>
-        <dd><input type="submit" class="btn btn-default" value="Search"></dd>
+        <dd><input type="submit" class="btn btn-info" value="Search" ></dd>
       </dl>
     </form>
 
@@ -1422,7 +1433,7 @@ Now add the following code to *search.html*:
 Add a search button for better navigation just below `<h1>Flaskr-TDD</h1>`:
 
 ```html
-<button type="button" class="btn"><a href="{{ url_for('search') }}">Search</a></button>
+<a class="btn btn-info" role="button" href="{{ url_for('search') }}">Search</a>
 ```
 
 ## Conclusion
