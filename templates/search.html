@@ -2,20 +2,21 @@
 <html>
 <head>
   <title>Flaskr</title>
-  <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" 
+  integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
 </head>
 <body>
 
-  <div class="container">
+  <div class="container-fluid">
 
     <h1>Flaskr-TDD</h1>
 
-    <button type="button" class="btn"><a href="{{ url_for('index') }}"> Home </a></button>
+    <a class="btn btn-primary" role="button" href="{{ url_for('index') }}"> Home </a>
 
     {% if not session.logged_in %}
-      <button type="button" class="btn"><a href="{{ url_for('login') }}">log in</a></button>
+      <a class="btn btn-success" role="button" href="{{ url_for('login') }}">log in</a>
     {% else %}
-      <button type="button" class="btn"><a href="{{ url_for('logout') }}">log out</a></button>
+      <a class="btn btn-warning" role="button" href="{{ url_for('logout') }}">log out</a>
     {% endif %}
 
     {% for message in get_flashed_messages() %}
@@ -23,12 +24,12 @@
     {% endfor %}
 
 
-    <form action="{{ url_for('search') }}" method="get">
+    <form action="{{ url_for('search') }}" method="get" class="from-group">
       <dl>
         <dt>Search:</dt>
-        <dd><input type="text" name="query"></dd>
+        <dd><input type="text" name="query" class="form-control col-lg-2" ></dd>
         <br>
-        <dd><input type="submit" class="btn btn-default" value="Search"></dd>
+        <dd><input type="submit" class="btn btn-info" value="Search" ></dd>
       </dl>
     </form>
 

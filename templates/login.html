@@ -2,11 +2,12 @@
 <html>
 <head>
   <title>Flaskr-TDD | Login</title>
-  <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" 
+  integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">  
 </head>
 <body>
 
-  <div class="container">
+  <div class="container-fluid">
 
     <h1>Flaskr</h1>
 
@@ -16,15 +17,15 @@
 
     <h3>Login</h3>
 
-    {% if error %}<p class="error"><strong>Error:</strong> {{ error }}{% endif %}</p>
-    <form action="{{ url_for('login') }}" method="post">
+    {% if error %}<p class="alert alert-danger col-lg-2" role="danger"><strong>Error:</strong> {{ error }}{% endif %}</p>
+    <form action="{{ url_for('login') }}" method="post" class="form-group">
       <dl>
         <dt>Username:</dt>
-        <dd><input type="text" name="username"></dd>
+        <dd><input type="text" name="username" class="form-control col-lg-2"></dd>
         <dt>Password:</dt>
-        <dd><input type="password" name="password"></dd>
+        <dd><input type="password" name="password" class="form-control col-lg-2"></dd>
         <br><br>
-        <dd><input type="submit" class="btn btn-default" value="Login"></dd>
+        <dd><input type="submit" class="btn btn-primary" value="Login"></dd>
         <span>Use "admin" for username and password</span>
       </dl>
     </form>
