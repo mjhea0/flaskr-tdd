@@ -18,6 +18,7 @@ Also, if you are completely new to Flask and/or web development in general, it's
 
 ### Change Log
 
+- 10/16/2017: Updated to Python 3.6.2
 - 10/16/2017: Updated to Bootstrap 4
 - 10/10/2017: Added Search Feature
 - 07/03/2017: Updated to Python 3.6.1
@@ -54,7 +55,7 @@ Also, if you are completely new to Flask and/or web development in general, it's
 
 This tutorial utilizes the following requirements:
 
-1. Python v3.6.1
+1. Python v3.6.2
 1. Flask v0.12.2
 1. Flask-SQLAlchemy v2.1
 1. gunicorn v19.7.1
@@ -76,7 +77,7 @@ TDD usually follows the "Red-Green-Refactor" cycle, as shown in the image above:
 
 Before beginning make sure you have the latest version of [Python 3.6](https://www.python.org/downloads/release/python-360/) installed, which you can download from http://www.python.org/download/.
 
-> **NOTE**: This tutorial uses Python v3.6.1.
+> **NOTE**: This tutorial uses Python v3.6.2.
 
 Along with Python, this also installed-
 - [pip](https://pip.pypa.io/en/stable/) - a [package management](http://en.wikipedia.org/wiki/Package_management_system) system for Python, similar to gem or npm for Ruby and Node, respectively.
@@ -899,50 +900,56 @@ With the app in a working-state, let's shift gears and deploy the app to [Heroku
 
 1. Next, install a web server called [gunicorn](http://gunicorn.org/):
 
-  ```sh
-  (env)$ pip install gunicorn==19.7.1
-  ```
+    ```sh
+    (env)$ pip install gunicorn==19.7.1
+    ```
 
 1. Create a [Procfile](https://devcenter.heroku.com/articles/procfile) in the project root:
 
-  ```sh
-  (env)$ touch Procfile
-  ```
+    ```sh
+    (env)$ touch Procfile
+    ```
 
-  And add the following code:
+    And add the following code:
 
-  ```sh
-  web: gunicorn app:app
-  ```
+    ```sh
+    web: gunicorn app:app
+    ```
 
 1. Create a *requirements.txt* file to specify the external dependencies that need to be installed for the app to work:
 
-  ```sh
-  (env)$ pip freeze > requirements.txt
-  ```
+    ```sh
+    (env)$ pip freeze > requirements.txt
+    ```
 
 1. Create a *.gitignore* file:
 
-  ```sh
-  (env)$ touch .gitignore
-  ```
+    ```sh
+    (env)$ touch .gitignore
+    ```
 
-  And include the following files and folders (so they are not included in version control):
+    And include the following files and folders (so they are not included in version control):
 
-  ```sh
-  env
-  *.pyc
-  *.DS_Store
-  __pycache__
-  ```
+    ```sh
+    env
+    *.pyc
+    *.DS_Store
+    __pycache__
+    ```
 
 1. Add a local Git repo:
 
-  ```sh
-  (env)$ git init
-  (env)$ git add -A
-  (env)$ git commit -m "initial"
-  ```
+    ```sh
+    (env)$ git init
+    (env)$ git add -A
+    (env)$ git commit -m "initial"
+    ```
+
+1. To speficy the correct Python runtime, add a new file to the project root called *runtime.txt*:
+
+    ```
+    python-3.6.2
+    ```
 
 1. Deploy to Heroku:
 
