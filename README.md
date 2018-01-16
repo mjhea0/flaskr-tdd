@@ -10,7 +10,7 @@ Also, if you are completely new to Flask and/or web development in general, it's
 1. What a "request" is.
 1. How HTML pages are rendered and/or returned to the end user.
 
-> **NOTE**: This tutorial is powered by **[Real Python](https://realpython.com)**. Please support this open source project by purchasing our [courses](http://www.realpython.com/courses) to learn Python and web development with Django and Flask!
+> **NOTE**: This tutorial is powered by **[TestDriven.io](https://testdriven.io/)**. Please support this open source project by purchasing the [Microservices with Docker, Flask, and React](https://testdriven.io/) course to learn how to build, test, and deploy microservices powered by Docker, Flask, and React!
 
 ### What you're building
 
@@ -1447,5 +1447,5 @@ Add a search button for better navigation just below `<h1>Flaskr-TDD</h1>`:
 
 1. Want my code? Grab it [here](https://github.com/mjhea0/flaskr-tdd).
 1. View my app on [Heroku](http://flaskr-tdd.herokuapp.com/). Cheers!
-1. Want more Flask fun? Check out [Real Python](http://www.realpython.com).
+1. Want more Flask fun? Check out [Microservices with Docker, Flask, and React](https://testdriven.io/).
 1. Want something else added to this tutorial? Add an issue to the repo. Cheers!
