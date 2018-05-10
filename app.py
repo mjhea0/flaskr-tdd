@@ -1,10 +1,12 @@
 # imports
+import os
+
 from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
-import os
 
-# grabs the folder where the script runs
+
+# get the folder where this file runs
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 # configuration
@@ -14,7 +16,7 @@ SECRET_KEY = 'my_precious'
 USERNAME = 'admin'
 PASSWORD = 'admin'
 
-# defines the full path for the database
+# define the full path for the database
 DATABASE_PATH = os.path.join(basedir, DATABASE)
 
 # database config
@@ -74,7 +76,7 @@ def logout():
 
 @app.route('/delete/<int:post_id>', methods=['GET'])
 def delete_entry(post_id):
-    """Deletes post from database"""
+    """Deletes post from database."""
     result = {'status': 0, 'message': 'Error'}
     try:
         new_id = post_id
