@@ -1,6 +1,6 @@
 import unittest
 import os
-from flask import json
+import json
 
 from app import app, db
 
@@ -10,13 +10,13 @@ TEST_DB = 'test.db'
 class BasicTestCase(unittest.TestCase):
 
     def test_index(self):
-        """inital test. ensure flask was set up correctly"""
+        """initial test. ensure flask was set up correctly"""
         tester = app.test_client(self)
         response = tester.get('/', content_type='html/text')
         self.assertEqual(response.status_code, 200)
 
     def test_database(self):
-        """inital test. ensure that the database exists"""
+        """initial test. ensure that the database exists"""
         tester = os.path.exists("flaskr.db")
         self.assertTrue(tester)
 
@@ -75,12 +75,6 @@ class FlaskrTestCase(unittest.TestCase):
         self.assertNotIn(b'No entries here so far', rv.data)
         self.assertIn(b'&lt;Hello&gt;', rv.data)
         self.assertIn(b'<strong>HTML</strong> allowed here', rv.data)
-
-    def test_search(self):
-        """Ensure that search is working correctly"""
-        tester = app.test_client(self)
-        response = tester.get('/search', content_type='html/text')
-        self.assertEqual(response.status_code, 301)
 
     def test_delete_message(self):
         """Ensure the messages are being deleted"""

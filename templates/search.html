@@ -2,7 +2,7 @@
 <html>
 <head>
   <title>Flaskr</title>
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="//stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
 </head>
 <body>
 
@@ -36,7 +36,7 @@
     <ul class="entries">
       {% for entry in entries %}
         {% if query.lower() in entry.title.lower() or query.lower() in entry.text.lower() %}
-        <li class="entry"><h2 id={{ entry.post_id }}>{{ entry.title }}</h2>{{ entry.text|safe }}</li>
+        <li class="entry"><h2 id="{{ entry.post_id }}">{{ entry.title }}</h2>{{ entry.text|safe }}</li>
         {% endif %}
       {% endfor %}
     </ul>
@@ -44,8 +44,8 @@
 
   </div>
 
-  <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
-  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-2.2.4.min.js"></script>
+  <script src="//stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="{{url_for('static', filename='main.js') }}"></script>
 
 </body>
