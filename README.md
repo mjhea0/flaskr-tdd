@@ -111,6 +111,12 @@ Along with Python, this also installed-
     (env)$ pip install flask==1.0.2
     ```
 
+    > **NOTE**: The tutorial comes with a minimal requirements.txt file which you can use to install the projects python dependencies.
+
+    ```sh
+    (env)$ pip install -r requirements.txt
+    ```
+
 ## First Test
 
 Let's start with a simple "hello, world" app.
