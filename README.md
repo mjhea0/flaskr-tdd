@@ -18,9 +18,9 @@ Also, if you are completely new to Flask and/or web development in general, it's
 
 ### Change Log
 
-This tutorial was last updated on May 10th, 2018:
+This tutorial was last updated on October 7th, 2018:
 
-- **05/10/2018**: Updated to Python 3.7.0, gunicorn 19.9.0
+- **10/07/2018**: Updated to Python 3.7.0
 - **05/10/2018**: Updated to Python 3.6.5, Flask 1.0.2, Bootstrap 4.1.1
 - **10/16/2017**: Updated to Python 3.6.2
 - **10/16/2017**: Updated to Bootstrap 4
@@ -68,7 +68,7 @@ This tutorial utilizes the following requirements:
 
 ![tdd](https://raw.githubusercontent.com/mjhea0/flaskr-tdd/master/tdd.png)
 
-Test-Driven Development (TDD) is an iterative development cycle that emphasizes writing automated tests before writing the actual feature of function. Put another way, TDD combines building and testing. This process not only helps ensure correctness of the code - but also helps to indirectly evolve the design and architecture of the project at hand.
+Test-Driven Development (TDD) is an iterative development cycle that emphasizes writing automated tests before writing the actual feature or function. Put another way, TDD combines building and testing. This process not only helps ensure correctness of the code - but also helps to indirectly evolve the design and architecture of the project at hand.
 
 TDD usually follows the "Red-Green-Refactor" cycle, as shown in the image above:
 
@@ -79,7 +79,7 @@ TDD usually follows the "Red-Green-Refactor" cycle, as shown in the image above:
 
 ## Download Python
 
-Before beginning make sure you have the latest version of [Python 3.6](https://www.python.org/downloads/release/python-360/) installed, which you can download from [http://www.python.org/download/](http://www.python.org/download/).
+Before beginning make sure you have the latest version of [Python 3.7](https://www.python.org/downloads/release/python-370/) installed, which you can download from [http://www.python.org/download/](http://www.python.org/download/).
 
 > **NOTE**: This tutorial uses Python v3.7.0.
 
@@ -109,12 +109,6 @@ Along with Python, this also installed-
 
     ```sh
     (env)$ pip install flask==1.0.2
-    ```
-
-    > **NOTE**: The tutorial comes with a minimal requirements.txt file which you can use to install the projects python dependencies.
-
-    ```sh
-    (env)$ pip install -r requirements.txt
     ```
 
 ## First Test
@@ -234,11 +228,11 @@ Let's start with a simple "hello, world" app.
     );
     ```
 
-  This will setup a single table with three fields - "id", "title", and "text". SQLite will be used for our RDMS since it's built in to the standard Python library and requires no configuration.
+  This will set up a single table with three fields - "id", "title", and "text". SQLite will be used for our RDMS since it's built in to the standard Python library and requires no configuration.
 
 ## Second Test
 
-Let's create the basic file for running our application. Before that though, we need to write a test first.
+Let's create the basic file for running our application. Before that though, we need to write a test.
 
 1. Simply alter *app-test.py* like so:
 
@@ -383,9 +377,9 @@ Essentially, we want to open a database connection, create the database based on
 
 Next, we need to set up the templates and the associated views, which define the routes. Think about this from a user standpoint:
 
-1. Users need to be able to log in and out.
-1. Once logged in, users need to be able to post.
-1. Finally, users need to be able to view the posts.
+1. Users should be able to log in and out.
+1. Once logged in, users should be able to post.
+1. Finally, users should be able to view the posts.
 
 Write some tests for this first.
 
@@ -498,42 +492,42 @@ All will fail except for `test_database()`:
 .FFFF
 ======================================================================
 FAIL: test_index (__main__.BasicTestCase)
-initial test. ensure flask was set up correctly
+Initial test: Ensure flask was set up correctly.
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "app-test.py", line 13, in test_index
+  File "app-test.py", line 14, in test_index
     self.assertEqual(response.status_code, 200)
 AssertionError: 404 != 200
 
 ======================================================================
 FAIL: test_empty_db (__main__.FlaskrTestCase)
-Ensure database is blank
+Ensure database is blank.
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "app-test.py", line 51, in test_empty_db
+  File "app-test.py", line 52, in test_empty_db
     assert b'No entries here so far' in rv.data
 AssertionError
 
 ======================================================================
 FAIL: test_login_logout (__main__.FlaskrTestCase)
-Test login and logout using helper functions
+Test login and logout using helper functions.
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "app-test.py", line 59, in test_login_logout
+  File "app-test.py", line 60, in test_login_logout
     assert b'You were logged in' in rv.data
 AssertionError
 
 ======================================================================
 FAIL: test_messages (__main__.FlaskrTestCase)
-Ensure that user can post messages
+Ensure that a user can post messages.
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "app-test.py", line 84, in test_messages
+  File "app-test.py", line 85, in test_messages
     assert b'&lt;Hello&gt;' in rv.data
 AssertionError
 
 ----------------------------------------------------------------------
-Ran 5 tests in 0.027s
+Ran 5 tests in 0.020s
 
 FAILED (failures=4)
 ```
@@ -725,17 +719,18 @@ Let's get these all green, one at a time...
     Now you should see:
 
     ```sh
+    ..F..
     ======================================================================
     FAIL: test_empty_db (__main__.FlaskrTestCase)
-    Ensure database is blank
+    Ensure database is blank.
     ----------------------------------------------------------------------
     Traceback (most recent call last):
-      File "app-test.py", line 51, in test_empty_db
+      File "app-test.py", line 52, in test_empty_db
         assert b'No entries here so far' in rv.data
     AssertionError
 
     ----------------------------------------------------------------------
-    Ran 5 tests in 0.068s
+    Ran 5 tests in 0.054s
 
     FAILED (failures=1)
     ```
@@ -849,7 +844,7 @@ Now let's add some JavaScript to make the site slightly more interactive.
 
     ```html
     <script src="//code.jquery.com/jquery-2.2.4.min.js"></script>
-    <script src="//stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="{{url_for('static', filename='main.js') }}"></script>
     ```
 
@@ -921,14 +916,14 @@ Now let's add some JavaScript to make the site slightly more interactive.
 
 ## Deployment
 
-With the app in a working-state, let's shift gears and deploy the app to [Heroku](https://www.heroku.com).
+With the app in a working state, let's shift gears and deploy the app to [Heroku](https://www.heroku.com).
 
 1. To do this, first sign up and then install the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli).
 
 1. Next, install a production-grade web server called [gunicorn](http://gunicorn.org/):
 
     ```sh
-    (env)$ pip install gunicorn==19.8.1
+    (env)$ pip install gunicorn==19.9.0
     ```
 
 1. Create a [Procfile](https://devcenter.heroku.com/articles/procfile) in the project root:
@@ -964,18 +959,18 @@ With the app in a working-state, let's shift gears and deploy the app to [Heroku
     __pycache__
     ```
 
+1. To specify the correct Python runtime, add a new file to the project root called *runtime.txt*:
+
+    ```
+    python-3.7.0
+    ```
+
 1. Add a local Git repo:
 
     ```sh
     (env)$ git init
     (env)$ git add -A
     (env)$ git commit -m "initial"
-    ```
-
-1. To specify the correct Python runtime, add a new file to the project root called *runtime.txt*:
-
-    ```
-    python-3.7.0
     ```
 
 1. Deploy to Heroku:
@@ -991,12 +986,12 @@ Let's test this in the cloud. Run `heroku open` to open the app in the browser.
 
 ## Bootstrap
 
-Let's update the styles with Bootstrap 4.
+Let's update the styles with [Bootstrap 4](http://getbootstrap.com/).
 
 1. First, remove the *style.css* stylesheet from both *index.html* and *login.html*. Then add this stylesheet to both files:
 
     ```html
-    <link rel="stylesheet" type="text/css" href="//stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="//stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     ```
 
     Now we have full access to all of the Bootstrap helper classes.
@@ -1008,7 +1003,7 @@ Let's update the styles with Bootstrap 4.
     <html>
     <head>
       <title>Flaskr-TDD | Login</title>
-      <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+      <link rel="stylesheet" type="text/css" href="//stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     </head>
     <body>
 
@@ -1040,7 +1035,7 @@ Let's update the styles with Bootstrap 4.
       </div>
 
       <script src="//code.jquery.com/jquery-2.2.4.min.js"></script>
-      <script src="//stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+      <script src="//stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
       <script type="text/javascript" src="{{url_for('static', filename='main.js') }}"></script>
 
     </body>
@@ -1054,7 +1049,7 @@ Let's update the styles with Bootstrap 4.
     <html>
     <head>
       <title>Flaskr</title>
-      <link rel="stylesheet" type="text/css" href="//stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+      <link rel="stylesheet" type="text/css" href="//stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     </head>
     <body>
 
@@ -1100,7 +1095,7 @@ Let's update the styles with Bootstrap 4.
       </div>
 
       <script src="//code.jquery.com/jquery-2.2.4.min.js"></script>
-      <script src="//stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+      <script src="//stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
       <script type="text/javascript" src="{{url_for('static', filename='main.js') }}"></script>
 
     </body>
@@ -1419,7 +1414,7 @@ Now add the following code to *search.html*:
 <html>
 <head>
   <title>Flaskr</title>
-  <link rel="stylesheet" type="text/css" href="//stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="//stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 </head>
 <body>
 
@@ -1462,7 +1457,7 @@ Now add the following code to *search.html*:
   </div>
 
   <script src="//code.jquery.com/jquery-2.2.4.min.js"></script>
-  <script src="//stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+  <script src="//stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="{{url_for('static', filename='main.js') }}"></script>
 
 </body>
@@ -1482,6 +1477,6 @@ Test it out locally. If all is well, commit your code and update the version on 
 ## Conclusion
 
 1. Want my code? Grab it [here](https://github.com/mjhea0/flaskr-tdd).
-1. View my app on [Heroku](http://flaskr-tdd.herokuapp.com/). Cheers!
+1. View my app on [Heroku](https://flaskr-tdd.herokuapp.com/). Cheers!
 1. Want more Flask fun? Check out [Microservices with Docker, Flask, and React](https://testdriven.io/).
 1. Want something else added to this tutorial? Add an issue to the repo. Cheers!
