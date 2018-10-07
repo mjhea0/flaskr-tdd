@@ -20,6 +20,7 @@ Also, if you are completely new to Flask and/or web development in general, it's
 
 This tutorial was last updated on May 10th, 2018:
 
+- **05/10/2018**: Updated to Python 3.7.0, gunicorn 19.9.0
 - **05/10/2018**: Updated to Python 3.6.5, Flask 1.0.2, Bootstrap 4.1.1
 - **10/16/2017**: Updated to Python 3.6.2
 - **10/16/2017**: Updated to Bootstrap 4
@@ -58,10 +59,10 @@ This tutorial was last updated on May 10th, 2018:
 
 This tutorial utilizes the following requirements:
 
-1. Python v3.6.5
+1. Python v3.7.0
 1. Flask v1.0.2
 1. Flask-SQLAlchemy v2.3.2
-1. gunicorn v19.8.1
+1. gunicorn v19.9.0
 
 ## Test Driven Development?
 
@@ -80,7 +81,7 @@ TDD usually follows the "Red-Green-Refactor" cycle, as shown in the image above:
 
 Before beginning make sure you have the latest version of [Python 3.6](https://www.python.org/downloads/release/python-360/) installed, which you can download from [http://www.python.org/download/](http://www.python.org/download/).
 
-> **NOTE**: This tutorial uses Python v3.6.5.
+> **NOTE**: This tutorial uses Python v3.7.0.
 
 Along with Python, this also installed-
 - [pip](https://pip.pypa.io/en/stable/) - a [package management](http://en.wikipedia.org/wiki/Package_management_system) system for Python, similar to gem or npm for Ruby and Node, respectively.
@@ -108,6 +109,12 @@ Along with Python, this also installed-
 
     ```sh
     (env)$ pip install flask==1.0.2
+    ```
+
+    > **NOTE**: The tutorial comes with a minimal requirements.txt file which you can use to install the projects python dependencies.
+
+    ```sh
+    (env)$ pip install -r requirements.txt
     ```
 
 ## First Test
@@ -968,7 +975,7 @@ With the app in a working-state, let's shift gears and deploy the app to [Heroku
 1. To specify the correct Python runtime, add a new file to the project root called *runtime.txt*:
 
     ```
-    python-3.6.5
+    python-3.7.0
     ```
 
 1. Deploy to Heroku:
