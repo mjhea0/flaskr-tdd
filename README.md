@@ -1474,6 +1474,168 @@ Add a search button for better navigation just below `<h1>Flaskr-TDD</h1>`:
 
 Test it out locally. If all is well, commit your code and update the version on Heroku.
 
+### Add Behavior Test Driven Development practice to the project
+
+Now, we can test the front end behaviors using Selenium Web Driver and chromedriver
+
+1. Install Selenium and Flask-Testing:
+
+    ```sh
+    (env)$ pip install selenium flask-testing
+    ```
+
+2. Install Chromedriver:
+
+    Make sure you are installing the latest version
+
+    ```sh
+    (env)$ sudo apt-get install xvfb libxi6 libgconf-2-4
+    (env)$ wget http://chromedriver.storage.googleapis.com/2.44/chromedriver_linux64.zip
+    (env)$ unzip chromedriver_linux64.zip
+    (env)$ sudo cp chromedriver /bin/
+    (env)$ sudo mv -f chromedriver /usr/local/share/chromedriver
+    (env)$ sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver
+    (env)$ sudo ln -s /usr/local/share/chromedriver /usr/bin/chromedriver
+    (env)$ sudo chmod a+x /usr/local/bin/chromedriver
+    ```
+
+3. Create a new test file only for the front end:
+
+    ```sh
+    (env)$ touch frontend-test.py
+    ```
+
+4. Create a TestBase class using Flask-Testing called 'FlaskrFrontEndTestBase':
+
+    ```python
+    import unittest
+    import time
+    import os
+
+    from selenium import webdriver
+    from selenium.common.exceptions import NoSuchElementException
+    from selenium.webdriver.chrome.options import Options
+
+    from flask import url_for
+    from flask_testing import LiveServerTestCase
+
+    from app import app, db
+
+    try:
+        # For Python 3.0 and later
+        from urllib.request import urlopen
+    except ImportError:
+        # Fall back to Python 2's urllib2
+        from urllib2 import urlopen
+
+    TEST_DB = 'test.db'
+
+    class FlaskrFrontEndTestBase(LiveServerTestCase):
+        def create_app(self):
+            basedir = os.path.abspath(os.path.dirname(__file__))
+            app.config['TESTING'] = True
+            app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
+                os.path.join(basedir, TEST_DB)
+            app.config.update(
+            LIVESERVER_PORT=8000
+            )
+
+            return app
+
+        def setUp(self):
+            """Setup the test driver"""
+            chrome_options = Options()
+            chrome_options.add_argument('--no-sandbox')
+            # chrome_options.add_argument('--no-default-browser-check')
+            # chrome_options.add_argument('--no-first-run')
+            # chrome_options.add_argument('--disable-default-apps')
+            # chrome_options.add_argument('--remote-debugging-port=9222')
+            # chrome_options.add_argument('--headless')
+            chrome_options.add_argument('--disable-gpu')
+
+            self.driver = webdriver.Chrome(chrome_options=chrome_options)
+            self.driver.get('http://localhost:%s' % 5000)
+
+            """Set up a blank temp database before each test"""
+            db.session.commit()
+            db.create_all()
+
+        def tearDown(self):
+            """Destroy blank temp database after each test"""
+            db.drop_all()
+            self.driver.quit()
+            
+    if __name__ == '__main__':
+        unittest.main()
+    ```
+
+5. Create a Class for the new test case to test the login flow:
+
+    ```python
+    class TestLogin(FlaskrFrontEndTestBase):
+
+        def test_login_final_user(self):
+            login_link = self.get_server_url() + url_for('login')
+
+            self.driver.get(login_link)
+            self.driver.find_element_by_name("username").send_keys('admin')
+            self.driver.find_element_by_name("password").send_keys('admin')
+            self.driver.find_element_by_css_selector('.btn.btn-primary').click()
+
+            time.sleep(1)
+
+            welcome_message = self.driver.find_element_by_css_selector("flash.alert.alert-success.col-sm-4").text
+            assert "You were logged in" in welcome_message
+    ```
+
+6. Now we can use chrome in headless mode to improve the perfomance in local and in Travis
+
+    ```python
+        def setUp(self):
+            """Setup the test driver"""
+            chrome_options = Options()
+            chrome_options.add_argument('--no-sandbox')
+            chrome_options.add_argument('--no-default-browser-check') # Uncommented
+            chrome_options.add_argument('--no-first-run') # Uncommented
+            chrome_options.add_argument('--disable-default-apps') # Uncommented
+            chrome_options.add_argument('--remote-debugging-port=9222') # Uncommented
+            chrome_options.add_argument('--headless') # Uncommented
+            chrome_options.add_argument('--disable-gpu')
+    ```
+
+7. Edit travis to run the scripts for setup chromedriver and run the new test file!
+
+    ```YAML
+        language: python
+        sudo: required
+        addons:
+            chrome: stable
+        python:
+            - 3.7
+            - 3.6
+            - 2.7
+        cache: pip
+        install:
+            - pip install -r requirements.txt
+        before_script:
+            - sudo apt-get install xvfb libxi6 libgconf-2-4
+            - wget http://chromedriver.storage.googleapis.com/2.44/chromedriver_linux64.zip
+            - unzip chromedriver_linux64.zip
+            - sudo cp chromedriver /bin/
+            - sudo mv -f chromedriver /usr/local/share/chromedriver
+            - sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver
+            - sudo ln -s /usr/local/share/chromedriver /usr/bin/chromedriver
+            - sudo chmod a+x /usr/local/bin/chromedriver
+        script:
+            - whereis google-chrome-stable
+            - whereis chromedriver
+            - python app-test.py
+            - python frontend-test.py
+    ```
+
+
+> **NOTE**: Now you can try create a test case for the creation of the post flaskr!
+
 ## Conclusion
 
 1. Want my code? Grab it [here](https://github.com/mjhea0/flaskr-tdd).

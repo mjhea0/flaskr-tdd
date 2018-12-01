@@ -1,17 +1,25 @@
 language: python
-
-# python 3.7 workaround for travis
-# https://github.com/travis-ci/travis-ci/issues/9069#issuecomment-425720905
 sudo: required
-dist: xenial
-
+addons:
+    chrome: stable
 python:
-  - 3.7
-  - 3.6
-  - 2.7
-
+    - 3.7
+    - 3.6
+    - 2.7
+cache: pip
 install:
-  - pip install -r requirements.txt
-
+    - pip install -r requirements.txt
+before_script:
+    - sudo apt-get install xvfb libxi6 libgconf-2-4
+    - wget http://chromedriver.storage.googleapis.com/2.44/chromedriver_linux64.zip
+    - unzip chromedriver_linux64.zip
+    - sudo cp chromedriver /bin/
+    - sudo mv -f chromedriver /usr/local/share/chromedriver
+    - sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver
+    - sudo ln -s /usr/local/share/chromedriver /usr/bin/chromedriver
+    - sudo chmod a+x /usr/local/bin/chromedriver
 script:
-  - python app-test.py
+    - whereis google-chrome-stable
+    - whereis chromedriver
+    - python app-test.py
+    - python frontend-test.py
