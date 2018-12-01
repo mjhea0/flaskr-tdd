@@ -1551,10 +1551,10 @@ Now, we can test the front end behaviors using Selenium Web Driver and chromedri
             # chrome_options.add_argument('--disable-default-apps')
             # chrome_options.add_argument('--remote-debugging-port=9222')
             # chrome_options.add_argument('--headless')
-            chrome_options.add_argument('--disable-gpu')
+            # chrome_options.add_argument('--disable-gpu')
 
             self.driver = webdriver.Chrome(chrome_options=chrome_options)
-            self.driver.get('http://localhost:%s' % 5000)
+            self.driver.get(self.get_server_url())
 
             """Set up a blank temp database before each test"""
             db.session.commit()
@@ -1584,7 +1584,7 @@ Now, we can test the front end behaviors using Selenium Web Driver and chromedri
 
             time.sleep(1)
 
-            welcome_message = self.driver.find_element_by_css_selector("flash.alert.alert-success.col-sm-4").text
+            welcome_message = self.driver.find_element_by_css_selector(".flash.alert.alert-success.col-sm-4").text
             assert "You were logged in" in welcome_message
     ```
 
@@ -1600,7 +1600,8 @@ Now, we can test the front end behaviors using Selenium Web Driver and chromedri
             chrome_options.add_argument('--disable-default-apps') # Uncommented
             chrome_options.add_argument('--remote-debugging-port=9222') # Uncommented
             chrome_options.add_argument('--headless') # Uncommented
-            chrome_options.add_argument('--disable-gpu')
+            chrome_options.add_argument('--disable-gpu') # Uncommented
+
     ```
 
 7. Edit travis to run the scripts for setup chromedriver and run the new test file!
