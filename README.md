@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/mjhea0/flaskr-tdd.svg?branch=master)](https://travis-ci.org/mjhea0/flaskr-tdd)
 
+[Share on Twitter](https://twitter.com/intent/tweet?text=Check%20out%20Flaskr%E2%80%94An%20intro%20to%20Flask%2C%20Test-Driven%20Development%2C%20and%20JavaScript%21%20https%3A%2F%2Fgithub.com%2Fmjhea0%2Fflaskr-tdd%20%23webdev%0A)
+
 As many of you know, Flaskr - a mini-blog-like-app - is the app you build for the official Flask [tutorial](http://flask.pocoo.org/docs/1.0/tutorial/). I've gone through the tutorial more times than I care to admit. Anyway, I wanted to take the tutorial a step further by adding test-driven development (TDD), a bit of JavaScript, and deployment. This post is that tutorial. Enjoy.
 
 Also, if you are completely new to Flask and/or web development in general, it's important to grasp these basic fundamental concepts:
@@ -1480,3 +1482,5 @@ Test it out locally. If all is well, commit your code and update the version on 
 1. View my app on [Heroku](https://flaskr-tdd.herokuapp.com/). Cheers!
 1. Want more Flask fun? Check out [Microservices with Docker, Flask, and React](https://testdriven.io/).
 1. Want something else added to this tutorial? Add an issue to the repo. Cheers!
+
+> Did you enjoy this tutorial? Please [Share on Twitter](https://twitter.com/intent/tweet?text=Check%20out%20Flaskr%E2%80%94An%20intro%20to%20Flask%2C%20Test-Driven%20Development%2C%20and%20JavaScript%21%20https%3A%2F%2Fgithub.com%2Fmjhea0%2Fflaskr-tdd%20%23webdev%0A).
