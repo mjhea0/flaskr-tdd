@@ -1,0 +1,17 @@
+---
+version: 0.2
+
+env:
+  variables:
+    DEBUG: "False"
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.7
+  pre_build:
+    commands:
+      - pip install -r requirements.txt
+  build:
+    commands:
+      - python app-test.py

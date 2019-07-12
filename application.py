@@ -11,7 +11,8 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 # configuration
 DATABASE = 'flaskr.db'
-DEBUG = True
+DEBUG = os.getenv('DEBUG', False)
+DEBUG = True if DEBUG == 'True' else False
 SECRET_KEY = 'my_precious'
 USERNAME = 'admin'
 PASSWORD = 'admin'
@@ -23,22 +24,22 @@ DATABASE_PATH = os.path.join(basedir, DATABASE)
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + DATABASE_PATH
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-# create app
-app = Flask(__name__)
-app.config.from_object(__name__)
-db = SQLAlchemy(app)
+# create application
+application = Flask(__name__)
+application.config.from_object(__name__)
+db = SQLAlchemy(application)
 
 import models
 
 
-@app.route('/')
+@application.route('/')
 def index():
     """Searches the database for entries, then displays them."""
     entries = db.session.query(models.Flaskr)
     return render_template('index.html', entries=entries)
 
 
-@app.route('/add', methods=['POST'])
+@application.route('/add', methods=['POST'])
 def add_entry():
     """Adds new post to the database."""
     if not session.get('logged_in'):
@@ -50,14 +51,14 @@ def add_entry():
     return redirect(url_for('index'))
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@application.route('/login', methods=['GET', 'POST'])
 def login():
     """User login/authentication/session management."""
     error = None
     if request.method == 'POST':
-        if request.form['username'] != app.config['USERNAME']:
+        if request.form['username'] != application.config['USERNAME']:
             error = 'Invalid username'
-        elif request.form['password'] != app.config['PASSWORD']:
+        elif request.form['password'] != application.config['PASSWORD']:
             error = 'Invalid password'
         else:
             session['logged_in'] = True
@@ -66,7 +67,7 @@ def login():
     return render_template('login.html', error=error)
 
 
-@app.route('/logout')
+@application.route('/logout')
 def logout():
     """User logout/authentication/session management."""
     session.pop('logged_in', None)
@@ -74,7 +75,7 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/delete/<int:post_id>', methods=['GET'])
+@application.route('/delete/<int:post_id>', methods=['GET'])
 def delete_entry(post_id):
     """Deletes post from database."""
     result = {'status': 0, 'message': 'Error'}
@@ -89,7 +90,7 @@ def delete_entry(post_id):
     return jsonify(result)
 
 
-@app.route('/search/', methods=['GET'])
+@application.route('/search/', methods=['GET'])
 def search():
     query = request.args.get("query")
     entries = db.session.query(models.Flaskr)
@@ -98,5 +99,5 @@ def search():
     return render_template('search.html')
 
 
-if __name__ == '__main__':
-    app.run()
+if __name__ == '__main__' and DEBUG is True:
+    application.run()

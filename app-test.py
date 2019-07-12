@@ -2,7 +2,7 @@ import unittest
 import os
 import json
 
-from app import app, db
+from application import application as app, db
 
 TEST_DB = 'test.db'
 
