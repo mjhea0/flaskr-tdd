@@ -79,6 +79,9 @@ def delete_entry(post_id):
     """Deletes post from database."""
     result = {'status': 0, 'message': 'Error'}
     try:
+        if not session.get('logged_in'):
+            flash('Please log in to delete posts!')
+            raise Exception('Please log in to delete posts!')
         new_id = post_id
         db.session.query(models.Flaskr).filter_by(post_id=new_id).delete()
         db.session.commit()
@@ -99,4 +102,4 @@ def search():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='127.0.0.1',port=8080)

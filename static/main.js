@@ -14,6 +14,10 @@ $('.entry').on('click', function() {
         $(this).remove();
         console.log(result);
       }
+      else{
+        console.log(result);
+      }
+      location.reload();
     }
   });
 });
