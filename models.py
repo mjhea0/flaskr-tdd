@@ -14,4 +14,4 @@ class Flaskr(db.Model):
         self.text = text
 
     def __repr__(self):
-        return '<title {}>'.format(self.body)
+        return f"<title {self.body}>"

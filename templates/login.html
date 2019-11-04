@@ -2,14 +2,12 @@
 <html>
 <head>
   <title>Flaskr-TDD | Login</title>
-  <link rel="stylesheet" type="text/css" href="//stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
-
   <div class="container">
-
+    <br><br>
     <h1>Flaskr</h1>
-
     <br><br>
 
     {% for message in get_flashed_messages() %}
@@ -18,7 +16,8 @@
 
     <h3>Login</h3>
 
-    {% if error %}<p class="alert alert-danger col-sm-4" role="danger"><strong>Error:</strong> {{ error }}{% endif %}</p>
+    {% if error %}<p class="alert alert-danger col-sm-4" role="danger"><strong>Error:</strong> {{ error }}</p>{% endif %}
+
     <form action="{{ url_for('login') }}" method="post" class="form-group">
       <dl>
         <dt>Username:</dt>
@@ -30,12 +29,7 @@
         <span>Use "admin" for username and password</span>
       </dl>
     </form>
-
   </div>
-
-  <script src="//code.jquery.com/jquery-2.2.4.min.js"></script>
-  <script src="//stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="{{url_for('static', filename='main.js') }}"></script>
-
 </body>
 </html>
