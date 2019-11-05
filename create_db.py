@@ -2,7 +2,6 @@
 
 
 from app import db
-from models import Flaskr
 
 
 # create the database and the db table

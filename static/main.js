@@ -1,19 +1,26 @@
-$(function() {
+(function() {
   console.log('ready!'); // sanity check
-});
+})();
 
-$('.entry').on('click', function() {
-  var entry = this;
-  var post_id = $(this).find('h2').attr('id');
-  $.ajax({
-    type:'GET',
-    url: '/delete' + '/' + post_id,
-    context: entry,
-    success:function(result) {
-      if(result.status === 1) {
-        $(this).remove();
-        console.log(result);
-      }
-    }
+const postElements = document.getElementsByClassName('entry');
+
+for (var i = 0; i < postElements.length; i++) {
+  postElements[i].addEventListener('click', function() {
+    const postId = this.getElementsByTagName('h2')[0].getAttribute('id');
+    const node = this;
+    fetch(`/delete/${postId}`)
+      .then(function(resp) {
+        return resp.json();
+      })
+      .then(function(result) {
+        if (result.status === 1) {
+          node.parentNode.removeChild(node);
+          console.log(result);
+        }
+        location.reload();
+      })
+      .catch(function(err) {
+        console.log(err);
+      });
   });
-});
+}

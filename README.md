@@ -4,7 +4,7 @@
 
 [Share on Twitter](https://twitter.com/intent/tweet?text=Check%20out%20Flaskr%E2%80%94An%20intro%20to%20Flask%2C%20Test-Driven%20Development%2C%20and%20JavaScript%21%20https%3A%2F%2Fgithub.com%2Fmjhea0%2Fflaskr-tdd%20%23webdev%0A)
 
-As many of you know, Flaskr - a mini-blog-like-app - is the app you build for the official Flask [tutorial](http://flask.pocoo.org/docs/1.0/tutorial/). I've gone through the tutorial more times than I care to admit. Anyway, I wanted to take the tutorial a step further by adding test-driven development (TDD), a bit of JavaScript, and deployment. This post is that tutorial. Enjoy.
+As many of you know, Flaskr -- a mini-blog-like-app -- is the app that you build for the official Flask [tutorial](https://flask.palletsprojects.com/tutorial). I've gone through the tutorial more times than I care to admit. Anyway, I wanted to take the tutorial a step further by adding Test-Driven Development (TDD), a bit of JavaScript, and deployment. This post is that tutorial. Enjoy.
 
 Also, if you are completely new to Flask and/or web development in general, it's important to grasp these basic fundamental concepts:
 
@@ -12,20 +12,27 @@ Also, if you are completely new to Flask and/or web development in general, it's
 1. What "requests" and "responses" are.
 1. How HTML pages are rendered and/or returned to the end user.
 
-> **NOTE**: This tutorial is powered by **[TestDriven.io](https://testdriven.io/)**. Please support this open source project by purchasing the [Microservices with Docker, Flask, and React](https://testdriven.io/) course to learn how to build, test, and deploy microservices powered by Docker, Flask, and React!
+> **NOTE**: This project is powered by **[TestDriven.io](https://testdriven.io/)**. Please support this open source project by purchasing one of our Flask courses. Learn how to build, test, and deploy microservices powered by Docker, Flask, and React!
 
-### What you're building
+## What you're building
 
 ![flaskr app](/flaskr-app.png)
 
-### Change Log
+## Changelog
 
-This tutorial was last updated on October 7th, 2018:
+This tutorial was last updated on November 5th, 2019:
 
+- **11/05/2019**:
+  - Updated to Python 3.8.0, Flask 1.1.1, and Bootstrap 4.3.1.
+  - Replaced jQuery with vanilla JavaScript.
+  - Added Black and Flake8.
+  - Used Postgres in production.
+  - Restricted post delete requests.
 - **10/07/2018**: Updated to Python 3.7.0
 - **05/10/2018**: Updated to Python 3.6.5, Flask 1.0.2, Bootstrap 4.1.1
-- **10/16/2017**: Updated to Python 3.6.2
-- **10/16/2017**: Updated to Bootstrap 4
+- **10/16/2017**:
+  - Updated to Python 3.6.2
+  -  Updated to Bootstrap 4
 - **10/10/2017**: Added a search feature
 - **07/03/2017**: Updated to Python 3.6.1
 - **01/24/2016**: Updated to Python 3! (v3.5.1)
@@ -37,7 +44,7 @@ This tutorial was last updated on October 7th, 2018:
 - **11/19/2013**: Fixed typo. Updated unit tests.
 - **11/11/2013**: Added information on requests.
 
-### Contents
+## Contents
 
 1. [Test Driven Development?](#test-driven-development)
 1. [Download Python](#download-python)
@@ -49,28 +56,34 @@ This tutorial was last updated on October 7th, 2018:
 1. [Templates and Views](#templates-and-views)
 1. [Add Some Color](#add-some-color)
 1. [Test](#test)
-1. [jQuery](#jquery)
+1. [JavaScript](#javascript)
 1. [Deployment](#deployment)
 1. [Test (again!)](#test-again)
 1. [Bootstrap](#bootstrap)
 1. [SQLAlchemy](#sqlalchemy)
 1. [Search Page](#search-page)
+1. [Login Required](#login-required)
+1. [Postgres Heroku](#postgres-heroku)
+1. [Linting and Code Formatting](#linting-and-code-formatting)
 1. [Conclusion](#conclusion)
 
-### Requirements
+## Requirements
 
 This tutorial utilizes the following requirements:
 
-1. Python v3.7.0
-1. Flask v1.0.2
-1. Flask-SQLAlchemy v2.3.2
-1. gunicorn v19.9.0
+1. Python v3.8.0
+1. Flask v1.1.1
+1. Flask-SQLAlchemy v2.4.1
+1. Gunicorn v19.9.0
+1. Psycopg2 v2.8.4
+1. Flake8 v3.7.9
+1. Black v19.10b0
 
 ## Test Driven Development?
 
 ![tdd](https://raw.githubusercontent.com/mjhea0/flaskr-tdd/master/tdd.png)
 
-Test-Driven Development (TDD) is an iterative development cycle that emphasizes writing automated tests before writing the actual feature or function. Put another way, TDD combines building and testing. This process not only helps ensure correctness of the code - but also helps to indirectly evolve the design and architecture of the project at hand.
+Test-Driven Development (TDD) is an iterative development cycle that emphasizes writing automated tests before writing the actual feature or function. Put another way, TDD combines building and testing. This process not only helps ensure correctness of the code -- but also helps to indirectly evolve the design and architecture of the project at hand.
 
 TDD usually follows the "Red-Green-Refactor" cycle, as shown in the image above:
 
@@ -79,13 +92,15 @@ TDD usually follows the "Red-Green-Refactor" cycle, as shown in the image above:
 1. Write just enough code for the test to pass
 2. Refactor code and retest, again and again (if necessary)
 
+> For more, check out [What is Test-Driven Development?](https://testdriven.io/test-driven-development/).
+
 ## Download Python
 
-Before beginning make sure you have the latest version of [Python 3.7](https://www.python.org/downloads/release/python-370/) installed, which you can download from [http://www.python.org/download/](http://www.python.org/download/).
+Before beginning make sure you have the latest version of [Python 3.8](https://www.python.org/downloads/release/python-380/) installed, which you can download from [http://www.python.org/download/](http://www.python.org/download/).
 
-> **NOTE**: This tutorial uses Python v3.7.0.
+> **NOTE**: This tutorial uses Python v3.8.0.
 
-Along with Python, this also installed-
+Along with Python, the following tools are also installed:
 - [pip](https://pip.pypa.io/en/stable/) - a [package management](http://en.wikipedia.org/wiki/Package_management_system) system for Python, similar to gem or npm for Ruby and Node, respectively.
 - [venv](https://docs.python.org/3/library/venv.html) - used to create isolated environments for development. This is standard practice. Always, always, ALWAYS utilize virtual environments. If you don't, you will eventually run into problems with dependency conflicts.
 
@@ -101,16 +116,16 @@ Along with Python, this also installed-
 1. Create and activate your virtual env:
 
     ```sh
-    $ python3 -m venv env
+    $ python3.8 -m venv env
     $ source env/bin/activate
     ```
 
-    > **NOTE**: You know that you are in a virtual environment as "env" is now showing before the $ in your terminal - (env)$. To exit the virtual environment, use the command `deactivate`. You can reactivate by navigating back to the project directory and running `source env/bin/activate`.
+    > **NOTE**: You know that you are in a virtual environment as `env` is now showing before the `$` in your terminal -- `(env)$`. To exit the virtual environment, use the command `deactivate`. You can reactivate by navigating back to the project directory and running `source env/bin/activate`.
 
 1. Install Flask with pip:
 
     ```sh
-    (env)$ pip install flask==1.0.2
+    (env)$ pip install flask==1.1.1
     ```
 
 ## First Test
@@ -120,15 +135,15 @@ Let's start with a simple "hello, world" app.
 1. Create a test file:
 
     ```sh
-    (env)$ touch app-test.py
+    (env)$ touch app.test.py
     ```
 
-    Open this file in your favorite text editor. (I use [Sublime](http://www.sublimetext.com/).) Add the following code:
+    Open this file in your favorite text editor -- like [Visual Studio Code](https://code.visualstudio.com/), [Sublime Text](https://www.sublimetext.com/), or [PyCharm](https://www.jetbrains.com/pycharm/) -- and then add the following code:
 
     ```python
-    from app import app
-
     import unittest
+
+    from app import app
 
 
     class BasicTestCase(unittest.TestCase):
@@ -149,7 +164,7 @@ Let's start with a simple "hello, world" app.
 1. Run the test:
 
     ```sh
-    (env)$ python app-test.py
+    (env)$ python app.test.py
     ```
 
     If all goes well, this will fail:
@@ -168,6 +183,7 @@ Let's start with a simple "hello, world" app.
 
     ```python
     from flask import Flask
+
 
     app = Flask(__name__)
 
@@ -194,7 +210,8 @@ Let's start with a simple "hello, world" app.
 1. Run the test again:
 
     ```sh
-    (env)$ python app-test.py
+    (env)$ python app.test.py
+
     .
     ----------------------------------------------------------------------
     Ran 1 test in 0.010s
@@ -211,8 +228,8 @@ Let's start with a simple "hello, world" app.
     Add two folders, "static" and "templates", in the project root. Your file structure should now look like this:
 
     ```sh
-    ├── app-test.py
     ├── app.py
+    ├── app.test.py
     ├── static
     └── templates
     ```
@@ -230,18 +247,18 @@ Let's start with a simple "hello, world" app.
     );
     ```
 
-  This will set up a single table with three fields - "id", "title", and "text". SQLite will be used for our RDMS since it's built in to the standard Python library and requires no configuration.
+  This will set up a single table with three fields -- "id", "title", and "text". SQLite will be used for our RDMS since it's part of the standard Python library and requires no configuration.
 
 ## Second Test
 
 Let's create the basic file for running our application. Before that though, we need to write a test.
 
-1. Simply alter *app-test.py* like so:
+1. Simply alter *app.test.py* like so:
 
     ```python
-    from app import app
-
     import unittest
+
+    from app import app
 
 
     class BasicTestCase(unittest.TestCase):
@@ -264,7 +281,7 @@ Let's create the basic file for running our application. Before that though, we 
     # imports
     import sqlite3
     from flask import Flask, request, session, g, redirect, url_for, \
-         abort, render_template, flash, jsonify
+                      abort, render_template, flash, jsonify
 
 
     # configuration
@@ -298,11 +315,12 @@ Let's create the basic file for running our application. Before that though, we 
 
 Essentially, we want to open a database connection, create the database based on the schema if it doesn't already exist, then close the connection each time a test is ran.
 
-1. How do we test for the existence of a file? Update *app-test.py*:
+1. How do we test for the existence of a file? Update *app.test.py*:
 
     ```python
-    import unittest
     import os
+    import unittest
+
     from app import app
 
 
@@ -366,7 +384,7 @@ Essentially, we want to open a database connection, create the database based on
         app.run()
     ```
 
-    Now it is possible to create a database by starting up a Python shell and importing and calling the `init_db()` function:
+    Now it's possible to create a database by starting up a Python shell and importing and calling the `init_db()` function:
 
     ```python
     >>> from app import init_db
@@ -390,8 +408,8 @@ Write some tests for this first.
 Take a look at the final code. I added docstrings for explanation.
 
 ```python
-import unittest
 import os
+import unittest
 import tempfile
 
 import app
@@ -482,10 +500,10 @@ if __name__ == '__main__':
     unittest.main()
 ```
 
-If you run the tests now:
+Run the tests now:
 
 ```sh
-(env)$ python app-test.py
+(env)$ python app.test.py
 ```
 
 All will fail except for `test_database()`:
@@ -497,7 +515,7 @@ FAIL: test_index (__main__.BasicTestCase)
 Initial test: Ensure flask was set up correctly.
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "app-test.py", line 14, in test_index
+  File "app.test.py", line 14, in test_index
     self.assertEqual(response.status_code, 200)
 AssertionError: 404 != 200
 
@@ -506,7 +524,7 @@ FAIL: test_empty_db (__main__.FlaskrTestCase)
 Ensure database is blank.
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "app-test.py", line 52, in test_empty_db
+  File "app.test.py", line 52, in test_empty_db
     assert b'No entries here so far' in rv.data
 AssertionError
 
@@ -515,7 +533,7 @@ FAIL: test_login_logout (__main__.FlaskrTestCase)
 Test login and logout using helper functions.
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "app-test.py", line 60, in test_login_logout
+  File "app.test.py", line 60, in test_login_logout
     assert b'You were logged in' in rv.data
 AssertionError
 
@@ -524,12 +542,12 @@ FAIL: test_messages (__main__.FlaskrTestCase)
 Ensure that a user can post messages.
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "app-test.py", line 85, in test_messages
+  File "app.test.py", line 85, in test_messages
     assert b'&lt;Hello&gt;' in rv.data
 AssertionError
 
 ----------------------------------------------------------------------
-Ran 5 tests in 0.020s
+Ran 5 tests in 0.030s
 
 FAILED (failures=4)
 ```
@@ -560,10 +578,9 @@ Let's get these all green, one at a time...
       <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
     </head>
     <body>
-
       <div class="page">
-
         <h1>Flaskr-TDD</h1>
+
         <div class="metanav">
           {% if not session.logged_in %}
             <a href="{{ url_for('login') }}">log in</a>
@@ -571,9 +588,11 @@ Let's get these all green, one at a time...
             <a href="{{ url_for('logout') }}">log out</a>
           {% endif %}
         </div>
+
         {% for message in get_flashed_messages() %}
           <div class="flash">{{ message }}</div>
         {% endfor %}
+
         {% block body %}{% endblock %}
 
         {% if session.logged_in %}
@@ -587,6 +606,7 @@ Let's get these all green, one at a time...
             </dl>
           </form>
         {% endif %}
+
         <ul class="entries">
           {% for entry in entries %}
             <li><h2>{{ entry.title }}</h2>{{ entry.text|safe }}</li>
@@ -594,9 +614,7 @@ Let's get these all green, one at a time...
             <li><em>No entries yet. Add some!</em></li>
           {% endfor %}
         </ul>
-
       </div>
-
     </body>
     </html>
     ```
@@ -638,7 +656,7 @@ Let's get these all green, one at a time...
         return redirect(url_for('index'))
       ```
 
-    In the above `login()` function, the decorator indicates that the route can accept either a GET or POST request. Put simply, a request is initiated by the end user when they access the `/login` url. The difference between these requests is simple - GET is used for accessing a webpage, while POST is used when information is sent to the server. Thus, when a user accesses the `/login` url, they are using a GET request, but when they attempt to log in, a POST request is used.
+    In the above `login()` function, the decorator indicates that the route can accept either a GET or POST request. Put simply, a request is initiated by the end user when they access the `/login` url. The difference between these requests is simple -- GET is used for accessing a webpage, while POST is used when information is sent to the server. Thus, when a user accesses the `/login` url, they are using a GET request, but when they attempt to log in, a POST request is used.
 
 1. Add the template - *login.html*:
 
@@ -650,10 +668,9 @@ Let's get these all green, one at a time...
       <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
     </head>
     <body>
-
       <div class="page">
-
         <h1>Flaskr</h1>
+
         <div class="metanav">
           {% if not session.logged_in %}
             <a href="{{ url_for('login') }}">log in</a>
@@ -661,15 +678,19 @@ Let's get these all green, one at a time...
             <a href="{{ url_for('logout') }}">log out</a>
           {% endif %}
         </div>
+
         {% for message in get_flashed_messages() %}
           <div class="flash">{{ message }}</div>
         {% endfor %}
+
         {% block body %}{% endblock %}
 
         <h2>Login</h2>
+
         {% if error %}
           <p class="error"><strong>Error:</strong> {{ error }}</p>
         {% endif %}
+
         <form action="{{ url_for('login') }}" method="post">
           <dl>
             <dt>Username:</dt>
@@ -679,16 +700,14 @@ Let's get these all green, one at a time...
             <dd><input type="submit" value="Login"></dd>
           </dl>
         </form>
-
       </div>
-
     </body>
     </html>
     ```
 
 1. Run the tests again.
 
-    You should still see some errors! Look at one of the errors - `werkzeug.routing.BuildError: Could not build url for endpoint 'index'. Did you mean 'login' instead?`
+    You should still see some errors! Look at one of the errors -- `werkzeug.routing.BuildError: Could not build url for endpoint 'index'. Did you mean 'login' instead?`
 
     Essentially, we are trying to redirect to the `index()` function, which does not exist. Rename the `show_entries()` function to `index()` within *app.py* then re-test:
 
@@ -727,7 +746,7 @@ Let's get these all green, one at a time...
     Ensure database is blank.
     ----------------------------------------------------------------------
     Traceback (most recent call last):
-      File "app-test.py", line 52, in test_empty_db
+      File "app.test.py", line 52, in test_empty_db
         assert b'No entries here so far' in rv.data
     AssertionError
 
@@ -827,7 +846,7 @@ h2 {
 
 ## Test
 
-Run you app, log in (username/password = "admin"), add a post, log out.
+Run your app, log in (username/password = "admin"), add a post, log out.
 
 ## JavaScript
 
@@ -842,36 +861,41 @@ Now let's add some JavaScript to make the site slightly more interactive.
     </li>
     ```
 
-    Now we can use jQuery to target each `<li`>. First, we need to add the following scripts to the document just before the closing body tag:
+    Now we can use JavaScript to target each `<li`>. First, we need to add the following script to the document just before the closing body tag:
 
     ```html
-    <script src="//code.jquery.com/jquery-2.2.4.min.js"></script>
-    <script src="//stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="{{url_for('static', filename='main.js') }}"></script>
     ```
 
 1. Create a *main.js* file in your "static" directory and add the following code:
 
     ```javascript
-    $(function() {
+    (function() {
       console.log('ready!'); // sanity check
-    });
+    })();
 
-    $('.entry').on('click', function() {
-      var entry = this;
-      var post_id = $(this).find('h2').attr('id');
-      $.ajax({
-        type:'GET',
-        url: '/delete' + '/' + post_id,
-        context: entry,
-        success:function(result) {
-          if(result.status === 1) {
-            $(this).remove();
-            console.log(result);
-          }
-        }
+    const postElements = document.getElementsByClassName('entry');
+
+    for (var i = 0; i < postElements.length; i++) {
+      postElements[i].addEventListener('click', function() {
+        const postId = this.getElementsByTagName('h2')[0].getAttribute('id');
+        const node = this;
+        fetch(`/delete/${postId}`)
+          .then(function(resp) {
+            return resp.json();
+          })
+          .then(function(result) {
+            if (result.status === 1) {
+              node.parentNode.removeChild(node);
+              console.log(result);
+            }
+            location.reload();
+          })
+          .catch(function(err) {
+            console.log(err);
+          });
       });
-    });
+    }
     ```
 
 1. Add a new function in *app.py* to remove the post from the database:
@@ -879,7 +903,7 @@ Now let's add some JavaScript to make the site slightly more interactive.
     ```python
     @app.route('/delete/<post_id>', methods=['GET'])
     def delete_entry(post_id):
-        '''Delete post from database'''
+        """Delete post from database"""
         result = {'status': 0, 'message': 'Error'}
         try:
             db = get_db()
@@ -888,7 +912,6 @@ Now let's add some JavaScript to make the site slightly more interactive.
             result = {'status': 1, 'message': "Post Deleted"}
         except Exception as e:
             result = {'status': 0, 'message': repr(e)}
-
         return jsonify(result)
     ```
 
@@ -902,7 +925,7 @@ Now let's add some JavaScript to make the site slightly more interactive.
         self.assertEqual(data['status'], 1)
     ```
 
-    Make sure to add the following import as well - `import json`.
+    Make sure to add the following import as well -- `import json`.
 
     Manually test this out by running the server and adding two new entries. Click on one of them. It should be removed from the DOM as well as the database. Double check this.
 
@@ -922,7 +945,7 @@ With the app in a working state, let's shift gears and deploy the app to [Heroku
 
 1. To do this, first sign up and then install the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli).
 
-1. Next, install a production-grade web server called [gunicorn](http://gunicorn.org/):
+1. Next, install a production-grade WSGI web server called [Gunicorn](http://gunicorn.org/):
 
     ```sh
     (env)$ pip install gunicorn==19.9.0
@@ -964,7 +987,7 @@ With the app in a working state, let's shift gears and deploy the app to [Heroku
 1. To specify the correct Python runtime, add a new file to the project root called *runtime.txt*:
 
     ```
-    python-3.7.0
+    python-3.8.0
     ```
 
 1. Add a local Git repo:
@@ -993,7 +1016,7 @@ Let's update the styles with [Bootstrap 4](http://getbootstrap.com/).
 1. First, remove the *style.css* stylesheet from both *index.html* and *login.html*. Then add this stylesheet to both files:
 
     ```html
-    <link rel="stylesheet" type="text/css" href="//stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     ```
 
     Now we have full access to all of the Bootstrap helper classes.
@@ -1005,14 +1028,12 @@ Let's update the styles with [Bootstrap 4](http://getbootstrap.com/).
     <html>
     <head>
       <title>Flaskr-TDD | Login</title>
-      <link rel="stylesheet" type="text/css" href="//stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+      <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     </head>
     <body>
-
       <div class="container">
-
+        <br><br>
         <h1>Flaskr</h1>
-
         <br><br>
 
         {% for message in get_flashed_messages() %}
@@ -1021,7 +1042,8 @@ Let's update the styles with [Bootstrap 4](http://getbootstrap.com/).
 
         <h3>Login</h3>
 
-        {% if error %}<p class="alert alert-danger col-sm-4" role="danger"><strong>Error:</strong> {{ error }}{% endif %}</p>
+        {% if error %}<p class="alert alert-danger col-sm-4" role="danger"><strong>Error:</strong> {{ error }}</p>{% endif %}
+
         <form action="{{ url_for('login') }}" method="post" class="form-group">
           <dl>
             <dt>Username:</dt>
@@ -1033,13 +1055,8 @@ Let's update the styles with [Bootstrap 4](http://getbootstrap.com/).
             <span>Use "admin" for username and password</span>
           </dl>
         </form>
-
       </div>
-
-      <script src="//code.jquery.com/jquery-2.2.4.min.js"></script>
-      <script src="//stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
       <script type="text/javascript" src="{{url_for('static', filename='main.js') }}"></script>
-
     </body>
     </html>
     ```
@@ -1051,13 +1068,13 @@ Let's update the styles with [Bootstrap 4](http://getbootstrap.com/).
     <html>
     <head>
       <title>Flaskr</title>
-      <link rel="stylesheet" type="text/css" href="//stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+      <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     </head>
     <body>
-
       <div class="container">
-
-        <h1>Flaskr-TDD</h1>
+        <br><br>
+        <h1>Flaskr</h1>
+        <br><br>
 
         {% if not session.logged_in %}
           <a class="btn btn-success" role="button" href="{{ url_for('login') }}">log in</a>
@@ -1093,13 +1110,8 @@ Let's update the styles with [Bootstrap 4](http://getbootstrap.com/).
             <li><em>No entries yet. Add some!</em></li>
           {% endfor %}
         </ul>
-
       </div>
-
-      <script src="//code.jquery.com/jquery-2.2.4.min.js"></script>
-      <script src="//stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
       <script type="text/javascript" src="{{url_for('static', filename='main.js') }}"></script>
-
     </body>
     </html>
     ```
@@ -1114,14 +1126,14 @@ Let's update the styles with [Bootstrap 4](http://getbootstrap.com/).
 
 ## SQLAlchemy
 
-Let's upgrade to [Flask-SQLAlchemy](http://pythonhosted.org/Flask-SQLAlchemy/), in order to better manage our database.
+Let's upgrade to [Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/), in order to better manage our database.
 
 ### Setup SQLAlchemy
 
 1. Start by installing Flask-SQLAlchemy:
 
     ```sh
-    $ pip install Flask-SQLAlchemy==2.3.2
+    (env)$ pip install Flask-SQLAlchemy==2.4.1
     ```
 
 1. Create a *create_db.py* file, then add the following code:
@@ -1151,7 +1163,7 @@ Let's upgrade to [Flask-SQLAlchemy](http://pythonhosted.org/Flask-SQLAlchemy/), 
 
     class Flaskr(db.Model):
 
-        __tablename__ = "flaskr"
+        __tablename__ = 'flaskr'
 
         post_id = db.Column(db.Integer, primary_key=True)
         title = db.Column(db.String, nullable=False)
@@ -1162,7 +1174,7 @@ Let's upgrade to [Flask-SQLAlchemy](http://pythonhosted.org/Flask-SQLAlchemy/), 
             self.text = text
 
         def __repr__(self):
-            return '<title {}>'.format(self.body)
+            return f'<title {self.body}>'
     ```
 
 ### Update *app.py*
@@ -1172,7 +1184,7 @@ Let's upgrade to [Flask-SQLAlchemy](http://pythonhosted.org/Flask-SQLAlchemy/), 
 import os
 
 from flask import Flask, request, session, g, redirect, url_for, \
-     abort, render_template, flash, jsonify
+                  abort, render_template, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
 
@@ -1263,7 +1275,7 @@ if __name__ == '__main__':
     app.run()
 ```
 
-Notice the changes in the config at the top, as well the means in which we're now accessing and manipulating the database in each view function - via SQLAlchemy instead of vanilla SQL.
+Notice the changes in the config at the top as well the means in which we're now accessing and manipulating the database in each view function -- via SQLAlchemy instead of vanilla SQL.
 
 ### Create the DB
 
@@ -1416,13 +1428,13 @@ Now add the following code to *search.html*:
 <html>
 <head>
   <title>Flaskr</title>
-  <link rel="stylesheet" type="text/css" href="//stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
-
   <div class="container">
-
-    <h1>Flaskr-TDD</h1>
+    <br><br>
+    <h1>Flaskr</h1>
+    <br><br>
 
     <a class="btn btn-primary" role="button" href="{{ url_for('index') }}"> Home </a>
 
@@ -1454,21 +1466,15 @@ Now add the following code to *search.html*:
         {% endif %}
       {% endfor %}
     </ul>
-
-
   </div>
-
-  <script src="//code.jquery.com/jquery-2.2.4.min.js"></script>
-  <script src="//stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="{{url_for('static', filename='main.js') }}"></script>
-
 </body>
 </html>
 ```
 
 ### Update *index.html*
 
-Add a search button for better navigation just below `<h1>Flaskr-TDD</h1>`:
+Add a search button for better navigation just below `<h1>Flaskr</h1>`:
 
 ```html
 <a class="btn btn-info" role="button" href="{{ url_for('search') }}">Search</a>
@@ -1476,11 +1482,284 @@ Add a search button for better navigation just below `<h1>Flaskr-TDD</h1>`:
 
 Test it out locally. If all is well, commit your code and update the version on Heroku.
 
+## Login Required
+
+Currently, posts can be deleted by anyone. Let's change that so one has to be logged in in order to delete a post.
+
+Add the following decorator to *app.py*:
+
+```python
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session.get('logged_in'):
+            flash('Please log in.')
+            return jsonify({'status': 0, 'message': 'Please log in.'}), 401
+        return f(*args, **kwargs)
+    return decorated_function
+```
+
+Don't forget the import:
+
+```python
+from functools import wraps
+```
+
+> **NOTE**: Be sure to write tests for this on your own!
+
+Next, add the decorator to the `delete_entry` view:
+
+```python
+@app.route('/delete/<int:post_id>', methods=['GET'])
+@login_required
+def delete_entry(post_id):
+    """Deletes post from database."""
+    result = {'status': 0, 'message': 'Error'}
+    try:
+        new_id = post_id
+        db.session.query(models.Flaskr).filter_by(post_id=new_id).delete()
+        db.session.commit()
+        result = {'status': 1, 'message': "Post Deleted"}
+        flash('The entry was deleted.')
+    except Exception as e:
+        result = {'status': 0, 'message': repr(e)}
+    return jsonify(result)
+```
+
+Update the test:
+
+```python
+def test_delete_message(self):
+    """Ensure the messages are being deleted"""
+    rv = self.app.get('/delete/1')
+    data = json.loads(rv.data)
+    self.assertEqual(data['status'], 0)
+    self.login(app.config['USERNAME'], app.config['PASSWORD'])
+    rv = self.app.get('/delete/1')
+    data = json.loads(rv.data)
+    self.assertEqual(data['status'], 1)
+```
+
+Test it out locally again. If all is well, commit your code and update the version on Heroku.
+
+## Postgres Heroku
+
+SQLite is a great database to use in order to get an app up and running quickly. That said, it's not intended to be used as a production grade database. So, let's move to using Postgres on Heroku.
+
+Start by provisioning a new [hobby-dev](https://devcenter.heroku.com/articles/heroku-postgres-plans#hobby-tier) plan Postgres database:
+
+```sh
+(env)$ heroku addons:create heroku-postgresql:hobby-dev
+```
+
+Once created, the database URL can be access via the `DATABASE_URL` environment variable:
+
+```sh
+(env)$ heroku config
+```
+
+You should see something similar to:
+
+```sh
+=== dry-garden-92414 Config Vars
+DATABASE_URL: postgres://wqvcyzyveczscw:df14796eabbf0a1d9eb8a96a206bcd906101162c8ef7f2e7be5e2f7514c22b48@ec2-54-227-250-19.compute-1.amazonaws.com:5432/d64vugb1eio9h1
+```
+
+Next, update *app.py* like so:
+
+```python
+# imports
+import os
+from functools import wraps
+
+from flask import Flask, request, session, g, redirect, url_for, \
+                  abort, render_template, flash, jsonify
+from flask_sqlalchemy import SQLAlchemy
+
+
+# get the folder where this file runs
+basedir = os.path.abspath(os.path.dirname(__file__))
+
+# configuration
+SECRET_KEY = 'my_precious'
+USERNAME = 'admin'
+PASSWORD = 'admin'
+
+# database config
+SQLALCHEMY_DATABASE_URI = os.getenv(
+    'DATABASE_URL',
+    f'sqlite:///{os.path.join(basedir, "flaskr.db")}'
+)
+SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+# create app
+app = Flask(__name__)
+app.config.from_object(__name__)
+db = SQLAlchemy(app)
+
+import models
+
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session.get('logged_in'):
+            flash('Please log in.')
+            return jsonify({'status': 0, 'message': 'Please log in.'}), 401
+        return f(*args, **kwargs)
+    return decorated_function
+
+
+@app.route('/')
+def index():
+    """Searches the database for entries, then displays them."""
+    entries = db.session.query(models.Flaskr)
+    return render_template('index.html', entries=entries)
+
+
+@app.route('/add', methods=['POST'])
+def add_entry():
+    """Adds new post to the database."""
+    if not session.get('logged_in'):
+        abort(401)
+    new_entry = models.Flaskr(request.form['title'], request.form['text'])
+    db.session.add(new_entry)
+    db.session.commit()
+    flash('New entry was successfully posted')
+    return redirect(url_for('index'))
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    """User login/authentication/session management."""
+    error = None
+    if request.method == 'POST':
+        if request.form['username'] != app.config['USERNAME']:
+            error = 'Invalid username'
+        elif request.form['password'] != app.config['PASSWORD']:
+            error = 'Invalid password'
+        else:
+            session['logged_in'] = True
+            flash('You were logged in')
+            return redirect(url_for('index'))
+    return render_template('login.html', error=error)
+
+
+@app.route('/logout')
+def logout():
+    """User logout/authentication/session management."""
+    session.pop('logged_in', None)
+    flash('You were logged out')
+    return redirect(url_for('index'))
+
+
+@app.route('/delete/<int:post_id>', methods=['GET'])
+@login_required
+def delete_entry(post_id):
+    """Deletes post from database."""
+    result = {'status': 0, 'message': 'Error'}
+    try:
+        new_id = post_id
+        db.session.query(models.Flaskr).filter_by(post_id=new_id).delete()
+        db.session.commit()
+        result = {'status': 1, 'message': "Post Deleted"}
+        flash('The entry was deleted.')
+    except Exception as e:
+        result = {'status': 0, 'message': repr(e)}
+    return jsonify(result)
+
+
+@app.route('/search/', methods=['GET'])
+def search():
+    query = request.args.get("query")
+    entries = db.session.query(models.Flaskr)
+    if query:
+        return render_template('search.html', entries=entries, query=query)
+    return render_template('search.html')
+
+
+if __name__ == '__main__':
+    app.run()
+```
+
+First, we removed `DEBUG = True`. We'll let the `DEBUG` config variable be defined by the [FLASK_ENV](https://flask.palletsprojects.com/config/#environment-and-debug-features) environment variable (which defaults to `production`). We also updated the `SQLALCHEMY_DATABASE_URI` so that it uses the value of the `DATABASE_URL` environment variable if it's available. Otherwise, it will use the SQLite URL.
+
+Run the tests to ensure they still pass:
+
+```sh
+(env)$ python app.test.py
+
+......
+----------------------------------------------------------------------
+Ran 6 tests in 0.122s
+
+OK
+```
+
+To test locally, run:
+
+```sh
+(env)$ FLASK_ENV=development python app.py
+```
+
+Try logging in and out, adding a few new entries, and deleting old entries.
+
+Before updating Heroku, add [Psycopg2](http://initd.org/psycopg/) -- a Postgres database adapter for Python -- to the requirements file:
+
+```
+Flask==1.1.1
+Flask-SQLAlchemy==2.4.1
+gunicorn==19.9.0
+psycopg2-binary==2.8.4
+```
+
+Commit and push your code up to Heroku.
+
+Snce we're using a new database on Heroku, you'll need to run the following command *once* to create the tables:
+
+```sh
+(env)$ heroku run python create_db.py
+```
+
+Test things out.
+
+## Linting and Code Formatting
+
+Finally, we can lint and auto format our code with [Flake8](http://flake8.pycqa.org/) and [Black](https://black.readthedocs.io/), respectively:
+
+```sh
+(env)$ pip install flake8==3.7.9
+(env)$ pip install black==19.10b0
+```
+
+Run Flake8 and correct any issues:
+
+```sh
+(env)$ flake8 --exclude env --ignore E402,E501 .
+
+./app.py:5:1: F401 'flask.g' imported but unused
+./create_db.py:5:1: F401 'models.Flaskr' imported but unused
+```
+
+Update the code formatting per Black:
+
+```sh
+$ black --exclude=env .
+
+reformatted /Users/michael.herman/repos/github/flaskr-tdd/models.py
+reformatted /Users/michael.herman/repos/github/flaskr-tdd/app.py
+reformatted /Users/michael.herman/repos/github/flaskr-tdd/app.test.py
+All done! ✨ 🍰 ✨
+3 files reformatted, 1 file left unchanged.
+```
+
+Test everything out once last time!
+
 ## Conclusion
 
 1. Want my code? Grab it [here](https://github.com/mjhea0/flaskr-tdd).
 1. View my app on [Heroku](https://flaskr-tdd.herokuapp.com/). Cheers!
-1. Want more Flask fun? Check out [Microservices with Docker, Flask, and React](https://testdriven.io/).
+1. Want more Flask fun? Check out [TestDriven.io](https://testdriven.io/). Learn how to build, test, and deploy microservices powered by Docker, Flask, and React!
 1. Want something else added to this tutorial? Add an issue to the repo. Cheers!
 
 > Did you enjoy this tutorial? Please [Share on Twitter](https://twitter.com/intent/tweet?text=Check%20out%20Flaskr%E2%80%94An%20intro%20to%20Flask%2C%20Test-Driven%20Development%2C%20and%20JavaScript%21%20https%3A%2F%2Fgithub.com%2Fmjhea0%2Fflaskr-tdd%20%23webdev%0A).
