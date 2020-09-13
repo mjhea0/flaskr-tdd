@@ -142,7 +142,7 @@ Let's start with a simple "hello, world" app.
 1. Create a test file:
 
    ```sh
-   (env)$ touch app.test.py
+   (env)$ touch app_test.py
    ```
 
    Open this file in your favorite text editor -- like [Visual Studio Code](https://code.visualstudio.com/), [Sublime Text](https://www.sublimetext.com/), or [PyCharm](https://www.jetbrains.com/pycharm/) -- and then add the following code:
@@ -171,7 +171,7 @@ Essentially, we're testing whether the response that we get back is "200" and th
 1. Run the test:
 
    ```sh
-   (env)$ python app.test.py
+   (env)$ python -m pytest
    ```
 
    If all goes well, this will fail:
@@ -217,7 +217,7 @@ Essentially, we're testing whether the response that we get back is "200" and th
 1. Run the test again:
 
    ```sh
-   (env)$ python app.test.py
+   (env)$ python -m pytest
 
    .
    ----------------------------------------------------------------------
@@ -236,7 +236,7 @@ Essentially, we're testing whether the response that we get back is "200" and th
 
    ```sh
    ├── app.py
-   ├── app.test.py
+   ├── app_test.py
    ├── static
    └── templates
    ```
@@ -260,7 +260,7 @@ This will set up a single table with three fields -- "id", "title", and "text". 
 
 Let's create the basic file for running our application. Before that though, we need to write a test.
 
-1. Simply alter _app.test.py_ like so:
+1. Simply alter _app_test.py_ like so:
 
    ```python
    import unittest
@@ -322,7 +322,7 @@ Let's create the basic file for running our application. Before that though, we 
 
 Essentially, we want to open a database connection, create the database based on the schema if it doesn't already exist, then close the connection each time a test is ran.
 
-1. How do we test for the existence of a file? Update _app.test.py_:
+1. How do we test for the existence of a file? Update _app_test.py_:
 
    ```python
    import os
@@ -510,7 +510,7 @@ if __name__ == '__main__':
 Run the tests now:
 
 ```sh
-(env)$ python app.test.py
+(env)$ python -m pytest
 ```
 
 All will fail except for `test_database()`:
@@ -522,7 +522,7 @@ FAIL: test_index (__main__.BasicTestCase)
 Initial test: Ensure flask was set up correctly.
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "app.test.py", line 14, in test_index
+  File "app_test.py", line 14, in test_index
     self.assertEqual(response.status_code, 200)
 AssertionError: 404 != 200
 
@@ -531,7 +531,7 @@ FAIL: test_empty_db (__main__.FlaskrTestCase)
 Ensure database is blank.
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "app.test.py", line 52, in test_empty_db
+  File "app_test.py", line 52, in test_empty_db
     assert b'No entries here so far' in rv.data
 AssertionError
 
@@ -540,7 +540,7 @@ FAIL: test_login_logout (__main__.FlaskrTestCase)
 Test login and logout using helper functions.
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "app.test.py", line 60, in test_login_logout
+  File "app_test.py", line 60, in test_login_logout
     assert b'You were logged in' in rv.data
 AssertionError
 
@@ -549,7 +549,7 @@ FAIL: test_messages (__main__.FlaskrTestCase)
 Ensure that a user can post messages.
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "app.test.py", line 85, in test_messages
+  File "app_test.py", line 85, in test_messages
     assert b'&lt;Hello&gt;' in rv.data
 AssertionError
 
@@ -762,7 +762,7 @@ Let's get these all green, one at a time...
    Ensure database is blank.
    ----------------------------------------------------------------------
    Traceback (most recent call last):
-     File "app.test.py", line 52, in test_empty_db
+     File "app_test.py", line 52, in test_empty_db
        assert b'No entries here so far' in rv.data
    AssertionError
 
@@ -970,7 +970,7 @@ With the app in a working state, let's shift gears and deploy the app to [Heroku
 1. Next, install a production-grade WSGI web server called [Gunicorn](http://gunicorn.org/):
 
    ```sh
-   (env)$ pip install gunicorn==19.9.0
+   (env)$ pip install gunicorn==20.0.4
    ```
 
 1. Create a [Procfile](https://devcenter.heroku.com/articles/procfile) in the project root:
@@ -1793,7 +1793,7 @@ First, we removed `DEBUG = True`. We'll let the `DEBUG` config variable be defin
 Run the tests to ensure they still pass:
 
 ```sh
-(env)$ python app.test.py
+(env)$ python -m pytest
 
 ......
 ----------------------------------------------------------------------
@@ -1854,7 +1854,7 @@ $ black --exclude=env .
 
 reformatted /Users/michael.herman/repos/github/flaskr-tdd/models.py
 reformatted /Users/michael.herman/repos/github/flaskr-tdd/app.py
-reformatted /Users/michael.herman/repos/github/flaskr-tdd/app.test.py
+reformatted /Users/michael.herman/repos/github/flaskr-tdd/app_test.py
 All done! ✨ 🍰 ✨
 3 files reformatted, 1 file left unchanged.
 ```
