@@ -27,6 +27,8 @@ This tutorial was last updated on September 14th, 2020:
   - Renamed app.test.py to app_test.py. Fixed issue #58.
   - Updated to Flask 1.1.2, Flask-SQLAlchemy 2.4.4, gunicorn 20.0.4, psycopg2-binary 2.8.6, black 20.8b.1, flake8 3.8.3.
   - Added pytest 6.0.1.
+  - Converted from unittest to pytest
+  - Updated os.path to pathlib
 
 - **11/05/2019**:
   - Updated to Python 3.8.0, Flask 1.1.1, and Bootstrap 4.3.1.

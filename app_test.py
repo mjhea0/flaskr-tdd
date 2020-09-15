@@ -1,92 +1,97 @@
-import unittest
+import pytest
 import os
 import json
+from pathlib import Path
 
 from app import app, db
 
 TEST_DB = "test.db"
 
 
-class BasicTestCase(unittest.TestCase):
-    def test_index(self):
-        """initial test. ensure flask was set up correctly"""
-        tester = app.test_client(self)
-        response = tester.get("/", content_type="html/text")
-        self.assertEqual(response.status_code, 200)
-
-    def test_database(self):
-        """initial test. ensure that the database exists"""
-        tester = os.path.exists("flaskr.db")
-        self.assertTrue(tester)
+@pytest.fixture
+def client():
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    app.config["TESTING"] = True
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + str(
+        BASE_DIR.joinpath(TEST_DB)
+    )
+    return app.test_client()
 
 
-class FlaskrTestCase(unittest.TestCase):
-    def setUp(self):
-        """Set up a blank temp database before each test"""
-        basedir = os.path.abspath(os.path.dirname(__file__))
-        app.config["TESTING"] = True
-        app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
-            basedir, TEST_DB
-        )
-        self.app = app.test_client()
-        db.create_all()
-
-    def tearDown(self):
-        """Destroy blank temp database after each test"""
-        db.drop_all()
-
-    def login(self, username, password):
-        """Login helper function"""
-        return self.app.post(
-            "/login",
-            data=dict(username=username, password=password),
-            follow_redirects=True,
-        )
-
-    def logout(self):
-        """Logout helper function"""
-        return self.app.get("/logout", follow_redirects=True)
-
-    # assert functions
-
-    def test_empty_db(self):
-        """Ensure database is blank"""
-        rv = self.app.get("/")
-        self.assertIn(b"No entries yet. Add some!", rv.data)
-
-    def test_login_logout(self):
-        """Test login and logout using helper functions"""
-        rv = self.login(app.config["USERNAME"], app.config["PASSWORD"])
-        self.assertIn(b"You were logged in", rv.data)
-        rv = self.logout()
-        self.assertIn(b"You were logged out", rv.data)
-        rv = self.login(app.config["USERNAME"] + "x", app.config["PASSWORD"])
-        self.assertIn(b"Invalid username", rv.data)
-        rv = self.login(app.config["USERNAME"], app.config["PASSWORD"] + "x")
-        self.assertIn(b"Invalid password", rv.data)
-
-    def test_messages(self):
-        """Ensure that user can post messages"""
-        self.login(app.config["USERNAME"], app.config["PASSWORD"])
-        rv = self.app.post(
-            "/add",
-            data=dict(title="<Hello>", text="<strong>HTML</strong> allowed here"),
-            follow_redirects=True,
-        )
-        self.assertNotIn(b"No entries here so far", rv.data)
-        self.assertIn(b"&lt;Hello&gt;", rv.data)
-        self.assertIn(b"<strong>HTML</strong> allowed here", rv.data)
-
-    def test_delete_message(self):
-        """Ensure the messages are being deleted"""
-        rv = self.app.get("/delete/1")
-        data = json.loads(rv.data)
-        self.assertEqual(data["status"], 0)
-        self.login(app.config["USERNAME"], app.config["PASSWORD"])
-        rv = self.app.get("/delete/1")
-        data = json.loads(rv.data)
-        self.assertEqual(data["status"], 1)
+@pytest.fixture
+def test_db():
+    """
+    Set up a blank temp database before each test
+    and
+    Destroy blank temp database after each test
+    """
+    db.create_all()  # setup
+    yield  # testing happens here
+    db.drop_all()  # teardown
 
 
-if __name__ == "__main__":
-    unittest.main()
+def login(client, username, password):
+    """Login helper function"""
+    return client.post(
+        "/login",
+        data=dict(username=username, password=password),
+        follow_redirects=True,
+    )
+
+
+def logout(client):
+    """Logout helper function"""
+    return client.get("/logout", follow_redirects=True)
+
+
+def test_index(client, test_db):
+    response = client.get("/", content_type="html/text")
+    assert response.status_code == 200
+
+
+def test_database(client, test_db):
+    """initial test. ensure that the database exists"""
+    tester = os.path.exists("flaskr.db")
+    assert tester
+
+
+def test_empty_db(client, test_db):
+    """Ensure database is blank"""
+    rv = client.get("/")
+    assert b"No entries yet. Add some!" in rv.data
+
+
+def test_login_logout(client, test_db):
+    """Test login and logout using helper functions"""
+    rv = login(client, app.config["USERNAME"], app.config["PASSWORD"])
+    assert b"You were logged in" in rv.data
+    rv = logout(client)
+    assert b"You were logged out" in rv.data
+    rv = login(client, app.config["USERNAME"] + "x", app.config["PASSWORD"])
+    assert b"Invalid username" in rv.data
+    rv = login(client, app.config["USERNAME"], app.config["PASSWORD"] + "x")
+    assert b"Invalid password" in rv.data
+
+
+def test_messages(client, test_db):
+    """Ensure that user can post messages"""
+    login(client, app.config["USERNAME"], app.config["PASSWORD"])
+    rv = client.post(
+        "/add",
+        data=dict(title="<Hello>", text="<strong>HTML</strong> allowed here"),
+        follow_redirects=True,
+    )
+    assert b"No entries here so far" not in rv.data
+    assert b"&lt;Hello&gt;" in rv.data
+    assert b"<strong>HTML</strong> allowed here" in rv.data
+
+
+def test_delete_message(client, test_db):
+    """Ensure the messages are being deleted"""
+    rv = client.get("/delete/1")
+    data = json.loads(rv.data)
+    assert data["status"] == 0
+    login(client, app.config["USERNAME"], app.config["PASSWORD"])
+    rv = client.get("/delete/1")
+    data = json.loads(rv.data)
+    assert data["status"] == 1
