@@ -151,41 +151,13 @@ Let's start with a simple "hello, world" app.
 
    ```python
 
-    import pytest
-    import os
-    import json
-    from pathlib import Path
+    from app import app
 
-    from app import app, db
-
-    TEST_DB = "test.db"
-
-   @pytest.fixture
-   def client():
-      BASE_DIR = Path(__file__).resolve().parent.parent
-      app.config["TESTING"] = True
-      app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + str(
-          BASE_DIR.joinpath(TEST_DB)
-      )
-      return app.test_client()
-
-
-   @pytest.fixture
-   def test_db():
-      """
-      Set up a blank temp database before each test
-      and
-      Destroy blank temp database after each test
-      """
-      db.create_all()  # setup
-      yield  # testing happens here
-      db.drop_all()  # teardown
-
-
-   def test_index(client, test_db):
-      response = client.get("/", content_type="html/text")
-      assert response.status_code == 200
-      assert response.data == b'Hello, World!'
+    def test_index(self):
+        tester = app.test_client(self)
+        response = tester.get("/", content_type="html/text")
+        assert response.status_code == 200
+        assert response.data == b'Hello, World!'
 
    ```
 
@@ -287,39 +259,11 @@ Let's create the basic file for running our application. Before that though, we 
 
    ```python
 
-    import pytest
-    import os
-    import json
-    from pathlib import Path
-
     from app import app, db
 
-    TEST_DB = "test.db"
-
-   @pytest.fixture
-   def client():
-      BASE_DIR = Path(__file__).resolve().parent.parent
-      app.config["TESTING"] = True
-      app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + str(
-          BASE_DIR.joinpath(TEST_DB)
-      )
-      return app.test_client()
-
-
-   @pytest.fixture
-   def test_db():
-      """
-      Set up a blank temp database before each test
-      and
-      Destroy blank temp database after each test
-      """
-      db.create_all()  # setup
-      yield  # testing happens here
-      db.drop_all()  # teardown
-
-
-   def test_index(client, test_db):
-      response = client.get("/", content_type="html/text")
+   def test_index(self):
+      tester = app.test_client(self)
+      response = tester.get("/", content_type="html/text")
       assert response.status_code == 200
 
    ```
@@ -369,23 +313,21 @@ Essentially, we want to open a database connection, create the database based on
 1. How do we test for the existence of a file? Update _app_test.py_:
 
    ```python
-   import os
+
    import pytest
-   import json
    from pathlib import Path
+   from app import app, db
+
+   def test_index(self):
+      tester = app.test_client(self)
+      response = tester.get("/", content_type="html/text")
+      assert response.status_code == 200
+
+   def test_database(self):
+      tester = Path("flaskr.db").is_file()
+      assert tester
+
    ```
-
-from app import app, db
-
-def test_index(client, test_db):
-response = client.get("/", content_type="html/text")
-assert response.status_code == 200
-
-def test_database(client, test_db):
-tester = os.path.exists("flaskr.db")
-assert tester
-
-````
 
 Run it to make sure it fails, indicating that the database does not exist.
 
@@ -421,7 +363,7 @@ def get_db():
 def close_db(error):
     if hasattr(g, 'sqlite_db'):
         g.sqlite_db.close()
-````
+```
 
 And add the `init_db()` function at the bottom of `app.py` to make sure we start the server each time with a fresh database:
 
@@ -452,7 +394,7 @@ Write some tests for this first.
 
 ### Tests
 
-Take a look at the final code. I added docstrings for explanation.
+Take a look at the final code. I added docstrings for explanation and also updated the previous tests to use our pytest setup.
 
 ```python
 import pytest
@@ -508,7 +450,7 @@ def test_index(client, test_db):
 
 def test_database(client, test_db):
   """initial test. ensure that the database exists"""
-  tester = os.path.exists("flaskr.db")
+  tester = Path("flaskr.db").is_file()
   assert tester
 
 
@@ -979,7 +921,7 @@ Now let's add some JavaScript to make the site slightly more interactive.
    ```python
    def test_delete_message(client, test_db):
       """Ensure the messages are being deleted"""
-      rv = self.app.get('/delete/1')
+      rv = client.get('/delete/1')
       data = json.loads(rv.data)
       assert data["status"] == 1
    ```
@@ -1513,7 +1455,7 @@ def test_messages(client, test_db):
 
 def test_delete_message(client, test_db):
     """Ensure the messages are being deleted"""
-    rv = self.app.get('/delete/1')
+    rv = client.get('/delete/1')
     data = json.loads(rv.data)
     assert data["status"] == 1
 
