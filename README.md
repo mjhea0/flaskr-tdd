@@ -20,7 +20,15 @@ Also, if you are completely new to Flask and/or web development in general, it's
 
 ## Changelog
 
-This tutorial was last updated on November 5th, 2019:
+This tutorial was last updated on September 14th, 2020:
+
+- **10/14/2020**:
+
+  - Renamed app.test.py to app_test.py. Fixed issue #58.
+  - Updated to Flask 1.1.2, Flask-SQLAlchemy 2.4.4, gunicorn 20.0.4, psycopg2-binary 2.8.6, black 20.8b.1, flake8 3.8.3.
+  - Added pytest 6.0.1.
+  - Updated unittest to pytest
+  - Updated os.path to pathlib
 
 - **11/05/2019**:
   - Updated to Python 3.8.0, Flask 1.1.1, and Bootstrap 4.3.1.
@@ -32,7 +40,7 @@ This tutorial was last updated on November 5th, 2019:
 - **05/10/2018**: Updated to Python 3.6.5, Flask 1.0.2, Bootstrap 4.1.1
 - **10/16/2017**:
   - Updated to Python 3.6.2
-  -  Updated to Bootstrap 4
+  - Updated to Bootstrap 4
 - **10/10/2017**: Added a search feature
 - **07/03/2017**: Updated to Python 3.6.1
 - **01/24/2016**: Updated to Python 3! (v3.5.1)
@@ -72,12 +80,12 @@ This tutorial was last updated on November 5th, 2019:
 This tutorial utilizes the following requirements:
 
 1. Python v3.8.0
-1. Flask v1.1.1
-1. Flask-SQLAlchemy v2.4.1
-1. Gunicorn v19.9.0
-1. Psycopg2 v2.8.4
-1. Flake8 v3.7.9
-1. Black v19.10b0
+1. Flask v1.1.2
+1. Flask-SQLAlchemy v2.4.4
+1. Gunicorn v20.0.4
+1. Psycopg2 v2.8.6
+1. Flake8 v3.8.3
+1. Black v20.8b1
 
 ## Test Driven Development?
 
@@ -90,7 +98,7 @@ TDD usually follows the "Red-Green-Refactor" cycle, as shown in the image above:
 1. Write a test
 1. Run the test (it should fail)
 1. Write just enough code for the test to pass
-2. Refactor code and retest, again and again (if necessary)
+1. Refactor code and retest, again and again (if necessary)
 
 > For more, check out [What is Test-Driven Development?](https://testdriven.io/test-driven-development/).
 
@@ -101,6 +109,7 @@ Before beginning make sure you have the latest version of [Python 3.8](https://w
 > **NOTE**: This tutorial uses Python v3.8.0.
 
 Along with Python, the following tools are also installed:
+
 - [pip](https://pip.pypa.io/en/stable/) - a [package management](http://en.wikipedia.org/wiki/Package_management_system) system for Python, similar to gem or npm for Ruby and Node, respectively.
 - [venv](https://docs.python.org/3/library/venv.html) - used to create isolated environments for development. This is standard practice. Always, always, ALWAYS utilize virtual environments. If you don't, you will eventually run into problems with dependency conflicts.
 
@@ -108,25 +117,25 @@ Along with Python, the following tools are also installed:
 
 1. Create a new directory to store the project:
 
-    ```sh
-    $ mkdir flaskr-tdd
-    $ cd flaskr-tdd
-    ```
+   ```sh
+   $ mkdir flaskr-tdd
+   $ cd flaskr-tdd
+   ```
 
 1. Create and activate your virtual env:
 
-    ```sh
-    $ python3.8 -m venv env
-    $ source env/bin/activate
-    ```
+   ```sh
+   $ python3.8 -m venv env
+   $ source env/bin/activate
+   ```
 
-    > **NOTE**: You know that you are in a virtual environment as `env` is now showing before the `$` in your terminal -- `(env)$`. To exit the virtual environment, use the command `deactivate`. You can reactivate by navigating back to the project directory and running `source env/bin/activate`.
+   > **NOTE**: You know that you are in a virtual environment as `env` is now showing before the `$` in your terminal -- `(env)$`. To exit the virtual environment, use the command `deactivate`. You can reactivate by navigating back to the project directory and running `source env/bin/activate`.
 
 1. Install Flask with pip:
 
-    ```sh
-    (env)$ pip install flask==1.1.1
-    ```
+   ```sh
+   (env)$ pip install flask==1.1.2
+   ```
 
 ## First Test
 
@@ -134,264 +143,244 @@ Let's start with a simple "hello, world" app.
 
 1. Create a test file:
 
-    ```sh
-    (env)$ touch app.test.py
-    ```
+   ```sh
+   (env)$ touch app_test.py
+   ```
 
-    Open this file in your favorite text editor -- like [Visual Studio Code](https://code.visualstudio.com/), [Sublime Text](https://www.sublimetext.com/), or [PyCharm](https://www.jetbrains.com/pycharm/) -- and then add the following code:
+   Open this file in your favorite text editor -- like [Visual Studio Code](https://code.visualstudio.com/), [Sublime Text](https://www.sublimetext.com/), or [PyCharm](https://www.jetbrains.com/pycharm/) -- and then add the following code:
 
-    ```python
-    import unittest
+   ```python
 
     from app import app
 
+    def test_index(self):
+        tester = app.test_client(self)
+        response = tester.get("/", content_type="html/text")
+        assert response.status_code == 200
+        assert response.data == b'Hello, World!'
 
-    class BasicTestCase(unittest.TestCase):
+   ```
 
-        def test_index(self):
-            tester = app.test_client(self)
-            response = tester.get('/', content_type='html/text')
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.data, b'Hello, World!')
-
-
-    if __name__ == '__main__':
-        unittest.main()
-    ```
-
-  Essentially, we're testing whether the response that we get back is "200" and that "Hello, World!" is displayed.
+Essentially, we're testing whether the response that we get back is "200" and that "Hello, World!" is displayed.
 
 1. Run the test:
 
-    ```sh
-    (env)$ python app.test.py
-    ```
+   ```sh
+   (env)$ python -m pytest
+   ```
 
-    If all goes well, this will fail:
+   If all goes well, this will fail:
 
-    ```sh
-    ModuleNotFoundError: No module named 'app'
-    ```
+   ```sh
+   ModuleNotFoundError: No module named 'app'
+   ```
 
 1. Now add the code for this to pass.
 
-    ```sh
-    (env)$ touch app.py
-    ```
+   ```sh
+   (env)$ touch app.py
+   ```
 
-    Code:
+   Code:
 
-    ```python
-    from flask import Flask
-
-
-    app = Flask(__name__)
+   ```python
+   from flask import Flask
 
 
-    @app.route('/')
-    def hello():
-        return 'Hello, World!'
+   app = Flask(__name__)
 
 
-    if __name__ == '__main__':
-        app.run()
-    ```
+   @app.route('/')
+   def hello():
+       return 'Hello, World!'
+
+
+   if __name__ == '__main__':
+       app.run()
+   ```
 
 1. Run the app:
 
-    ```sh
-    (env)$ python app.py
-    ```
+   ```sh
+   (env)$ python app.py
+   ```
 
-    Then Navigate to [http://localhost:5000/](http://localhost:5000/) in your browser of choice. You should see "Hello, World!" on your screen.
+   Then Navigate to [http://localhost:5000/](http://localhost:5000/) in your browser of choice. You should see "Hello, World!" on your screen.
 
-    Return to the terminal. Kill the server with Ctrl+C.
+   Return to the terminal. Kill the server with Ctrl+C.
 
 1. Run the test again:
 
-    ```sh
-    (env)$ python app.test.py
+   ```sh
+   (env)$ python -m pytest
 
-    .
-    ----------------------------------------------------------------------
-    Ran 1 test in 0.010s
+   .
+   ----------------------------------------------------------------------
+   Ran 1 test in 0.010s
 
-    OK
-    ```
+   OK
+   ```
 
-    Nice.
+   Nice.
 
 ## Flaskr Setup
 
 1. Add structure
 
-    Add two folders, "static" and "templates", in the project root. Your file structure should now look like this:
+   Add two folders, "static" and "templates", in the project root. Your file structure should now look like this:
 
-    ```sh
-    ├── app.py
-    ├── app.test.py
-    ├── static
-    └── templates
-    ```
+   ```sh
+   ├── app.py
+   ├── app_test.py
+   ├── static
+   └── templates
+   ```
 
 1. SQL Schema
 
-    Create a new file called *schema.sql* and add the following code:
+   Create a new file called _schema.sql_ and add the following code:
 
-    ```sql
-    drop table if exists entries;
-    create table entries (
-      id integer primary key autoincrement,
-      title text not null,
-      text text not null
-    );
-    ```
+   ```sql
+   drop table if exists entries;
+   create table entries (
+     id integer primary key autoincrement,
+     title text not null,
+     text text not null
+   );
+   ```
 
-  This will set up a single table with three fields -- "id", "title", and "text". SQLite will be used for our RDMS since it's part of the standard Python library and requires no configuration.
+This will set up a single table with three fields -- "id", "title", and "text". SQLite will be used for our RDMS since it's part of the standard Python library and requires no configuration.
 
 ## Second Test
 
 Let's create the basic file for running our application. Before that though, we need to write a test.
 
-1. Simply alter *app.test.py* like so:
+1. Simply alter _app_test.py_ like so:
 
-    ```python
-    import unittest
+   ```python
 
-    from app import app
+    from app import app, db
 
+   def test_index(self):
+      tester = app.test_client(self)
+      response = tester.get("/", content_type="html/text")
+      assert response.status_code == 200
 
-    class BasicTestCase(unittest.TestCase):
+   ```
 
-        def test_index(self):
-            tester = app.test_client(self)
-            response = tester.get('/', content_type='html/text')
-            self.assertEqual(response.status_code, 404)
+   So, we are expecting a 404 error. Run the test. This will fail. Why? We are expecting a 404, but we actually get a 200 back since the route exists.
 
+1. Update _app.py_:
 
-    if __name__ == '__main__':
-        unittest.main()
-    ```
-
-    So, we are expecting a 404 error. Run the test. This will fail. Why? We are expecting a 404, but we actually get a 200 back since the route exists.
-
-1. Update *app.py*:
-
-    ```python
-    # imports
-    import sqlite3
-    from flask import Flask, request, session, g, redirect, url_for, \
-                      abort, render_template, flash, jsonify
+   ```python
+   # imports
+   import sqlite3
+   from flask import Flask, request, session, g, redirect, url_for, \
+                     abort, render_template, flash, jsonify
 
 
-    # configuration
-    DATABASE = 'flaskr.db'
-    DEBUG = True
-    SECRET_KEY = 'my_precious'
-    USERNAME = 'admin'
-    PASSWORD = 'admin'
+   # configuration
+   DATABASE = 'flaskr.db'
+   DEBUG = True
+   SECRET_KEY = 'my_precious'
+   USERNAME = 'admin'
+   PASSWORD = 'admin'
 
 
-    # create and initialize app
-    app = Flask(__name__)
-    app.config.from_object(__name__)
+   # create and initialize app
+   app = Flask(__name__)
+   app.config.from_object(__name__)
 
 
-    if __name__ == '__main__':
-        app.run()
-    ```
+   if __name__ == '__main__':
+       app.run()
+   ```
 
-    Here, we add in all the required imports, create a configuration section for global variables, initialize the app, and then finally run the app.
+   Here, we add in all the required imports, create a configuration section for global variables, initialize the app, and then finally run the app.
 
 1. Run it:
 
-    ```sh
-    (env)$ python app.py
-    ```
+   ```sh
+   (env)$ python app.py
+   ```
 
-    Launch the server. You should see the 404 error because no routes or views are setup. Return to the terminal. Kill the server. Now run the test. It should pass.
+   Launch the server. You should see the 404 error because no routes or views are setup. Return to the terminal. Kill the server. Now run the test. It should pass.
 
 ## Database Setup
 
 Essentially, we want to open a database connection, create the database based on the schema if it doesn't already exist, then close the connection each time a test is ran.
 
-1. How do we test for the existence of a file? Update *app.test.py*:
+1. How do we test for the existence of a file? Update _app_test.py_:
 
-    ```python
-    import os
-    import unittest
+   ```python
 
-    from app import app
+   import pytest
+   from pathlib import Path
+   from app import app, db
 
+   def test_index(self):
+      tester = app.test_client(self)
+      response = tester.get("/", content_type="html/text")
+      assert response.status_code == 200
 
-    class BasicTestCase(unittest.TestCase):
+   def test_database(self):
+      tester = Path("flaskr.db").is_file()
+      assert tester
 
-        def test_index(self):
-            tester = app.test_client(self)
-            response = tester.get('/', content_type='html/text')
-            self.assertEqual(response.status_code, 404)
+   ```
 
-        def test_database(self):
-            tester = os.path.exists("flaskr.db")
-            self.assertTrue(tester)
+Run it to make sure it fails, indicating that the database does not exist.
 
+1. Now add the following code to _app.py_:
 
-    if __name__ == '__main__':
-        unittest.main()
-    ```
-
-    Run it to make sure it fails, indicating that the database does not exist.
-
-1. Now add the following code to *app.py*:
-
-    ```python
-    # connect to database
-    def connect_db():
-        """Connects to the database."""
-        rv = sqlite3.connect(app.config['DATABASE'])
-        rv.row_factory = sqlite3.Row
-        return rv
+```python
+# connect to database
+def connect_db():
+    """Connects to the database."""
+    rv = sqlite3.connect(app.config['DATABASE'])
+    rv.row_factory = sqlite3.Row
+    return rv
 
 
-    # create the database
-    def init_db():
-        with app.app_context():
-            db = get_db()
-            with app.open_resource('schema.sql', mode='r') as f:
-                db.cursor().executescript(f.read())
-            db.commit()
+# create the database
+def init_db():
+    with app.app_context():
+        db = get_db()
+        with app.open_resource('schema.sql', mode='r') as f:
+            db.cursor().executescript(f.read())
+        db.commit()
 
 
-    # open database connection
-    def get_db():
-        if not hasattr(g, 'sqlite_db'):
-            g.sqlite_db = connect_db()
-        return g.sqlite_db
+# open database connection
+def get_db():
+    if not hasattr(g, 'sqlite_db'):
+        g.sqlite_db = connect_db()
+    return g.sqlite_db
 
 
-    # close database connection
-    @app.teardown_appcontext
-    def close_db(error):
-        if hasattr(g, 'sqlite_db'):
-            g.sqlite_db.close()
-    ```
+# close database connection
+@app.teardown_appcontext
+def close_db(error):
+    if hasattr(g, 'sqlite_db'):
+        g.sqlite_db.close()
+```
 
-    And add the `init_db()` function at the bottom of `app.py` to make sure we start the server each time with a fresh database:
+And add the `init_db()` function at the bottom of `app.py` to make sure we start the server each time with a fresh database:
 
-    ```python
-    if __name__ == '__main__':
-        init_db()
-        app.run()
-    ```
+```python
+if __name__ == '__main__':
+    init_db()
+    app.run()
+```
 
-    Now it's possible to create a database by starting up a Python shell and importing and calling the `init_db()` function:
+Now it's possible to create a database by starting up a Python shell and importing and calling the `init_db()` function:
 
-    ```python
-    >>> from app import init_db
-    >>> init_db()
-    ```
+```python
+>>> from app import init_db
+>>> init_db()
+```
 
-    Close the shell, then run the test again. Does it pass? Now we know that the database has been created.
+Close the shell, then run the test again. Does it pass? Now we know that the database has been created.
 
 ## Templates and Views
 
@@ -405,105 +394,102 @@ Write some tests for this first.
 
 ### Tests
 
-Take a look at the final code. I added docstrings for explanation.
+Take a look at the final code. I added docstrings for explanation and also updated the previous tests to use our pytest setup.
 
 ```python
+import pytest
 import os
-import unittest
-import tempfile
+import json
+from pathlib import Path
 
-import app
+from app import app, db
 
-
-class BasicTestCase(unittest.TestCase):
-
-    def test_index(self):
-        """Initial test: Ensure flask was set up correctly."""
-        tester = app.app.test_client(self)
-        response = tester.get('/', content_type='html/text')
-        self.assertEqual(response.status_code, 200)
-
-    def test_database(self):
-        """Initial test: Ensure that the database exists."""
-        tester = os.path.exists("flaskr.db")
-        self.assertEqual(tester, True)
+TEST_DB = "test.db"
 
 
-class FlaskrTestCase(unittest.TestCase):
-
-    def setUp(self):
-        """Set up a blank temp database before each test."""
-        self.db_fd, app.app.config['DATABASE'] = tempfile.mkstemp()
-        app.app.config['TESTING'] = True
-        self.app = app.app.test_client()
-        app.init_db()
-
-    def tearDown(self):
-        """Destroy blank temp database after each test."""
-        os.close(self.db_fd)
-        os.unlink(app.app.config['DATABASE'])
-
-    def login(self, username, password):
-        """Login helper function."""
-        return self.app.post('/login', data=dict(
-            username=username,
-            password=password
-        ), follow_redirects=True)
-
-    def logout(self):
-        """Logout helper function."""
-        return self.app.get('/logout', follow_redirects=True)
-
-    # assert functions
-
-    def test_empty_db(self):
-        """Ensure database is blank."""
-        rv = self.app.get('/')
-        assert b'No entries here so far' in rv.data
-
-    def test_login_logout(self):
-        """Test login and logout using helper functions."""
-        rv = self.login(
-            app.app.config['USERNAME'],
-            app.app.config['PASSWORD']
-        )
-        assert b'You were logged in' in rv.data
-        rv = self.logout()
-        assert b'You were logged out' in rv.data
-        rv = self.login(
-            app.app.config['USERNAME'] + 'x',
-            app.app.config['PASSWORD']
-        )
-        assert b'Invalid username' in rv.data
-        rv = self.login(
-            app.app.config['USERNAME'],
-            app.app.config['PASSWORD'] + 'x'
-        )
-        assert b'Invalid password' in rv.data
-
-    def test_messages(self):
-        """Ensure that a user can post messages."""
-        self.login(
-            app.app.config['USERNAME'],
-            app.app.config['PASSWORD']
-        )
-        rv = self.app.post('/add', data=dict(
-            title='<Hello>',
-            text='<strong>HTML</strong> allowed here'
-        ), follow_redirects=True)
-        assert b'No entries here so far' not in rv.data
-        assert b'&lt;Hello&gt;' in rv.data
-        assert b'<strong>HTML</strong> allowed here' in rv.data
+@pytest.fixture
+def client():
+  BASE_DIR = Path(__file__).resolve().parent.parent
+  app.config["TESTING"] = True
+  app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + str(
+      BASE_DIR.joinpath(TEST_DB)
+  )
+  return app.test_client()
 
 
-if __name__ == '__main__':
-    unittest.main()
+@pytest.fixture
+def test_db():
+  """
+  Set up a blank temp database before each test
+  and
+  Destroy blank temp database after each test
+  """
+  db.create_all()  # setup
+  yield  # testing happens here
+  db.drop_all()  # teardown
+
+
+def login(client, username, password):
+  """Login helper function"""
+  return client.post(
+      "/login",
+      data=dict(username=username, password=password),
+      follow_redirects=True,
+  )
+
+
+def logout(client):
+  """Logout helper function"""
+  return client.get("/logout", follow_redirects=True)
+
+
+def test_index(client, test_db):
+  response = client.get("/", content_type="html/text")
+  assert response.status_code == 200
+
+
+def test_database(client, test_db):
+  """initial test. ensure that the database exists"""
+  tester = Path("flaskr.db").is_file()
+  assert tester
+
+
+def test_empty_db(client, test_db):
+  """Ensure database is blank"""
+  rv = client.get("/")
+  assert b"No entries yet. Add some!" in rv.data
+
+
+def test_login_logout(client, test_db):
+  """Test login and logout using helper functions"""
+  rv = login(client, app.config["USERNAME"], app.config["PASSWORD"])
+  assert b"You were logged in" in rv.data
+  rv = logout(client)
+  assert b"You were logged out" in rv.data
+  rv = login(client, app.config["USERNAME"] + "x", app.config["PASSWORD"])
+  assert b"Invalid username" in rv.data
+  rv = login(client, app.config["USERNAME"], app.config["PASSWORD"] + "x")
+  assert b"Invalid password" in rv.data
+
+
+def test_messages(client, test_db):
+  """Ensure that user can post messages"""
+  login(client, app.config["USERNAME"], app.config["PASSWORD"])
+  rv = client.post(
+      "/add",
+      data=dict(title="<Hello>", text="<strong>HTML</strong> allowed here"),
+      follow_redirects=True,
+  )
+  assert b"No entries here so far" not in rv.data
+  assert b"&lt;Hello&gt;" in rv.data
+  assert b"<strong>HTML</strong> allowed here" in rv.data
+
 ```
 
 Run the tests now:
 
 ```sh
-(env)$ python app.test.py
+(env)$ python -m pytest
 ```
 
 All will fail except for `test_database()`:
@@ -515,7 +501,7 @@ FAIL: test_index (__main__.BasicTestCase)
 Initial test: Ensure flask was set up correctly.
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "app.test.py", line 14, in test_index
+  File "app_test.py", line 14, in test_index
     self.assertEqual(response.status_code, 200)
 AssertionError: 404 != 200
 
@@ -524,7 +510,7 @@ FAIL: test_empty_db (__main__.FlaskrTestCase)
 Ensure database is blank.
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "app.test.py", line 52, in test_empty_db
+  File "app_test.py", line 52, in test_empty_db
     assert b'No entries here so far' in rv.data
 AssertionError
 
@@ -533,7 +519,7 @@ FAIL: test_login_logout (__main__.FlaskrTestCase)
 Test login and logout using helper functions.
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "app.test.py", line 60, in test_login_logout
+  File "app_test.py", line 60, in test_login_logout
     assert b'You were logged in' in rv.data
 AssertionError
 
@@ -542,7 +528,7 @@ FAIL: test_messages (__main__.FlaskrTestCase)
 Ensure that a user can post messages.
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "app.test.py", line 85, in test_messages
+  File "app_test.py", line 85, in test_messages
     assert b'&lt;Hello&gt;' in rv.data
 AssertionError
 
@@ -556,219 +542,228 @@ Let's get these all green, one at a time...
 
 ### Show Entries
 
-1. First, add a view for displaying the entries to *app.py*:
+1. First, add a view for displaying the entries to _app.py_:
 
-    ```python
-    @app.route('/')
-    def show_entries():
-        """Searches the database for entries, then displays them."""
-        db = get_db()
-        cur = db.execute('select * from entries order by id desc')
-        entries = cur.fetchall()
-        return render_template('index.html', entries=entries)
-    ```
+   ```python
+   @app.route('/')
+   def show_entries():
+       """Searches the database for entries, then displays them."""
+       db = get_db()
+       cur = db.execute('select * from entries order by id desc')
+       entries = cur.fetchall()
+       return render_template('index.html', entries=entries)
+   ```
 
-1. Then add the *index.html* template to the "templates" folder:
+1. Then add the _index.html_ template to the "templates" folder:
 
-    ```html
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <title>Flaskr</title>
-      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-    </head>
-    <body>
-      <div class="page">
-        <h1>Flaskr-TDD</h1>
+   ```html
+   <!DOCTYPE html>
+   <html>
+     <head>
+       <title>Flaskr</title>
+       <link
+         rel="stylesheet"
+         type="text/css"
+         href="{{ url_for('static', filename='style.css') }}"
+       />
+     </head>
+     <body>
+       <div class="page">
+         <h1>Flaskr-TDD</h1>
 
-        <div class="metanav">
-          {% if not session.logged_in %}
-            <a href="{{ url_for('login') }}">log in</a>
-          {% else %}
-            <a href="{{ url_for('logout') }}">log out</a>
-          {% endif %}
-        </div>
+         <div class="metanav">
+           {% if not session.logged_in %}
+           <a href="{{ url_for('login') }}">log in</a>
+           {% else %}
+           <a href="{{ url_for('logout') }}">log out</a>
+           {% endif %}
+         </div>
 
-        {% for message in get_flashed_messages() %}
-          <div class="flash">{{ message }}</div>
-        {% endfor %}
+         {% for message in get_flashed_messages() %}
+         <div class="flash">{{ message }}</div>
+         {% endfor %} {% block body %}{% endblock %} {% if session.logged_in %}
+         <form
+           action="{{ url_for('add_entry') }}"
+           method="post"
+           class="add-entry"
+         >
+           <dl>
+             <dt>Title:</dt>
+             <dd><input type="text" size="30" name="title" /></dd>
+             <dt>Text:</dt>
+             <dd><textarea name="text" rows="5" cols="40"></textarea></dd>
+             <dd><input type="submit" value="Share" /></dd>
+           </dl>
+         </form>
+         {% endif %}
 
-        {% block body %}{% endblock %}
-
-        {% if session.logged_in %}
-          <form action="{{ url_for('add_entry') }}" method="post" class="add-entry">
-            <dl>
-              <dt>Title:</dt>
-              <dd><input type="text" size="30" name="title"></dd>
-              <dt>Text:</dt>
-              <dd><textarea name="text" rows="5" cols="40"></textarea></dd>
-              <dd><input type="submit" value="Share"></dd>
-            </dl>
-          </form>
-        {% endif %}
-
-        <ul class="entries">
-          {% for entry in entries %}
-            <li><h2>{{ entry.title }}</h2>{{ entry.text|safe }}</li>
-          {% else %}
-            <li><em>No entries yet. Add some!</em></li>
-          {% endfor %}
-        </ul>
-      </div>
-    </body>
-    </html>
-    ```
+         <ul class="entries">
+           {% for entry in entries %}
+           <li>
+             <h2>{{ entry.title }}</h2>
+             {{ entry.text|safe }}
+           </li>
+           {% else %}
+           <li><em>No entries yet. Add some!</em></li>
+           {% endfor %}
+         </ul>
+       </div>
+     </body>
+   </html>
+   ```
 
 1. Run the tests now. You should see:
 
-    ```sh
-    Ran 5 tests in 0.048s
+   ```sh
+   Ran 5 tests in 0.048s
 
-    FAILED (failures=2, errors=2)
-    ```
+   FAILED (failures=2, errors=2)
+   ```
 
 ### User Login and Logout
 
-1. Update *app.py*:
+1. Update _app.py_:
 
-    ```python
-    @app.route('/login', methods=['GET', 'POST'])
-    def login():
-        """User login/authentication/session management."""
-        error = None
-        if request.method == 'POST':
-            if request.form['username'] != app.config['USERNAME']:
-                error = 'Invalid username'
-            elif request.form['password'] != app.config['PASSWORD']:
-                error = 'Invalid password'
-            else:
-                session['logged_in'] = True
-                flash('You were logged in')
-                return redirect(url_for('index'))
-        return render_template('login.html', error=error)
+   ```python
+   @app.route('/login', methods=['GET', 'POST'])
+   def login():
+       """User login/authentication/session management."""
+       error = None
+       if request.method == 'POST':
+           if request.form['username'] != app.config['USERNAME']:
+               error = 'Invalid username'
+           elif request.form['password'] != app.config['PASSWORD']:
+               error = 'Invalid password'
+           else:
+               session['logged_in'] = True
+               flash('You were logged in')
+               return redirect(url_for('index'))
+       return render_template('login.html', error=error)
 
 
-    @app.route('/logout')
-    def logout():
-        """User logout/authentication/session management."""
-        session.pop('logged_in', None)
-        flash('You were logged out')
-        return redirect(url_for('index'))
-      ```
+   @app.route('/logout')
+   def logout():
+       """User logout/authentication/session management."""
+       session.pop('logged_in', None)
+       flash('You were logged out')
+       return redirect(url_for('index'))
+   ```
 
-    In the above `login()` function, the decorator indicates that the route can accept either a GET or POST request. Put simply, a request is initiated by the end user when they access the `/login` url. The difference between these requests is simple -- GET is used for accessing a webpage, while POST is used when information is sent to the server. Thus, when a user accesses the `/login` url, they are using a GET request, but when they attempt to log in, a POST request is used.
+   In the above `login()` function, the decorator indicates that the route can accept either a GET or POST request. Put simply, a request is initiated by the end user when they access the `/login` url. The difference between these requests is simple -- GET is used for accessing a webpage, while POST is used when information is sent to the server. Thus, when a user accesses the `/login` url, they are using a GET request, but when they attempt to log in, a POST request is used.
 
-1. Add the template - *login.html*:
+1. Add the template - _login.html_:
 
-    ```html
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <title>Flaskr-TDD | Login</title>
-      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-    </head>
-    <body>
-      <div class="page">
-        <h1>Flaskr</h1>
+   ```html
+   <!DOCTYPE html>
+   <html>
+     <head>
+       <title>Flaskr-TDD | Login</title>
+       <link
+         rel="stylesheet"
+         type="text/css"
+         href="{{ url_for('static', filename='style.css') }}"
+       />
+     </head>
+     <body>
+       <div class="page">
+         <h1>Flaskr</h1>
 
-        <div class="metanav">
-          {% if not session.logged_in %}
-            <a href="{{ url_for('login') }}">log in</a>
-          {% else %}
-            <a href="{{ url_for('logout') }}">log out</a>
-          {% endif %}
-        </div>
+         <div class="metanav">
+           {% if not session.logged_in %}
+           <a href="{{ url_for('login') }}">log in</a>
+           {% else %}
+           <a href="{{ url_for('logout') }}">log out</a>
+           {% endif %}
+         </div>
 
-        {% for message in get_flashed_messages() %}
-          <div class="flash">{{ message }}</div>
-        {% endfor %}
+         {% for message in get_flashed_messages() %}
+         <div class="flash">{{ message }}</div>
+         {% endfor %} {% block body %}{% endblock %}
 
-        {% block body %}{% endblock %}
+         <h2>Login</h2>
 
-        <h2>Login</h2>
+         {% if error %}
+         <p class="error"><strong>Error:</strong> {{ error }}</p>
+         {% endif %}
 
-        {% if error %}
-          <p class="error"><strong>Error:</strong> {{ error }}</p>
-        {% endif %}
-
-        <form action="{{ url_for('login') }}" method="post">
-          <dl>
-            <dt>Username:</dt>
-            <dd><input type="text" name="username"></dd>
-            <dt>Password:</dt>
-            <dd><input type="password" name="password"></dd>
-            <dd><input type="submit" value="Login"></dd>
-          </dl>
-        </form>
-      </div>
-    </body>
-    </html>
-    ```
+         <form action="{{ url_for('login') }}" method="post">
+           <dl>
+             <dt>Username:</dt>
+             <dd><input type="text" name="username" /></dd>
+             <dt>Password:</dt>
+             <dd><input type="password" name="password" /></dd>
+             <dd><input type="submit" value="Login" /></dd>
+           </dl>
+         </form>
+       </div>
+     </body>
+   </html>
+   ```
 
 1. Run the tests again.
 
-    You should still see some errors! Look at one of the errors -- `werkzeug.routing.BuildError: Could not build url for endpoint 'index'. Did you mean 'login' instead?`
+   You should still see some errors! Look at one of the errors -- `werkzeug.routing.BuildError: Could not build url for endpoint 'index'. Did you mean 'login' instead?`
 
-    Essentially, we are trying to redirect to the `index()` function, which does not exist. Rename the `show_entries()` function to `index()` within *app.py* then re-test:
+   Essentially, we are trying to redirect to the `index()` function, which does not exist. Rename the `show_entries()` function to `index()` within _app.py_ then re-test:
 
-    ```sh
-    Ran 5 tests in 0.048s
+   ```sh
+   Ran 5 tests in 0.048s
 
-    FAILED (failures=1, errors=2)
-    ```
+   FAILED (failures=1, errors=2)
+   ```
 
 1. Next, add in a view for adding entries:
 
-    ```python
-    @app.route('/add', methods=['POST'])
-    def add_entry():
-        """Add new post to database."""
-        if not session.get('logged_in'):
-            abort(401)
-        db = get_db()
-        db.execute(
-            'insert into entries (title, text) values (?, ?)',
-            [request.form['title'], request.form['text']]
-        )
-        db.commit()
-        flash('New entry was successfully posted')
-        return redirect(url_for('index'))
-    ```
+   ```python
+   @app.route('/add', methods=['POST'])
+   def add_entry():
+       """Add new post to database."""
+       if not session.get('logged_in'):
+           abort(401)
+       db = get_db()
+       db.execute(
+           'insert into entries (title, text) values (?, ?)',
+           [request.form['title'], request.form['text']]
+       )
+       db.commit()
+       flash('New entry was successfully posted')
+       return redirect(url_for('index'))
+   ```
 
 1. Retest.
 
-    Now you should see:
+   Now you should see:
 
-    ```sh
-    ..F..
-    ======================================================================
-    FAIL: test_empty_db (__main__.FlaskrTestCase)
-    Ensure database is blank.
-    ----------------------------------------------------------------------
-    Traceback (most recent call last):
-      File "app.test.py", line 52, in test_empty_db
-        assert b'No entries here so far' in rv.data
-    AssertionError
+   ```sh
+   ..F..
+   ======================================================================
+   FAIL: test_empty_db (__main__.FlaskrTestCase)
+   Ensure database is blank.
+   ----------------------------------------------------------------------
+   Traceback (most recent call last):
+     File "app_test.py", line 52, in test_empty_db
+       assert b'No entries here so far' in rv.data
+   AssertionError
 
-    ----------------------------------------------------------------------
-    Ran 5 tests in 0.054s
+   ----------------------------------------------------------------------
+   Ran 5 tests in 0.054s
 
-    FAILED (failures=1)
-    ```
+   FAILED (failures=1)
+   ```
 
-    This error is asserting that when the route `/` is hit, the message "No entries here so far" is returned. Check the *index.html* template. The message actually reads "No entries yet. Add some!". So update the test and then retest:
+   This error is asserting that when the route `/` is hit, the message "No entries here so far" is returned. Check the _index.html_ template. The message actually reads "No entries yet. Add some!". So update the test and then retest:
 
-    ```sh
-    Ran 5 tests in 0.055s
+   ```sh
+   Ran 5 tests in 0.055s
 
-    OK
-    ```
+   OK
+   ```
 
-    Perfect.
+   Perfect.
 
 ## Add Some Color
 
-Save the following styles to a new file called *style.css* in the "static" folder:
+Save the following styles to a new file called _style.css_ in the "static" folder:
 
 ```css
 body {
@@ -776,12 +771,15 @@ body {
   background: #eee;
 }
 
-a, h1, h2 {
-  color: #377BA8;
+a,
+h1,
+h2 {
+  color: #377ba8;
 }
 
-h1, h2 {
-  font-family: 'Georgia', serif;
+h1,
+h2 {
+  font-family: "Georgia", serif;
   margin: 0;
 }
 
@@ -833,13 +831,13 @@ h2 {
 }
 
 .flash {
-  background: #CEE5F5;
+  background: #cee5f5;
   padding: 0.5em;
-  border: 1px solid #AACBE2;
+  border: 1px solid #aacbe2;
 }
 
 .error {
-  background: #F0D6D6;
+  background: #f0d6d6;
   padding: 0.5em;
 }
 ```
@@ -852,92 +850,95 @@ Run your app, log in (username/password = "admin"), add a post, log out.
 
 Now let's add some JavaScript to make the site slightly more interactive.
 
-1. Open *index.html* and update the first `<li`> like so:
+1. Open _index.html_ and update the first `<li`> like so:
 
-    ```html
-    <li class="entry">
-      <h2 id="{{ entry.id }}">{{ entry.title }}</h2>
-      {{ entry.text|safe }}
-    </li>
-    ```
+   ```html
+   <li class="entry">
+     <h2 id="{{ entry.id }}">{{ entry.title }}</h2>
+     {{ entry.text|safe }}
+   </li>
+   ```
 
-    Now we can use JavaScript to target each `<li`>. First, we need to add the following script to the document just before the closing body tag:
+   Now we can use JavaScript to target each `<li`>. First, we need to add the following script to the document just before the closing body tag:
 
-    ```html
-    <script type="text/javascript" src="{{url_for('static', filename='main.js') }}"></script>
-    ```
+   ```html
+   <script
+     type="text/javascript"
+     src="{{url_for('static', filename='main.js') }}"
+   ></script>
+   ```
 
-1. Create a *main.js* file in your "static" directory and add the following code:
+1. Create a _main.js_ file in your "static" directory and add the following code:
 
-    ```javascript
-    (function() {
-      console.log('ready!'); // sanity check
-    })();
+   ```javascript
+   (function () {
+     console.log("ready!"); // sanity check
+   })();
 
-    const postElements = document.getElementsByClassName('entry');
+   const postElements = document.getElementsByClassName("entry");
 
-    for (var i = 0; i < postElements.length; i++) {
-      postElements[i].addEventListener('click', function() {
-        const postId = this.getElementsByTagName('h2')[0].getAttribute('id');
-        const node = this;
-        fetch(`/delete/${postId}`)
-          .then(function(resp) {
-            return resp.json();
-          })
-          .then(function(result) {
-            if (result.status === 1) {
-              node.parentNode.removeChild(node);
-              console.log(result);
-            }
-            location.reload();
-          })
-          .catch(function(err) {
-            console.log(err);
-          });
-      });
-    }
-    ```
+   for (var i = 0; i < postElements.length; i++) {
+     postElements[i].addEventListener("click", function () {
+       const postId = this.getElementsByTagName("h2")[0].getAttribute("id");
+       const node = this;
+       fetch(`/delete/${postId}`)
+         .then(function (resp) {
+           return resp.json();
+         })
+         .then(function (result) {
+           if (result.status === 1) {
+             node.parentNode.removeChild(node);
+             console.log(result);
+           }
+           location.reload();
+         })
+         .catch(function (err) {
+           console.log(err);
+         });
+     });
+   }
+   ```
 
-1. Add a new function in *app.py* to remove the post from the database:
+1. Add a new function in _app.py_ to remove the post from the database:
 
-    ```python
-    @app.route('/delete/<post_id>', methods=['GET'])
-    def delete_entry(post_id):
-        """Delete post from database"""
-        result = {'status': 0, 'message': 'Error'}
-        try:
-            db = get_db()
-            db.execute('delete from entries where id=' + post_id)
-            db.commit()
-            result = {'status': 1, 'message': "Post Deleted"}
-        except Exception as e:
-            result = {'status': 0, 'message': repr(e)}
-        return jsonify(result)
-    ```
+   ```python
+   @app.route('/delete/<post_id>', methods=['GET'])
+   def delete_entry(post_id):
+       """Delete post from database"""
+       result = {'status': 0, 'message': 'Error'}
+       try:
+           db = get_db()
+           db.execute('delete from entries where id=' + post_id)
+           db.commit()
+           result = {'status': 1, 'message': "Post Deleted"}
+       except Exception as e:
+           result = {'status': 0, 'message': repr(e)}
+       return jsonify(result)
+   ```
 
 1. Finally, add a new test:
 
-    ```python
-    def test_delete_message(self):
-        """Ensure the messages are being deleted."""
-        rv = self.app.get('/delete/1')
-        data = json.loads((rv.data).decode('utf-8'))
-        self.assertEqual(data['status'], 1)
-    ```
+   ```python
+   def test_delete_message(client, test_db):
+      """Ensure the messages are being deleted"""
+      rv = client.get('/delete/1')
+      data = json.loads(rv.data)
+      assert data["status"] == 1
+   ```
 
-    Make sure to add the following import as well -- `import json`.
+   Make sure to add the following import as well -- `import json`.
 
-    Manually test this out by running the server and adding two new entries. Click on one of them. It should be removed from the DOM as well as the database. Double check this.
+   Manually test this out by running the server and adding two new entries. Click on one of them. It should be removed from the DOM as well as the database. Double check this.
 
-    Then run your automated test suite. It should pass:
+   Then run your automated test suite. It should pass:
 
-    ```sh
-    ......
-    ----------------------------------------------------------------------
-    Ran 6 tests in 0.062s
+   ```sh
+   ......
+   ----------------------------------------------------------------------
+   Ran 6 tests in 0.062s
 
-    OK
-    ```
+   OK
+   ```
 
 ## Deployment
 
@@ -947,63 +948,63 @@ With the app in a working state, let's shift gears and deploy the app to [Heroku
 
 1. Next, install a production-grade WSGI web server called [Gunicorn](http://gunicorn.org/):
 
-    ```sh
-    (env)$ pip install gunicorn==19.9.0
-    ```
+   ```sh
+   (env)$ pip install gunicorn==20.0.4
+   ```
 
 1. Create a [Procfile](https://devcenter.heroku.com/articles/procfile) in the project root:
 
-    ```sh
-    (env)$ touch Procfile
-    ```
+   ```sh
+   (env)$ touch Procfile
+   ```
 
-    And add the following code:
+   And add the following code:
 
-    ```sh
-    web: gunicorn app:app
-    ```
+   ```sh
+   web: gunicorn app:app
+   ```
 
-1. Create a *requirements.txt* file to specify the external dependencies that need to be installed for the app to work:
+1. Create a _requirements.txt_ file to specify the external dependencies that need to be installed for the app to work:
 
-    ```sh
-    (env)$ pip freeze > requirements.txt
-    ```
+   ```sh
+   (env)$ pip freeze > requirements.txt
+   ```
 
-1. Create a *.gitignore* file in the project root:
+1. Create a _.gitignore_ file in the project root:
 
-    ```sh
-    (env)$ touch .gitignore
-    ```
+   ```sh
+   (env)$ touch .gitignore
+   ```
 
-    And include the following files and folders (so they are not included in version control):
+   And include the following files and folders (so they are not included in version control):
 
-    ```sh
-    env
-    *.pyc
-    *.DS_Store
-    __pycache__
-    ```
+   ```sh
+   env
+   *.pyc
+   *.DS_Store
+   __pycache__
+   ```
 
-1. To specify the correct Python runtime, add a new file to the project root called *runtime.txt*:
+1. To specify the correct Python runtime, add a new file to the project root called _runtime.txt_:
 
-    ```
-    python-3.8.0
-    ```
+   ```
+   python-3.8.0
+   ```
 
 1. Add a local Git repo:
 
-    ```sh
-    (env)$ git init
-    (env)$ git add -A
-    (env)$ git commit -m "initial"
-    ```
+   ```sh
+   (env)$ git init
+   (env)$ git add -A
+   (env)$ git commit -m "initial"
+   ```
 
 1. Deploy to Heroku:
 
-    ```sh
-    (env)$ heroku create
-    (env)$ git push heroku master
-    ```
+   ```sh
+   (env)$ heroku create
+   (env)$ git push heroku master
+   ```
 
 ## Test (again!)
 
@@ -1013,116 +1014,181 @@ Let's test this in the cloud. Run `heroku open` to open the app in the browser.
 
 Let's update the styles with [Bootstrap 4](http://getbootstrap.com/).
 
-1. First, remove the *style.css* stylesheet from both *index.html* and *login.html*. Then add this stylesheet to both files:
+1. First, remove the _style.css_ stylesheet from both _index.html_ and _login.html_. Then add this stylesheet to both files:
 
-    ```html
-    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    ```
+   ```html
+   <link
+     rel="stylesheet"
+     type="text/css"
+     href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+   />
+   ```
 
-    Now we have full access to all of the Bootstrap helper classes.
+   Now we have full access to all of the Bootstrap helper classes.
 
-1. Replace the code in *login.html* with:
+1. Replace the code in _login.html_ with:
 
-    ```html
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <title>Flaskr-TDD | Login</title>
-      <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    </head>
-    <body>
-      <div class="container">
-        <br><br>
-        <h1>Flaskr</h1>
-        <br><br>
+   ```html
+   <!DOCTYPE html>
+   <html>
+     <head>
+       <title>Flaskr-TDD | Login</title>
+       <link
+         rel="stylesheet"
+         type="text/css"
+         href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+       />
+     </head>
+     <body>
+       <div class="container">
+         <br /><br />
+         <h1>Flaskr</h1>
+         <br /><br />
 
-        {% for message in get_flashed_messages() %}
-          <div class="flash alert alert-success col-sm-4" role="success">{{ message }}</div>
-        {% endfor %}
+         {% for message in get_flashed_messages() %}
+         <div class="flash alert alert-success col-sm-4" role="success">
+           {{ message }}
+         </div>
+         {% endfor %}
 
-        <h3>Login</h3>
+         <h3>Login</h3>
 
-        {% if error %}<p class="alert alert-danger col-sm-4" role="danger"><strong>Error:</strong> {{ error }}</p>{% endif %}
+         {% if error %}
+         <p class="alert alert-danger col-sm-4" role="danger">
+           <strong>Error:</strong> {{ error }}
+         </p>
+         {% endif %}
 
-        <form action="{{ url_for('login') }}" method="post" class="form-group">
-          <dl>
-            <dt>Username:</dt>
-            <dd><input type="text" name="username" class="form-control col-sm-4"></dd>
-            <dt>Password:</dt>
-            <dd><input type="password" name="password" class="form-control col-sm-4"></dd>
-            <br><br>
-            <dd><input type="submit" class="btn btn-primary" value="Login"></dd>
-            <span>Use "admin" for username and password</span>
-          </dl>
-        </form>
-      </div>
-      <script type="text/javascript" src="{{url_for('static', filename='main.js') }}"></script>
-    </body>
-    </html>
-    ```
+         <form action="{{ url_for('login') }}" method="post" class="form-group">
+           <dl>
+             <dt>Username:</dt>
+             <dd>
+               <input
+                 type="text"
+                 name="username"
+                 class="form-control col-sm-4"
+               />
+             </dd>
+             <dt>Password:</dt>
+             <dd>
+               <input
+                 type="password"
+                 name="password"
+                 class="form-control col-sm-4"
+               />
+             </dd>
+             <br /><br />
+             <dd>
+               <input type="submit" class="btn btn-primary" value="Login" />
+             </dd>
+             <span>Use "admin" for username and password</span>
+           </dl>
+         </form>
+       </div>
+       <script
+         type="text/javascript"
+         src="{{url_for('static', filename='main.js') }}"
+       ></script>
+     </body>
+   </html>
+   ```
 
-1. And replace the code in *index.html* with:
+1. And replace the code in _index.html_ with:
 
-    ```html
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <title>Flaskr</title>
-      <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    </head>
-    <body>
-      <div class="container">
-        <br><br>
-        <h1>Flaskr</h1>
-        <br><br>
+   ```html
+   <!DOCTYPE html>
+   <html>
+     <head>
+       <title>Flaskr</title>
+       <link
+         rel="stylesheet"
+         type="text/css"
+         href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+       />
+     </head>
+     <body>
+       <div class="container">
+         <br /><br />
+         <h1>Flaskr</h1>
+         <br /><br />
 
-        {% if not session.logged_in %}
-          <a class="btn btn-success" role="button" href="{{ url_for('login') }}">log in</a>
-        {% else %}
-          <a class="btn btn-warning" role="button" href="{{ url_for('logout') }}">log out</a>
-        {% endif %}
+         {% if not session.logged_in %}
+         <a class="btn btn-success" role="button" href="{{ url_for('login') }}"
+           >log in</a
+         >
+         {% else %}
+         <a class="btn btn-warning" role="button" href="{{ url_for('logout') }}"
+           >log out</a
+         >
+         {% endif %}
 
-        <br><br>
+         <br /><br />
 
-        {% for message in get_flashed_messages() %}
-          <div class="flash alert alert-success col-sm-4" role="success">{{ message }}</div>
-        {% endfor %}
+         {% for message in get_flashed_messages() %}
+         <div class="flash alert alert-success col-sm-4" role="success">
+           {{ message }}
+         </div>
+         {% endfor %} {% if session.logged_in %}
+         <form
+           action="{{ url_for('add_entry') }}"
+           method="post"
+           class="add-entry form-group"
+         >
+           <dl>
+             <dt>Title:</dt>
+             <dd>
+               <input
+                 type="text"
+                 size="30"
+                 name="title"
+                 class="form-control col-sm-4"
+               />
+             </dd>
+             <dt>Text:</dt>
+             <dd>
+               <textarea
+                 name="text"
+                 rows="5"
+                 cols="40"
+                 class="form-control col-sm-4"
+               ></textarea>
+             </dd>
+             <br /><br />
+             <dd>
+               <input type="submit" class="btn btn-primary" value="Share" />
+             </dd>
+           </dl>
+         </form>
+         {% endif %}
 
-        {% if session.logged_in %}
-          <form action="{{ url_for('add_entry') }}" method="post" class="add-entry form-group">
-            <dl>
-              <dt>Title:</dt>
-              <dd><input type="text" size="30" name="title" class="form-control col-sm-4"></dd>
-              <dt>Text:</dt>
-              <dd><textarea name="text" rows="5" cols="40" class="form-control col-sm-4"></textarea></dd>
-              <br><br>
-              <dd><input type="submit" class="btn btn-primary" value="Share"></dd>
-            </dl>
-          </form>
-        {% endif %}
+         <br />
 
-        <br>
-
-        <ul class="entries">
-          {% for entry in entries %}
-            <li class="entry"><h2 id="{{ entry.id }}">{{ entry.title }}</h2>{{ entry.text|safe }}</li>
-          {% else %}
-            <li><em>No entries yet. Add some!</em></li>
-          {% endfor %}
-        </ul>
-      </div>
-      <script type="text/javascript" src="{{url_for('static', filename='main.js') }}"></script>
-    </body>
-    </html>
-    ```
+         <ul class="entries">
+           {% for entry in entries %}
+           <li class="entry">
+             <h2 id="{{ entry.id }}">{{ entry.title }}</h2>
+             {{ entry.text|safe }}
+           </li>
+           {% else %}
+           <li><em>No entries yet. Add some!</em></li>
+           {% endfor %}
+         </ul>
+       </div>
+       <script
+         type="text/javascript"
+         src="{{url_for('static', filename='main.js') }}"
+       ></script>
+     </body>
+   </html>
+   ```
 
 1. Run the app locally:
 
-    ```sh
-    (env)$ python app.py
-    ```
+   ```sh
+   (env)$ python app.py
+   ```
 
-    Check out your changes in the browser!
+   Check out your changes in the browser!
 
 ## SQLAlchemy
 
@@ -1132,52 +1198,52 @@ Let's upgrade to [Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com
 
 1. Start by installing Flask-SQLAlchemy:
 
-    ```sh
-    (env)$ pip install Flask-SQLAlchemy==2.4.1
-    ```
+   ```sh
+   (env)$ pip install Flask-SQLAlchemy==2.4.4
+   ```
 
-1. Create a *create_db.py* file, then add the following code:
+1. Create a _create_db.py_ file, then add the following code:
 
-    ```python
-    # create_db.py
-
-
-    from app import db
-    from models import Flaskr
+   ```python
+   # create_db.py
 
 
-    # create the database and the db table
-    db.create_all()
-
-    # commit the changes
-    db.session.commit()
-    ```
-
-    This file will be used to create our new database. Go ahead and delete the old *.db* (*flaskr.db*) along with the *schema.sql* file.
-
-1. Next add a *models.py* file, which will be used to generate the new schema:
-
-    ```python
-    from app import db
+   from app import db
+   from models import Flaskr
 
 
-    class Flaskr(db.Model):
+   # create the database and the db table
+   db.create_all()
 
-        __tablename__ = 'flaskr'
+   # commit the changes
+   db.session.commit()
+   ```
 
-        post_id = db.Column(db.Integer, primary_key=True)
-        title = db.Column(db.String, nullable=False)
-        text = db.Column(db.String, nullable=False)
+   This file will be used to create our new database. Go ahead and delete the old _.db_ (_flaskr.db_) along with the _schema.sql_ file.
 
-        def __init__(self, title, text):
-            self.title = title
-            self.text = text
+1. Next add a _models.py_ file, which will be used to generate the new schema:
 
-        def __repr__(self):
-            return f'<title {self.body}>'
-    ```
+   ```python
+   from app import db
 
-### Update *app.py*
+
+   class Flaskr(db.Model):
+
+       __tablename__ = 'flaskr'
+
+       post_id = db.Column(db.Integer, primary_key=True)
+       title = db.Column(db.String, nullable=False)
+       text = db.Column(db.String, nullable=False)
+
+       def __init__(self, title, text):
+           self.title = title
+           self.text = text
+
+       def __repr__(self):
+           return f'<title {self.body}>'
+   ```
+
+### Update _app.py_
 
 ```python
 # imports
@@ -1285,7 +1351,7 @@ Run the following command to create the initial database:
 (env)$ python create_db.py
 ```
 
-### Update *index.html*
+### Update _index.html_
 
 Update this line:
 
@@ -1300,106 +1366,112 @@ Pay attention to the `post_id`. Check the database to ensure that there is a mat
 Finally, update the tests:
 
 ```python
-import unittest
+import pytest
 import os
 import json
+from pathlib import Path
 
 from app import app, db
 
-TEST_DB = 'test.db'
+TEST_DB = "test.db"
 
 
-class BasicTestCase(unittest.TestCase):
-
-    def test_index(self):
-        """initial test. ensure flask was set up correctly"""
-        tester = app.test_client(self)
-        response = tester.get('/', content_type='html/text')
-        self.assertEqual(response.status_code, 200)
-
-    def test_database(self):
-        """initial test. ensure that the database exists"""
-        tester = os.path.exists("flaskr.db")
-        self.assertTrue(tester)
+@pytest.fixture
+def client():
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    app.config["TESTING"] = True
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + str(
+        BASE_DIR.joinpath(TEST_DB)
+    )
+    return app.test_client()
 
 
-class FlaskrTestCase(unittest.TestCase):
-
-    def setUp(self):
-        """Set up a blank temp database before each test"""
-        basedir = os.path.abspath(os.path.dirname(__file__))
-        app.config['TESTING'] = True
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
-            os.path.join(basedir, TEST_DB)
-        self.app = app.test_client()
-        db.create_all()
-
-    def tearDown(self):
-        """Destroy blank temp database after each test"""
-        db.drop_all()
-
-    def login(self, username, password):
-        """Login helper function"""
-        return self.app.post('/login', data=dict(
-            username=username,
-            password=password
-        ), follow_redirects=True)
-
-    def logout(self):
-        """Logout helper function"""
-        return self.app.get('/logout', follow_redirects=True)
-
-    # assert functions
-
-    def test_empty_db(self):
-        """Ensure database is blank"""
-        rv = self.app.get('/')
-        self.assertIn(b'No entries yet. Add some!', rv.data)
-
-    def test_login_logout(self):
-        """Test login and logout using helper functions"""
-        rv = self.login(app.config['USERNAME'], app.config['PASSWORD'])
-        self.assertIn(b'You were logged in', rv.data)
-        rv = self.logout()
-        self.assertIn(b'You were logged out', rv.data)
-        rv = self.login(app.config['USERNAME'] + 'x', app.config['PASSWORD'])
-        self.assertIn(b'Invalid username', rv.data)
-        rv = self.login(app.config['USERNAME'], app.config['PASSWORD'] + 'x')
-        self.assertIn(b'Invalid password', rv.data)
-
-    def test_messages(self):
-        """Ensure that user can post messages"""
-        self.login(app.config['USERNAME'], app.config['PASSWORD'])
-        rv = self.app.post('/add', data=dict(
-            title='<Hello>',
-            text='<strong>HTML</strong> allowed here'
-        ), follow_redirects=True)
-        self.assertNotIn(b'No entries here so far', rv.data)
-        self.assertIn(b'&lt;Hello&gt;', rv.data)
-        self.assertIn(b'<strong>HTML</strong> allowed here', rv.data)
-
-    def test_delete_message(self):
-        """Ensure the messages are being deleted"""
-        rv = self.app.get('/delete/1')
-        data = json.loads(rv.data)
-        self.assertEqual(data['status'], 1)
+@pytest.fixture
+def test_db():
+    """
+    Set up a blank temp database before each test
+    and
+    Destroy blank temp database after each test
+    """
+    db.create_all()  # setup
+    yield  # testing happens here
+    db.drop_all()  # teardown
 
 
-if __name__ == '__main__':
-    unittest.main()
+def login(client, username, password):
+    """Login helper function"""
+    return client.post(
+        "/login",
+        data=dict(username=username, password=password),
+        follow_redirects=True,
+    )
+
+
+def logout(client):
+    """Logout helper function"""
+    return client.get("/logout", follow_redirects=True)
+
+
+def test_index(client, test_db):
+    response = client.get("/", content_type="html/text")
+    assert response.status_code == 200
+
+
+def test_database(client, test_db):
+    """initial test. ensure that the database exists"""
+    tester = os.path.exists("flaskr.db")
+    assert tester
+
+
+def test_empty_db(client, test_db):
+    """Ensure database is blank"""
+    rv = client.get("/")
+    assert b"No entries yet. Add some!" in rv.data
+
+
+def test_login_logout(client, test_db):
+    """Test login and logout using helper functions"""
+    rv = login(client, app.config["USERNAME"], app.config["PASSWORD"])
+    assert b"You were logged in" in rv.data
+    rv = logout(client)
+    assert b"You were logged out" in rv.data
+    rv = login(client, app.config["USERNAME"] + "x", app.config["PASSWORD"])
+    assert b"Invalid username" in rv.data
+    rv = login(client, app.config["USERNAME"], app.config["PASSWORD"] + "x")
+    assert b"Invalid password" in rv.data
+
+
+def test_messages(client, test_db):
+    """Ensure that user can post messages"""
+    login(client, app.config["USERNAME"], app.config["PASSWORD"])
+    rv = client.post(
+        "/add",
+        data=dict(title="<Hello>", text="<strong>HTML</strong> allowed here"),
+        follow_redirects=True,
+    )
+    assert b"No entries here so far" not in rv.data
+    assert b"&lt;Hello&gt;" in rv.data
+    assert b"<strong>HTML</strong> allowed here" in rv.data
+
+def test_delete_message(client, test_db):
+    """Ensure the messages are being deleted"""
+    rv = client.get('/delete/1')
+    data = json.loads(rv.data)
+    assert data["status"] == 1
+
 ```
 
 We've mostly just updated the `setUp()` and `tearDown()` methods.
 
 Run the tests, and then manually test it by running the server and logging in and out, adding new entries, and deleting old entries.
 
-If all is well, update your requirements (`pip  freeze > requirements.txt`) commit your code, then PUSH the new version to Heroku!
+If all is well, update your requirements (`pip freeze > requirements.txt`) commit your code, then PUSH the new version to Heroku!
 
 ## Search Page
 
 Let's add a search page to our blog. It will be a nice feature that will come in handy after we have a number of blog posts.
 
-### Update *app.py*
+### Update _app.py_
 
 ```python
 @app.route('/search/', methods=['GET'])
@@ -1413,66 +1485,85 @@ def search():
 
 > **NOTE**: Be sure to write a test for this on your own!
 
-### Add *search.html*
+### Add _search.html_
 
-In the "templates" folder create a new file called *search.html*:
+In the "templates" folder create a new file called _search.html_:
 
 ```sh
 (env)$ touch search.html
 ```
 
-Now add the following code to *search.html*:
+Now add the following code to _search.html_:
 
 ```html
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Flaskr</title>
-  <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-</head>
-<body>
-  <div class="container">
-    <br><br>
-    <h1>Flaskr</h1>
-    <br><br>
+  <head>
+    <title>Flaskr</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <br /><br />
+      <h1>Flaskr</h1>
+      <br /><br />
 
-    <a class="btn btn-primary" role="button" href="{{ url_for('index') }}"> Home </a>
+      <a class="btn btn-primary" role="button" href="{{ url_for('index') }}">
+        Home
+      </a>
 
-    {% if not session.logged_in %}
-      <a class="btn btn-success" role="button" href="{{ url_for('login') }}">log in</a>
-    {% else %}
-      <a class="btn btn-warning" role="button" href="{{ url_for('logout') }}">log out</a>
-    {% endif %}
+      {% if not session.logged_in %}
+      <a class="btn btn-success" role="button" href="{{ url_for('login') }}"
+        >log in</a
+      >
+      {% else %}
+      <a class="btn btn-warning" role="button" href="{{ url_for('logout') }}"
+        >log out</a
+      >
+      {% endif %}
 
-    <br><br>
+      <br /><br />
 
-    {% for message in get_flashed_messages() %}
-      <div class="flash alert alert-success col-sm-4" role="success">{{ message }}</div>
-    {% endfor %}
-
-    <form action="{{ url_for('search') }}" method="get" class="from-group">
-      <dl>
-        <dt>Search:</dt>
-        <dd><input type="text" name="query" class="form-control col-sm-4" ></dd>
-        <br>
-        <dd><input type="submit" class="btn btn-info" value="Search" ></dd>
-      </dl>
-    </form>
-
-    <ul class="entries">
-      {% for entry in entries %}
-        {% if query.lower() in entry.title.lower() or query.lower() in entry.text.lower() %}
-        <li class="entry"><h2 id="{{ entry.post_id }}">{{ entry.title }}</h2>{{ entry.text|safe }}</li>
-        {% endif %}
+      {% for message in get_flashed_messages() %}
+      <div class="flash alert alert-success col-sm-4" role="success">
+        {{ message }}
+      </div>
       {% endfor %}
-    </ul>
-  </div>
-  <script type="text/javascript" src="{{url_for('static', filename='main.js') }}"></script>
-</body>
+
+      <form action="{{ url_for('search') }}" method="get" class="from-group">
+        <dl>
+          <dt>Search:</dt>
+          <dd>
+            <input type="text" name="query" class="form-control col-sm-4" />
+          </dd>
+          <br />
+          <dd><input type="submit" class="btn btn-info" value="Search" /></dd>
+        </dl>
+      </form>
+
+      <ul class="entries">
+        {% for entry in entries %} {% if query.lower() in entry.title.lower() or
+        query.lower() in entry.text.lower() %}
+        <li class="entry">
+          <h2 id="{{ entry.post_id }}">{{ entry.title }}</h2>
+          {{ entry.text|safe }}
+        </li>
+        {% endif %} {% endfor %}
+      </ul>
+    </div>
+    <script
+      type="text/javascript"
+      src="{{url_for('static', filename='main.js') }}"
+    ></script>
+  </body>
 </html>
 ```
 
-### Update *index.html*
+### Update _index.html_
 
 Add a search button for better navigation just below `<h1>Flaskr</h1>`:
 
@@ -1486,7 +1577,7 @@ Test it out locally. If all is well, commit your code and update the version on 
 
 Currently, posts can be deleted by anyone. Let's change that so one has to be logged in in order to delete a post.
 
-Add the following decorator to *app.py*:
+Add the following decorator to _app.py_:
 
 ```python
 def login_required(f):
@@ -1529,15 +1620,16 @@ def delete_entry(post_id):
 Update the test:
 
 ```python
-def test_delete_message(self):
+def test_delete_message(client, test_db):
     """Ensure the messages are being deleted"""
-    rv = self.app.get('/delete/1')
+    rv = client.get("/delete/1")
     data = json.loads(rv.data)
-    self.assertEqual(data['status'], 0)
-    self.login(app.config['USERNAME'], app.config['PASSWORD'])
-    rv = self.app.get('/delete/1')
+    assert data["status"] == 0
+    login(client, app.config["USERNAME"], app.config["PASSWORD"])
+    rv = client.get("/delete/1")
     data = json.loads(rv.data)
-    self.assertEqual(data['status'], 1)
+    assert data["status"] == 1
+
 ```
 
 Test it out locally again. If all is well, commit your code and update the version on Heroku.
@@ -1565,7 +1657,7 @@ You should see something similar to:
 DATABASE_URL: postgres://wqvcyzyveczscw:df14796eabbf0a1d9eb8a96a206bcd906101162c8ef7f2e7be5e2f7514c22b48@ec2-54-227-250-19.compute-1.amazonaws.com:5432/d64vugb1eio9h1
 ```
 
-Next, update *app.py* like so:
+Next, update _app.py_ like so:
 
 ```python
 # imports
@@ -1687,7 +1779,7 @@ First, we removed `DEBUG = True`. We'll let the `DEBUG` config variable be defin
 Run the tests to ensure they still pass:
 
 ```sh
-(env)$ python app.test.py
+(env)$ python -m pytest
 
 ......
 ----------------------------------------------------------------------
@@ -1707,15 +1799,15 @@ Try logging in and out, adding a few new entries, and deleting old entries.
 Before updating Heroku, add [Psycopg2](http://initd.org/psycopg/) -- a Postgres database adapter for Python -- to the requirements file:
 
 ```
-Flask==1.1.1
-Flask-SQLAlchemy==2.4.1
-gunicorn==19.9.0
-psycopg2-binary==2.8.4
+Flask==1.1.2
+Flask-SQLAlchemy==2.4.4
+gunicorn==20.0.4
+psycopg2-binary==2.8.6
 ```
 
 Commit and push your code up to Heroku.
 
-Snce we're using a new database on Heroku, you'll need to run the following command *once* to create the tables:
+Snce we're using a new database on Heroku, you'll need to run the following command _once_ to create the tables:
 
 ```sh
 (env)$ heroku run python create_db.py
@@ -1728,8 +1820,8 @@ Test things out.
 Finally, we can lint and auto format our code with [Flake8](http://flake8.pycqa.org/) and [Black](https://black.readthedocs.io/), respectively:
 
 ```sh
-(env)$ pip install flake8==3.7.9
-(env)$ pip install black==19.10b0
+(env)$ pip install flake8==3.8.3
+(env)$ pip install black==20.8b1
 ```
 
 Run Flake8 and correct any issues:
@@ -1748,7 +1840,7 @@ $ black --exclude=env .
 
 reformatted /Users/michael.herman/repos/github/flaskr-tdd/models.py
 reformatted /Users/michael.herman/repos/github/flaskr-tdd/app.py
-reformatted /Users/michael.herman/repos/github/flaskr-tdd/app.test.py
+reformatted /Users/michael.herman/repos/github/flaskr-tdd/app_test.py
 All done! ✨ 🍰 ✨
 3 files reformatted, 1 file left unchanged.
 ```
