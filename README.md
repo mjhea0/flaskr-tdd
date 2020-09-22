@@ -265,12 +265,12 @@ Let's create the basic file for running our application. Before that though, we 
 
    ```python
 
-    from app import app, db
+    from app import app
 
-   def test_index(self):
-      tester = app.test_client(self)
+   def test_index():
+      tester = app.test_client()
       response = tester.get("/", content_type="html/text")
-      assert response.status_code == 200
+      assert response.status_code == 404
 
    ```
 
@@ -322,14 +322,14 @@ Essentially, we want to open a database connection, create the database based on
 
    import pytest
    from pathlib import Path
-   from app import app, db
+   from app import app
 
-   def test_index(self):
-      tester = app.test_client(self)
+   def test_index():
+      tester = app.test_client()
       response = tester.get("/", content_type="html/text")
       assert response.status_code == 200
 
-   def test_database(self):
+   def test_database():
       tester = Path("flaskr.db").is_file()
       assert tester
 
@@ -377,7 +377,7 @@ And add the `init_db()` function at the bottom of `app.py` to make sure we start
 if __name__ == '__main__':
     init_db()
     app.run()
-```
+ ```
 
 Now it's possible to create a database by starting up a Python shell and importing and calling the `init_db()` function:
 
@@ -405,10 +405,9 @@ Take a look at the final code. I added docstrings for explanation and also updat
 ```python
 import pytest
 import os
-import json
 from pathlib import Path
 
-from app import app, db
+from app import app
 
 TEST_DB = "test.db"
 
@@ -421,18 +420,6 @@ def client():
       BASE_DIR.joinpath(TEST_DB)
   )
   return app.test_client()
-
-
-@pytest.fixture
-def test_db():
-  """
-  Set up a blank temp database before each test
-  and
-  Destroy blank temp database after each test
-  """
-  db.create_all()  # setup
-  yield  # testing happens here
-  db.drop_all()  # teardown
 
 
 def login(client, username, password):
@@ -449,24 +436,24 @@ def logout(client):
   return client.get("/logout", follow_redirects=True)
 
 
-def test_index(client, test_db):
+def test_index(client):
   response = client.get("/", content_type="html/text")
   assert response.status_code == 200
 
 
-def test_database(client, test_db):
+def test_database(client):
   """initial test. ensure that the database exists"""
   tester = Path("flaskr.db").is_file()
   assert tester
 
 
-def test_empty_db(client, test_db):
+def test_empty_db(client):
   """Ensure database is blank"""
   rv = client.get("/")
-  assert b"No entries yet. Add some!" in rv.data
+  assert b"No entries here so far" in rv.data
 
 
-def test_login_logout(client, test_db):
+def test_login_logout(client):
   """Test login and logout using helper functions"""
   rv = login(client, app.config["USERNAME"], app.config["PASSWORD"])
   assert b"You were logged in" in rv.data
@@ -478,7 +465,7 @@ def test_login_logout(client, test_db):
   assert b"Invalid password" in rv.data
 
 
-def test_messages(client, test_db):
+def test_messages(client):
   """Ensure that user can post messages"""
   login(client, app.config["USERNAME"], app.config["PASSWORD"])
   rv = client.post(
@@ -925,7 +912,7 @@ Now let's add some JavaScript to make the site slightly more interactive.
 1. Finally, add a new test:
 
    ```python
-   def test_delete_message(client, test_db):
+   def test_delete_message(client):
       """Ensure the messages are being deleted"""
       rv = client.get('/delete/1')
       data = json.loads(rv.data)
@@ -1467,7 +1454,7 @@ def test_delete_message(client, test_db):
 
 ```
 
-We've mostly just updated the `setUp()` and `tearDown()` methods.
+We've mostly just updated are methods to use `pytest.fixture`.
 
 Run the tests, and then manually test it by running the server and logging in and out, adding new entries, and deleting old entries.
 
