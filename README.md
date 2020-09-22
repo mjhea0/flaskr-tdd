@@ -163,12 +163,13 @@ Let's start with a simple "hello, world" app.
 
 Essentially, we're testing whether the response that we get back is "200" and that "Hello, World!" is displayed.
 
-0. Install Flask with pip:
-  ```sh
-  (env)$ pip install pytest==6.0.1
-  ```
+1. Install Flask with pip:
 
-1. Run the test:
+    ```sh
+    (env)$ pip install pytest==6.0.1
+    ```
+
+2. Run the test:
 
    ```sh
    (env)$ python -m pytest
@@ -180,7 +181,7 @@ Essentially, we're testing whether the response that we get back is "200" and th
    ModuleNotFoundError: No module named 'app'
    ```
 
-1. Now add the code for this to pass.
+3. Now add the code for this to pass.
 
    ```sh
    (env)$ touch app.py
