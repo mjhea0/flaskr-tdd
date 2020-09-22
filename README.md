@@ -163,6 +163,11 @@ Let's start with a simple "hello, world" app.
 
 Essentially, we're testing whether the response that we get back is "200" and that "Hello, World!" is displayed.
 
+0. Install Flask with pip:
+  ```sh
+  (env)$ pip install pytest==6.0.1
+  ```
+
 1. Run the test:
 
    ```sh
