@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Flaskr-TDD | Login</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <br /><br />
+      <h1>Flaskr</h1>
+      <br /><br />
+
+      {% for message in get_flashed_messages() %}
+      <div class="flash alert alert-success col-sm-4" role="success">
+        {{ message }}
+      </div>
+      {% endfor %}
+
+      <h3>Login</h3>
+
+      {% if error %}
+      <p class="alert alert-danger col-sm-4" role="danger">
+        <strong>Error:</strong> {{ error }}
+      </p>
+      {% endif %}
+
+      <form action="{{ url_for('login') }}" method="post" class="form-group">
+        <dl>
+          <dt>Username:</dt>
+          <dd>
+            <input
+              type="text"
+              name="username"
+              class="form-control col-sm-4"
+            />
+          </dd>
+          <dt>Password:</dt>
+          <dd>
+            <input
+              type="password"
+              name="password"
+              class="form-control col-sm-4"
+            />
+          </dd>
+          <br /><br />
+          <dd>
+            <input type="submit" class="btn btn-primary" value="Login" />
+          </dd>
+          <span>Use "admin" for username and password</span>
+        </dl>
+      </form>
+    </div>
+    <script
+      type="text/javascript"
+      src="{{url_for('static', filename='main.js') }}"
+    ></script>
+  </body>
+</html>

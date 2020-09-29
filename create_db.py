@@ -1,7 +1,7 @@
 # create_db.py
 
 
-from app import db
+from project.app import db
 
 
 # create the database and the db table

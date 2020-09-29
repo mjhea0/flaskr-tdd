@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Flaskr</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <br /><br />
+      <h1>Flaskr</h1>
+      <br /><br />
+
+      <a class="btn btn-primary" role="button" href="{{ url_for('index') }}">
+        Home
+      </a>
+
+      {% if not session.logged_in %}
+      <a class="btn btn-success" role="button" href="{{ url_for('login') }}"
+        >log in</a
+      >
+      {% else %}
+      <a class="btn btn-warning" role="button" href="{{ url_for('logout') }}"
+        >log out</a
+      >
+      {% endif %}
+
+      <br /><br />
+
+      {% for message in get_flashed_messages() %}
+      <div class="flash alert alert-success col-sm-4" role="success">
+        {{ message }}
+      </div>
+      {% endfor %}
+
+      <form action="{{ url_for('search') }}" method="get" class="from-group">
+        <dl>
+          <dt>Search:</dt>
+          <dd>
+            <input type="text" name="query" class="form-control col-sm-4" />
+          </dd>
+          <br />
+          <dd><input type="submit" class="btn btn-info" value="Search" /></dd>
+        </dl>
+      </form>
+
+      <ul class="entries">
+        {% for entry in entries %} {% if query.lower() in entry.title.lower() or
+        query.lower() in entry.text.lower() %}
+        <li class="entry">
+          <h2 id="{{ entry.post_id }}">{{ entry.title }}</h2>
+          {{ entry.text|safe }}
+        </li>
+        {% endif %} {% endfor %}
+      </ul>
+    </div>
+    <script
+      type="text/javascript"
+      src="{{url_for('static', filename='main.js') }}"
+    ></script>
+  </body>
+</html>
