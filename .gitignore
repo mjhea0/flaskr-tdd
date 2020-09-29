@@ -2,4 +2,4 @@ env
 *.pyc
 *.DS_Store
 __pycache__
-.vscode
+test.db
