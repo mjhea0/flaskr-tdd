@@ -4,13 +4,13 @@
 
 [Share on Twitter](https://twitter.com/intent/tweet?text=Check%20out%20Flaskr%E2%80%94An%20intro%20to%20Flask%2C%20Test-Driven%20Development%2C%20and%20JavaScript%21%20https%3A%2F%2Fgithub.com%2Fmjhea0%2Fflaskr-tdd%20%23webdev%0A)
 
-As many of you know, Flaskr -- a mini-blog-like-app -- is the app that you build for the official Flask [tutorial](https://flask.palletsprojects.com/tutorial). I've gone through the tutorial more times than I care to admit. Anyway, I wanted to take the tutorial a step further by adding Test-Driven Development (TDD), a bit of JavaScript, and deployment. This post is that tutorial. Enjoy.
+As many of you know, Flaskr -- a mini-blog-like-app -- is the app that you build for the official Flask [tutorial](https://flask.palletsprojects.com/tutorial). I've gone through the tutorial more times than I care to admit. Anyway, I wanted to take the tutorial a step further by adding Test-Driven Development (TDD), a bit of JavaScript, and deployment. This post is that tutorial. Enjoy!
 
 Also, if you are completely new to Flask and/or web development in general, it's important to grasp these basic fundamental concepts:
 
-1. The difference between GET and POST requests and how functions within the app handle each.
-1. What "requests" and "responses" are.
-1. How HTML pages are rendered and/or returned to the end user.
+1. The difference between GET and POST requests and how functions within the app handle each respectively.
+1. What "requests" and "responses" are?
+1. How HTML pages are rendered and/or returned to the end user?
 
 > **NOTE**: This project is powered by **[TestDriven.io](https://testdriven.io/)**. Please support this open source project by purchasing one of our Flask courses. Learn how to build, test, and deploy microservices powered by Docker, Flask, and React!
 
@@ -130,7 +130,7 @@ Along with Python, the following tools are also installed:
 
 ## First Test
 
-Let's start with a simple "hello, world" app.
+Let's start with a simple "hello world" app.
 
 1. Create a test file:
 
