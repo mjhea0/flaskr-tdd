@@ -1597,7 +1597,7 @@ def delete_entry(post_id):
 Update the test:
 
 ```python
-def test_delete_message(client, test_db):
+def test_delete_message(client):
     """Ensure the messages are being deleted"""
     rv = client.get("/delete/1")
     data = json.loads(rv.data)
