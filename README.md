@@ -503,7 +503,7 @@ def test_database(client):
 def test_empty_db(client):
     """Ensure database is blank"""
     rv = client.get("/")
-    assert b"No entries here so far" in rv.data
+    assert b"No entries yet. Add some!" in rv.data
 
 
 def test_login_logout(client):
