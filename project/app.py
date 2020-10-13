@@ -36,6 +36,8 @@ app.config.from_object(__name__)
 # init sqlalchemy
 db = SQLAlchemy(app)
 
+from project import models
+
 
 def login_required(f):
     @wraps(f)
@@ -46,9 +48,6 @@ def login_required(f):
         return f(*args, **kwargs)
 
     return decorated_function
-
-
-from project import models
 
 
 @app.route("/")

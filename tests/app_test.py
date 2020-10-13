@@ -1,5 +1,5 @@
-import json
 import pytest
+import json
 from pathlib import Path
 
 from project.app import app, db
@@ -70,7 +70,7 @@ def test_messages(client):
         data=dict(title="<Hello>", text="<strong>HTML</strong> allowed here"),
         follow_redirects=True,
     )
-    assert b"No entries yet. Add some!" not in rv.data
+    assert b"No entries here so far" not in rv.data
     assert b"&lt;Hello&gt;" in rv.data
     assert b"<strong>HTML</strong> allowed here" in rv.data
 

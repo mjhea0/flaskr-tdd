@@ -16,16 +16,18 @@ Also, if you're completely new to Flask and/or web development in general, it's 
 
 ## What you're building
 
+You'll be building a simple blogging app in this tutorial:
+
 ![flaskr app](/flaskr-app.png)
 
 ## Changelog
 
-This tutorial was last updated on September 29th, 2020:
+This tutorial was last updated on October 14th, 2020:
 
-- **09/29/2020**:
+- **10/14/2020**:
   - Renamed *app.test.py* to *app_test.py*. (Fixed issue #[58](https://github.com/mjhea0/flaskr-tdd/issues/58).)
-  - Updated all dependencies.
-  - Added pytest v6.0.1. (Fixed issue #[60](https://github.com/mjhea0/flaskr-tdd/issues/60))
+  - Updated to Python 3.9 and bumped all other dependencies.
+  - Added pytest v6.1.1. (Fixed issue #[60](https://github.com/mjhea0/flaskr-tdd/issues/60))
   - Migrated from `os.path` to `pathlib`.
 - **11/05/2019**:
   - Updated to Python 3.8.0, Flask 1.1.1, and Bootstrap 4.3.1.
@@ -59,7 +61,7 @@ This tutorial was last updated on September 29th, 2020:
 1. [Second Test](#second-test)
 1. [Database Setup](#database-setup)
 1. [Templates and Views](#templates-and-views)
-1. [Add Some Color](#add-some-color)
+1. [Add Some Style](#add-some-style)
 1. [JavaScript](#javascript)
 1. [Deployment](#deployment)
 1. [Bootstrap](#bootstrap)
@@ -74,14 +76,14 @@ This tutorial was last updated on September 29th, 2020:
 
 This tutorial utilizes the following requirements:
 
-1. Python v3.8.5
+1. Python v3.9.0
 1. Flask v1.1.2
 1. Flask-SQLAlchemy v2.4.4
 1. Gunicorn v20.0.4
 1. Psycopg2 v2.8.6
-1. Flake8 v3.8.3
+1. Flake8 v3.8.4
 1. Black v20.8b1
-1. pytest v6.0.1
+1. pytest v6.1.1
 
 ## Test Driven Development?
 
@@ -100,9 +102,9 @@ TDD usually follows the "Red-Green-Refactor" cycle, as shown in the image above:
 
 ## Download Python
 
-Before beginning make sure you have the latest version of [Python 3.8](https://www.python.org/downloads/release/python-380/) installed, which you can download from [http://www.python.org/download/](http://www.python.org/download/).
+Before beginning make sure you have the latest version of [Python 3.9](https://www.python.org/downloads/release/python-390/) installed, which you can download from [http://www.python.org/download/](http://www.python.org/download/).
 
-> This tutorial uses Python v3.8.5.
+> This tutorial uses Python v3.9.0.
 
 Along with Python, the following tools are also installed:
 
@@ -123,8 +125,9 @@ $ cd flaskr-tdd
 Create and activate a virtual environment:
 
 ```sh
-$ python3.8 -m venv env
+$ python3.9 -m venv env
 $ source env/bin/activate
+(env)$
 ```
 
 > You know that you're in a virtual environment, `env` is now showing before the `$` in your terminal: `(env)$`. To exit the virtual environment, use the command `deactivate`. You can reactivate by navigating back to the project directory and running `source env/bin/activate`.
@@ -155,7 +158,7 @@ While the Python standard library comes with a unit testing framework called ùn
 Install it:
 
 ```sh
-(env)$ pip install pytest==6.0.1
+(env)$ pip install pytest==6.1.1
 ```
 
 Open *tests/app_test.py* in your favorite text editor -- like [Visual Studio Code](https://code.visualstudio.com/), [Sublime Text](https://www.sublimetext.com/), or [PyCharm](https://www.jetbrains.com/pycharm/) -- and then add the following code:
@@ -207,8 +210,10 @@ if __name__ == "__main__":
 Run the app:
 
 ```sh
-(env)$ FLASK_APP=project/app.py flask run
+(env)$ FLASK_APP=project/app.py python -m flask run
 ```
+
+> The `FLASK_APP` environment variable is used to tell Flask to look for the application in a different module.
 
 Then, navigate to [http://localhost:5000/](http://localhost:5000/) in your browser of choice. You should see "Hello, World!" on your screen.
 
@@ -220,7 +225,7 @@ Run the test again:
 (env)$ python -m pytest
 
 ==================================================== test session starts =====================================================
-platform darwin -- Python 3.8.5, pytest-6.0.1, py-1.9.0, pluggy-0.13.1
+platform darwin -- Python 3.9.0, pytest-6.1.1, py-1.9.0, pluggy-0.13.1
 rootdir: /Users/michael/repos/github/flaskr-tdd
 collected 1 item
 
@@ -397,14 +402,14 @@ if __name__ == "__main__":
     app.run()
 ```
 
-Now, create a database by starting up a Python shell and importing and calling the `init_db` function:
+Now, create a database by starting up a Python shell and importing and then calling the `init_db` function:
 
 ```python
 >>> from project.app import init_db
 >>> init_db()
 ```
 
-Close the shell, then run the test again. Does it pass? Now we know that the database has been created.
+Close the shell, then run the test again. Does it pass? It should. Now we know that the database has been created.
 
 You can also call `init_db` within the test, to ensure that the test can be ran independently:
 
@@ -543,7 +548,7 @@ Three tests should fail:
 
 ```sh
 ==================================================== test session starts =====================================================
-platform darwin -- Python 3.8.5, pytest-6.0.1, py-1.9.0, pluggy-0.13.1
+platform darwin -- Python 3.9.0, pytest-6.1.1, py-1.9.0, pluggy-0.13.1
 rootdir: /Users/michael/repos/github/flaskr-tdd
 collected 5 items
 
@@ -765,7 +770,7 @@ Add the *login.html* template:
 </html>
 ```
 
-Run the tests again. You should se two errors:
+Run the tests again. You should see two errors:
 
 ```sh
 E           werkzeug.routing.BuildError: Could not build url for endpoint 'add_entry'. Did you mean 'login' instead?
@@ -793,7 +798,7 @@ Retest.
 
 ```sh
 ==================================================== test session starts =====================================================
-platform darwin -- Python 3.8.5, pytest-6.0.1, py-1.9.0, pluggy-0.13.1
+platform darwin -- Python 3.9.0, pytest-6.1.1, py-1.9.0, pluggy-0.13.1
 rootdir: /Users/michael/repos/github/flaskr-tdd
 collected 5 items
 
@@ -804,7 +809,7 @@ tests/app_test.py .....                                                         
 
 Perfect.
 
-## Add Some Color
+## Add Some Style
 
 Save the following styles to a new file called *style.css* in a new folder called "project/static":
 
@@ -889,7 +894,7 @@ Run your app, log in (username/password = "admin"), add a post, log out.
 
 ## JavaScript
 
-Next, let's add some JavaScript to make the site slightly more interactive.
+Next, let's add some JavaScript to make the app slightly more interactive.
 
 Open *index.html* and update the first `<li`> like so:
 
@@ -983,7 +988,7 @@ Then run your automated test suite. It should pass:
 (env)$ python -m pytest
 
 ==================================================== test session starts =====================================================
-platform darwin -- Python 3.8.5, pytest-6.0.1, py-1.9.0, pluggy-0.13.1
+platform darwin -- Python 3.9.0, pytest-6.1.1, py-1.9.0, pluggy-0.13.1
 rootdir: /Users/michael/repos/github/flaskr-tdd
 collected 6 items
 
@@ -1025,7 +1030,7 @@ Add the requirements:
 ```
 Flask==1.1.2
 gunicorn==20.0.4
-pytest==6.0.1
+pytest==6.1.1
 ```
 
 Create a *.gitignore* file in the project root:
@@ -1047,7 +1052,7 @@ test.db
 To specify the correct Python runtime, add a new file to the project root called *runtime.txt*:
 
 ```
-python-3.8.5
+python-3.9.0
 ```
 
 Add a local Git repo:
@@ -1242,7 +1247,7 @@ And replace the code in *index.html* with:
 Run the app locally:
 
 ```sh
-(env)$ FLASK_APP=project/app.py flask run
+(env)$ FLASK_APP=project/app.py python -m flask run
 ```
 
 Check out the changes in the browser!
@@ -1392,7 +1397,7 @@ if __name__ == "__main__":
     app.run()
 ```
 
-Notice the changes in the config at the top as well the means in which we're now accessing and manipulating the database in each view function -- via SQLAlchemy instead of vanilla SQL.
+Notice the changes in the config at the top as well as the means in which we're now accessing and manipulating the database in each view function -- via SQLAlchemy instead of vanilla SQL.
 
 ### Create the DB
 
@@ -1431,7 +1436,7 @@ Ensure the tests pass:
 (env)$ python -m pytest
 
 ==================================================== test session starts =====================================================
-platform darwin -- Python 3.8.5, pytest-6.0.1, py-1.9.0, pluggy-0.13.1
+platform darwin -- Python 3.9.0, pytest-6.1.1, py-1.9.0, pluggy-0.13.1
 rootdir: /Users/michael/repos/github/flaskr-tdd
 collected 6 items
 
@@ -1442,7 +1447,16 @@ tests/app_test.py ......                                                        
 
 Manually test the app as well by running the server and logging in and out, adding new entries, and deleting old entries.
 
-If all is well, commit your code, then PUSH the new version to Heroku!
+If all is well, Update the requirements file:
+
+```
+Flask==1.1.2
+Flask-SQLAlchemy==2.4.4
+gunicorn==20.0.4
+pytest==6.1.1
+```
+
+Commit your code, and then push the new version to Heroku!
 
 ## Search Page
 
@@ -1552,7 +1566,7 @@ Test it out locally. If all is well, commit your code and update the version on 
 
 ## Login Required
 
-Currently, posts can be deleted by anyone. Let's change that so one has to be logged in in order to delete a post.
+Currently, posts can be deleted by anyone. Let's change that so one has to be logged in before they can delete a post.
 
 Add the following decorator to *app.py*:
 
@@ -1656,7 +1670,7 @@ Run the tests to ensure they still pass:
 (env)$ python -m pytest
 
 ==================================================== test session starts =====================================================
-platform darwin -- Python 3.8.5, pytest-6.0.1, py-1.9.0, pluggy-0.13.1
+platform darwin -- Python 3.9.0, pytest-6.1.1, py-1.9.0, pluggy-0.13.1
 rootdir: /Users/michael/repos/github/flaskr-tdd
 collected 6 items
 
@@ -1674,7 +1688,7 @@ Flask==1.1.2
 Flask-SQLAlchemy==2.4.4
 gunicorn==20.0.4
 psycopg2-binary==2.8.6
-pytest==6.0.1
+pytest==6.1.1
 ```
 
 Commit and push your code up to Heroku.
@@ -1692,28 +1706,27 @@ Test things out.
 Finally, we can lint and auto format our code with [Flake8](http://flake8.pycqa.org/) and [Black](https://black.readthedocs.io/), respectively:
 
 ```sh
-(env)$ pip install flake8==3.8.3
+(env)$ pip install flake8==3.8.4
 (env)$ pip install black==20.8b1
 ```
 
 Run Flake8 and correct any issues:
 
 ```sh
-(env)$ flake8 --exclude env --ignore E402,E501 .
+(env)$ python -m flake8 --exclude env --ignore E402,E501 .
 
 ./create_db.py:5:1: F401 'project.models.Post' imported but unused
-./tests/app_test.py:3:1: F401 'os' imported but unused
-./project/models.py:1:1: F401 'project.app.app' imported but unused
+./tests/app_test.py:2:1: F401 'os' imported but unused
 ./project/app.py:2:1: F401 'sqlite3' imported but unused
 ./project/app.py:6:1: F401 'flask.g' imported but unused
 ./project/app.py:7:19: E126 continuation line over-indented for hanging indent
-./project/app.py:57:9: F821 undefined name 'abort'
+./project/app.py:56:9: F821 undefined name 'abort'
 ```
 
 Update the code formatting per Black:
 
 ```sh
-$ black --exclude=env .
+$ python -m black --exclude=env .
 
 reformatted /Users/michael/repos/github/flaskr-tdd/project/models.py
 reformatted /Users/michael/repos/github/flaskr-tdd/project/app.py
@@ -1728,6 +1741,6 @@ Test everything out once last time!
 1. Want my code? Grab it [here](https://github.com/mjhea0/flaskr-tdd).
 1. View my app on [Heroku](https://flaskr-tdd.herokuapp.com/). Cheers!
 1. Want more Flask fun? Check out [TestDriven.io](https://testdriven.io/). Learn how to build, test, and deploy microservices powered by Docker, Flask, and React!
-1. Want something else added to this tutorial? Add an issue to the repo. Cheers!
+1. Want something else added to this tutorial? Add an issue to the repo.
 
 > Did you enjoy this tutorial? Please [Share on Twitter](https://twitter.com/intent/tweet?text=Check%20out%20Flaskr%E2%80%94An%20intro%20to%20Flask%2C%20Test-Driven%20Development%2C%20and%20JavaScript%21%20https%3A%2F%2Fgithub.com%2Fmjhea0%2Fflaskr-tdd%20%23webdev%0A).
