@@ -794,6 +794,12 @@ def add_entry():
     return redirect(url_for('index'))
 ```
 
+Add the appropriate imports:
+
+```python
+from flask import Flask, g, render_template, request, session, flash, redirect, url_for, abort
+```
+
 Retest.
 
 ```sh
@@ -965,7 +971,7 @@ def delete_entry(post_id):
 Update the imports:
 
 ```python
-from flask import Flask, g, render_template, request, session, flash, redirect, url_for, jsonify
+from flask import Flask, g, render_template, request, session, flash, redirect, url_for, abort, jsonify
 ```
 
 Finally, add a new test:
@@ -1311,7 +1317,7 @@ import sqlite3
 from pathlib import Path
 
 from flask import Flask, g, render_template, request, session, \
-                  flash, redirect, url_for, jsonify
+                  flash, redirect, url_for, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
 
