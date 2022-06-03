@@ -8,8 +8,8 @@ As many of you know, Flaskr -- a mini-blog-like-app -- is the app that you build
 
 Also, if you're completely new to Flask and/or web development in general, it's important to grasp these basic fundamental concepts:
 
-1. The difference between GET and POST requests and how functions within the app handle each.
-1. What "requests" and "responses" are.
+1. The difference between HTTP GET and POST requests and how functions within the app handle each.
+1. What HTTP "requests" and "responses" are.
 1. How HTML pages are rendered and/or returned to the end user.
 
 > This project is powered by **[TestDriven.io](https://testdriven.io/)**. Please support this open source project by purchasing one of our Flask courses. Learn how to build, test, and deploy microservices powered by Docker, Flask, and React!
@@ -22,12 +22,14 @@ You'll be building a simple blogging app in this tutorial:
 
 ## Changelog
 
-This tutorial was last updated on October 14th, 2020:
+This tutorial was last updated on June 3rd, 2022:
 
+- **06/03/2022**:
+  - Updated to Python 3.10.4 and bumped all other dependencies.
 - **10/14/2020**:
   - Renamed *app.test.py* to *app_test.py*. (Fixed issue #[58](https://github.com/mjhea0/flaskr-tdd/issues/58).)
   - Updated to Python 3.9 and bumped all other dependencies.
-  - Added pytest v6.1.1. (Fixed issue #[60](https://github.com/mjhea0/flaskr-tdd/issues/60))
+  - Added pytest v7.1.2. (Fixed issue #[60](https://github.com/mjhea0/flaskr-tdd/issues/60))
   - Migrated from `os.path` to `pathlib`.
 - **11/05/2019**:
   - Updated to Python 3.8.0, Flask 1.1.1, and Bootstrap 4.3.1.
@@ -76,14 +78,14 @@ This tutorial was last updated on October 14th, 2020:
 
 This tutorial utilizes the following requirements:
 
-1. Python v3.9.0
-1. Flask v1.1.2
+1. Python v3.10.4
+1. Flask v2.1.1
 1. Flask-SQLAlchemy v2.5.1
-1. Gunicorn v20.0.4
-1. Psycopg2 v2.8.6
-1. Flake8 v3.8.4
-1. Black v20.8b1
-1. pytest v6.1.1
+1. Gunicorn v20.1.0
+1. Psycopg2 v2.9.3
+1. Flake8 v4.0.1
+1. Black v22.3.0
+1. pytest v7.1.2
 
 ## Test Driven Development?
 
@@ -104,14 +106,14 @@ TDD usually follows the "Red-Green-Refactor" cycle, as shown in the image above:
 
 Before beginning make sure you have the latest version of [Python 3.9](https://www.python.org/downloads/release/python-390/) installed, which you can download from [http://www.python.org/download/](http://www.python.org/download/).
 
-> This tutorial uses Python v3.9.0.
+> This tutorial uses Python v3.10.4.
 
 Along with Python, the following tools are also installed:
 
 - [pip](https://pip.pypa.io/en/stable/) - a [package management](http://en.wikipedia.org/wiki/Package_management_system) system for Python, similar to gem or npm for Ruby and Node, respectively.
 - [venv](https://docs.python.org/3/library/venv.html) - used to create isolated environments for development. This is standard practice. Always, always, ALWAYS utilize virtual environments. If you don't, you will eventually run into problems with dependency conflicts.
 
-> Feel free to swap out virtualenv and Pip for [Poetry](https://python-poetry.org/) or [Pipenv](https://pipenv.pypa.io/en/latest/).
+> Feel free to swap out virtualenv and Pip for [Poetry](https://python-poetry.org) or [Pipenv](https://github.com/pypa/pipenv). For more, review [Modern Python Environments](https://testdriven.io/blog/python-environments/).
 
 ## Project Setup
 
@@ -125,7 +127,7 @@ $ cd flaskr-tdd
 Create and activate a virtual environment:
 
 ```sh
-$ python3.9 -m venv env
+$ python3.10 -m venv env
 $ source env/bin/activate
 (env)$
 ```
@@ -135,7 +137,7 @@ $ source env/bin/activate
 Install Flask with pip:
 
 ```sh
-(env)$ pip install flask==1.1.2
+(env)$ pip install flask==2.1.1
 ```
 
 ## First Test
@@ -158,13 +160,14 @@ While the Python standard library comes with a unit testing framework called ùn
 Install it:
 
 ```sh
-(env)$ pip install pytest==6.1.1
+(env)$ pip install pytest==7.1.2
 ```
 
 Open *tests/app_test.py* in your favorite text editor -- like [Visual Studio Code](https://code.visualstudio.com/), [Sublime Text](https://www.sublimetext.com/), or [PyCharm](https://www.jetbrains.com/pycharm/) -- and then add the following code:
 
 ```python
 from project.app import app
+
 
 def test_index():
     tester = app.test_client()
@@ -224,14 +227,14 @@ Run the test again:
 ```sh
 (env)$ python -m pytest
 
-==================================================== test session starts =====================================================
-platform darwin -- Python 3.9.0, pytest-6.1.1, py-1.9.0, pluggy-0.13.1
+=============================== test session starts ===============================
+platform darwin -- Python 3.10.4, pytest-7.1.2, pluggy-1.0.0
 rootdir: /Users/michael/repos/github/flaskr-tdd
 collected 1 item
 
-tests/app_test.py .                                                                                                    [100%]
+tests/app_test.py .                                                         [100%]
 
-===================================================== 1 passed in 0.11s ======================================================
+================================ 1 passed in 0.10s ================================
 ```
 
 Nice.
@@ -244,6 +247,7 @@ Create a new file called *schema.sql* in "project" and add the following code:
 
 ```sql
 drop table if exists entries;
+
 create table entries (
   id integer primary key autoincrement,
   title text not null,
@@ -251,7 +255,7 @@ create table entries (
 );
 ```
 
-This will set up a single table with three fields -- "id", "title", and "text". SQLite will be used for our RDMS since it's part of the standard Python library and requires no configuration.
+This will set up a single table with three fields: "id", "title", and "text". SQLite will be used for our RDMS since it's part of the standard Python library and requires no configuration.
 
 Update *app.py*:
 
@@ -340,6 +344,7 @@ Add the imports:
 
 ```python
 import sqlite3
+
 from flask import Flask, g
 ```
 
@@ -349,6 +354,7 @@ You should now have:
 
 ```python
 import sqlite3
+
 from flask import Flask, g
 
 
@@ -547,27 +553,27 @@ Run the tests now:
 Three tests should fail:
 
 ```sh
-==================================================== test session starts =====================================================
-platform darwin -- Python 3.9.0, pytest-6.1.1, py-1.9.0, pluggy-0.13.1
+=============================== test session starts ===============================
+platform darwin -- Python 3.10.4, pytest-7.1.2, pluggy-1.0.0
 rootdir: /Users/michael/repos/github/flaskr-tdd
 collected 5 items
 
-tests/app_test.py ..FFF                                                                                                [100%]
+tests/app_test.py ..FFF                                                     [100%]
 
-========================================================== FAILURES ==========================================================
-_______________________________________________________ test_empty_db ________________________________________________________
+==================================== FAILURES =====================================
+__________________________________ test_empty_db __________________________________
 
 client = <FlaskClient <Flask 'project.app'>>
 
     def test_empty_db(client):
         """Ensure database is blank"""
         rv = client.get("/")
->       assert b"No entries here so far" in rv.data
+>       assert b"No entries yet. Add some!" in rv.data
 E       AssertionError: assert b'No entries yet. Add some!' in b'Hello, World!'
-E        +  where b'Hello, World!' = <Response 13 bytes [200 OK]>.data
+E        +  where b'Hello, World!' = <WrapperTestResponse 13 bytes [200 OK]>.data
 
 tests/app_test.py:49: AssertionError
-_____________________________________________________ test_login_logout ______________________________________________________
+________________________________ test_login_logout ________________________________
 
 client = <FlaskClient <Flask 'project.app'>>
 
@@ -577,7 +583,7 @@ client = <FlaskClient <Flask 'project.app'>>
 E       KeyError: 'USERNAME'
 
 tests/app_test.py:54: KeyError
-_______________________________________________________ test_messages ________________________________________________________
+__________________________________ test_messages __________________________________
 
 client = <FlaskClient <Flask 'project.app'>>
 
@@ -587,11 +593,12 @@ client = <FlaskClient <Flask 'project.app'>>
 E       KeyError: 'USERNAME'
 
 tests/app_test.py:66: KeyError
-================================================== short test summary info ===================================================
-FAILED tests/app_test.py::test_empty_db - AssertionError: assert b'No entries yet. Add some!' in b'Hello, World!'
+============================= short test summary info =============================
+FAILED tests/app_test.py::test_empty_db -
+    AssertionError: assert b'No entries yet. Add some!' in b'Hello, World!'
 FAILED tests/app_test.py::test_login_logout - KeyError: 'USERNAME'
 FAILED tests/app_test.py::test_messages - KeyError: 'USERNAME'
-================================================ 3 failed, 2 passed in 0.27s =================================================
+=========================== 3 failed, 2 passed in 0.17s ==========================
 ```
 
 Let's get these all green, one at a time...
@@ -800,17 +807,17 @@ Add the appropriate imports:
 from flask import Flask, g, render_template, request, session, flash, redirect, url_for, abort
 ```
 
-Retest.
+Retest:
 
 ```sh
-==================================================== test session starts =====================================================
-platform darwin -- Python 3.9.0, pytest-6.1.1, py-1.9.0, pluggy-0.13.1
+=============================== test session starts ===============================
+platform darwin -- Python 3.10.4, pytest-7.1.2, pluggy-1.0.0
 rootdir: /Users/michael/repos/github/flaskr-tdd
 collected 5 items
 
-tests/app_test.py .....                                                                                                [100%]
+tests/app_test.py .....                                                     [100%]
 
-===================================================== 5 passed in 0.26s ======================================================
+================================ 5 passed in 0.16s ================================
 ```
 
 Perfect.
@@ -993,14 +1000,14 @@ Then run your automated test suite. It should pass:
 ```sh
 (env)$ python -m pytest
 
-==================================================== test session starts =====================================================
-platform darwin -- Python 3.9.0, pytest-6.1.1, py-1.9.0, pluggy-0.13.1
+=============================== test session starts ===============================
+platform darwin -- Python 3.10.4, pytest-7.1.2, pluggy-1.0.0
 rootdir: /Users/michael/repos/github/flaskr-tdd
 collected 6 items
 
-tests/app_test.py ......                                                                                               [100%]
+tests/app_test.py ......                                                    [100%]
 
-===================================================== 6 passed in 0.18s ======================================================
+================================ 6 passed in 0.17s ================================
 ```
 
 ## Deployment
@@ -1034,9 +1041,9 @@ Create a *requirements.txt* file to specify the external dependencies that need 
 Add the requirements:
 
 ```
-Flask==1.1.2
+Flask==2.1.1
 gunicorn==20.0.4
-pytest==6.1.1
+pytest==7.1.2
 ```
 
 Create a *.gitignore* file in the project root:
@@ -1058,7 +1065,7 @@ test.db
 To specify the correct Python runtime, add a new file to the project root called *runtime.txt*:
 
 ```
-python-3.9.0
+python-3.10.4
 ```
 
 Add a local Git repo:
@@ -1088,7 +1095,7 @@ First, remove the *style.css* stylesheet from both *index.html* and *login.html*
 <link
   rel="stylesheet"
   type="text/css"
-  href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
 />
 ```
 
@@ -1104,7 +1111,7 @@ Replace the code in *login.html* with:
     <link
       rel="stylesheet"
       type="text/css"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
     />
   </head>
   <body>
@@ -1171,7 +1178,7 @@ And replace the code in *index.html* with:
     <link
       rel="stylesheet"
       type="text/css"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
     />
   </head>
   <body>
@@ -1403,7 +1410,7 @@ if __name__ == "__main__":
     app.run()
 ```
 
-Notice the changes in the config at the top as well as the means in which we're now accessing and manipulating the database in each view function -- via SQLAlchemy instead of vanilla SQL.
+Notice the changes in the config at the top as well since the means in which we're now accessing and manipulating the database in each view function -- via SQLAlchemy instead of vanilla SQL.
 
 ### Create the DB
 
@@ -1441,14 +1448,14 @@ Ensure the tests pass:
 ```sh
 (env)$ python -m pytest
 
-==================================================== test session starts =====================================================
-platform darwin -- Python 3.9.0, pytest-6.1.1, py-1.9.0, pluggy-0.13.1
+=============================== test session starts ===============================
+platform darwin -- Python 3.10.4, pytest-7.1.2, pluggy-1.0.0
 rootdir: /Users/michael/repos/github/flaskr-tdd
 collected 6 items
 
-tests/app_test.py ......                                                                                               [100%]
+tests/app_test.py ......                                                    [100%]
 
-===================================================== 6 passed in 0.28s ======================================================
+================================ 6 passed in 0.34s ================================
 ```
 
 Manually test the app as well by running the server and logging in and out, adding new entries, and deleting old entries.
@@ -1456,10 +1463,10 @@ Manually test the app as well by running the server and logging in and out, addi
 If all is well, Update the requirements file:
 
 ```
-Flask==1.1.2
+Flask==2.1.1
 Flask-SQLAlchemy==2.5.1
 gunicorn==20.0.4
-pytest==6.1.1
+pytest==7.1.2
 ```
 
 Commit your code, and then push the new version to Heroku!
@@ -1500,7 +1507,7 @@ Now add the following code to *search.html*:
     <link
       rel="stylesheet"
       type="text/css"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
     />
   </head>
   <body>
@@ -1656,10 +1663,12 @@ DATABASE_URL: postgres://wqvcyzyveczscw:df14796eabbf0a1d9eb8a96a206bcd906101162c
 Next, update the `SQLALCHEMY_DATABASE_URI` variable in *app.py* like so:
 
 ```python
-SQLALCHEMY_DATABASE_URI = os.getenv(
-    'DATABASE_URL',
-    f'sqlite:///{Path(basedir).joinpath(DATABASE)}'
-)
+url = os.getenv('DATABASE_URL', f'sqlite:///{Path(basedir).joinpath(DATABASE)}')
+
+if url.startswith("postgres://"):
+    url = url.replace("postgres://", "postgresql://", 1)
+
+SQLALCHEMY_DATABASE_URI = url
 ```
 
 So, `SQLALCHEMY_DATABASE_URI` now uses the value of the `DATABASE_URL` environment variable if it's available. Otherwise, it will use the SQLite URL.
@@ -1675,14 +1684,14 @@ Run the tests to ensure they still pass:
 ```sh
 (env)$ python -m pytest
 
-==================================================== test session starts =====================================================
-platform darwin -- Python 3.9.0, pytest-6.1.1, py-1.9.0, pluggy-0.13.1
+=============================== test session starts ===============================
+platform darwin -- Python 3.10.4, pytest-7.1.2, pluggy-1.0.0
 rootdir: /Users/michael/repos/github/flaskr-tdd
 collected 6 items
 
-tests/app_test.py ......                                                                                               [100%]
+tests/app_test.py ......                                                    [100%]
 
-===================================================== 6 passed in 0.29s ======================================================
+================================ 6 passed in 0.32s ================================
 ```
 
 Try logging in and out, adding a few new entries, and deleting old entries locally.
@@ -1690,11 +1699,11 @@ Try logging in and out, adding a few new entries, and deleting old entries local
 Before updating Heroku, add [Psycopg2](http://initd.org/psycopg/) -- a Postgres database adapter for Python -- to the requirements file:
 
 ```
-Flask==1.1.2
+Flask==2.1.1
 Flask-SQLAlchemy==2.5.1
-gunicorn==20.0.4
-psycopg2-binary==2.8.6
-pytest==6.1.1
+gunicorn==20.1.0
+psycopg2-binary==2.9.3
+pytest==7.1.2
 ```
 
 Commit and push your code up to Heroku.
@@ -1712,8 +1721,8 @@ Test things out.
 Finally, we can lint and auto format our code with [Flake8](http://flake8.pycqa.org/) and [Black](https://black.readthedocs.io/), respectively:
 
 ```sh
-(env)$ pip install flake8==3.8.4
-(env)$ pip install black==20.8b1
+(env)$ pip install flake8==4.0.1
+(env)$ pip install black==22.3.0
 ```
 
 Run Flake8 and correct any issues:
@@ -1726,7 +1735,6 @@ Run Flake8 and correct any issues:
 ./project/app.py:2:1: F401 'sqlite3' imported but unused
 ./project/app.py:6:1: F401 'flask.g' imported but unused
 ./project/app.py:7:19: E126 continuation line over-indented for hanging indent
-./project/app.py:56:9: F821 undefined name 'abort'
 ```
 
 Update the code formatting per Black:
@@ -1750,3 +1758,5 @@ Test everything out once last time!
 1. Want something else added to this tutorial? Add an issue to the repo.
 
 > Did you enjoy this tutorial? Please [Share on Twitter](https://twitter.com/intent/tweet?text=Check%20out%20Flaskr%E2%80%94An%20intro%20to%20Flask%2C%20Test-Driven%20Development%2C%20and%20JavaScript%21%20https%3A%2F%2Fgithub.com%2Fmjhea0%2Fflaskr-tdd%20%23webdev%0A).
+
+add github actions

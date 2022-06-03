@@ -1,8 +1,8 @@
-Flask==1.1.2
+Flask==2.1.1
 Flask-SQLAlchemy==2.5.1
-gunicorn==20.0.4
-psycopg2-binary==2.8.6
+gunicorn==20.1.0
+psycopg2-binary==2.9.3
 
-black==20.8b1
-flake8==3.8.4
-pytest==6.1.1
+black==22.3.0
+flake8==4.0.1
+pytest==7.1.2
