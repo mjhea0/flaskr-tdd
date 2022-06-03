@@ -5,66 +5,38 @@
     <link
       rel="stylesheet"
       type="text/css"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      href="{{ url_for('static', filename='style.css') }}"
     />
   </head>
   <body>
-    <div class="container">
-      <br /><br />
-      <h1>Flaskr</h1>
-      <a class="btn btn-info" role="button" href="{{ url_for('search') }}">Search</a>
-      <br /><br />
+    <div class="page">
+      <h1>Flaskr-TDD</h1>
 
-      {% if not session.logged_in %}
-      <a class="btn btn-success" role="button" href="{{ url_for('login') }}"
-        >log in</a
-      >
-      {% else %}
-      <a class="btn btn-warning" role="button" href="{{ url_for('logout') }}"
-        >log out</a
-      >
-      {% endif %}
-
-      <br /><br />
+      <div class="metanav">
+        {% if not session.logged_in %}
+        <a href="{{ url_for('login') }}">log in</a>
+        {% else %}
+        <a href="{{ url_for('logout') }}">log out</a>
+        {% endif %}
+      </div>
 
       {% for message in get_flashed_messages() %}
-      <div class="flash alert alert-success col-sm-4" role="success">
-        {{ message }}
-      </div>
-      {% endfor %} {% if session.logged_in %}
+      <div class="flash">{{ message }}</div>
+      {% endfor %} {% block body %}{% endblock %} {% if session.logged_in %}
       <form
         action="{{ url_for('add_entry') }}"
         method="post"
-        class="add-entry form-group"
+        class="add-entry"
       >
         <dl>
           <dt>Title:</dt>
-          <dd>
-            <input
-              type="text"
-              size="30"
-              name="title"
-              class="form-control col-sm-4"
-            />
-          </dd>
+          <dd><input type="text" size="30" name="title" /></dd>
           <dt>Text:</dt>
-          <dd>
-            <textarea
-              name="text"
-              rows="5"
-              cols="40"
-              class="form-control col-sm-4"
-            ></textarea>
-          </dd>
-          <br /><br />
-          <dd>
-            <input type="submit" class="btn btn-primary" value="Share" />
-          </dd>
+          <dd><textarea name="text" rows="5" cols="40"></textarea></dd>
+          <dd><input type="submit" value="Share" /></dd>
         </dl>
       </form>
       {% endif %}
-
-      <br />
 
       <ul class="entries">
         {% for entry in entries %}
