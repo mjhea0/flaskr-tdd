@@ -78,7 +78,7 @@ This tutorial utilizes the following requirements:
 
 1. Python v3.9.0
 1. Flask v1.1.2
-1. Flask-SQLAlchemy v2.4.4
+1. Flask-SQLAlchemy v2.5.1
 1. Gunicorn v20.0.4
 1. Psycopg2 v2.8.6
 1. Flake8 v3.8.4
@@ -1267,7 +1267,7 @@ Let's upgrade to [Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com
 Start by installing Flask-SQLAlchemy:
 
 ```sh
-(env)$ pip install Flask-SQLAlchemy==2.4.4
+(env)$ pip install Flask-SQLAlchemy==2.5.1
 ```
 
 Make sure to add it to your requirements file as well.
@@ -1457,7 +1457,7 @@ If all is well, Update the requirements file:
 
 ```
 Flask==1.1.2
-Flask-SQLAlchemy==2.4.4
+Flask-SQLAlchemy==2.5.1
 gunicorn==20.0.4
 pytest==6.1.1
 ```
@@ -1691,7 +1691,7 @@ Before updating Heroku, add [Psycopg2](http://initd.org/psycopg/) -- a Postgres 
 
 ```
 Flask==1.1.2
-Flask-SQLAlchemy==2.4.4
+Flask-SQLAlchemy==2.5.1
 gunicorn==20.0.4
 psycopg2-binary==2.8.6
 pytest==6.1.1
