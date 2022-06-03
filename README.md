@@ -82,7 +82,7 @@ This tutorial utilizes the following requirements:
 1. Flask v2.1.1
 1. Flask-SQLAlchemy v2.5.1
 1. Gunicorn v20.1.0
-1. Psycopg2 v3.0.14
+1. Psycopg2 v2.9.3
 1. Flake8 v4.0.1
 1. Black v22.3.0
 1. pytest v7.1.2
@@ -1095,7 +1095,7 @@ First, remove the *style.css* stylesheet from both *index.html* and *login.html*
 <link
   rel="stylesheet"
   type="text/css"
-  href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
 />
 ```
 
@@ -1111,7 +1111,7 @@ Replace the code in *login.html* with:
     <link
       rel="stylesheet"
       type="text/css"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
     />
   </head>
   <body>
@@ -1178,7 +1178,7 @@ And replace the code in *index.html* with:
     <link
       rel="stylesheet"
       type="text/css"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
     />
   </head>
   <body>
@@ -1410,7 +1410,7 @@ if __name__ == "__main__":
     app.run()
 ```
 
-Notice the changes in the config at the top as well as the means in which we're now accessing and manipulating the database in each view function -- via SQLAlchemy instead of vanilla SQL.
+Notice the changes in the config at the top as well since the means in which we're now accessing and manipulating the database in each view function -- via SQLAlchemy instead of vanilla SQL.
 
 ### Create the DB
 
@@ -1448,14 +1448,14 @@ Ensure the tests pass:
 ```sh
 (env)$ python -m pytest
 
-==================================================== test session starts =====================================================
-platform darwin -- Python 3.10.4, pytest-7.1.2, py-1.9.0, pluggy-0.13.1
+=============================== test session starts ===============================
+platform darwin -- Python 3.10.4, pytest-7.1.2, pluggy-1.0.0
 rootdir: /Users/michael/repos/github/flaskr-tdd
 collected 6 items
 
-tests/app_test.py ......                                                                                               [100%]
+tests/app_test.py ......                                                    [100%]
 
-===================================================== 6 passed in 0.28s ======================================================
+================================ 6 passed in 0.34s ================================
 ```
 
 Manually test the app as well by running the server and logging in and out, adding new entries, and deleting old entries.
@@ -1507,7 +1507,7 @@ Now add the following code to *search.html*:
     <link
       rel="stylesheet"
       type="text/css"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
     />
   </head>
   <body>
@@ -1663,10 +1663,12 @@ DATABASE_URL: postgres://wqvcyzyveczscw:df14796eabbf0a1d9eb8a96a206bcd906101162c
 Next, update the `SQLALCHEMY_DATABASE_URI` variable in *app.py* like so:
 
 ```python
-SQLALCHEMY_DATABASE_URI = os.getenv(
-    'DATABASE_URL',
-    f'sqlite:///{Path(basedir).joinpath(DATABASE)}'
-)
+url = os.getenv('DATABASE_URL', f'sqlite:///{Path(basedir).joinpath(DATABASE)}')
+
+if url.startswith("postgres://"):
+    url = url.replace("postgres://", "postgresql://", 1)
+
+SQLALCHEMY_DATABASE_URI = url
 ```
 
 So, `SQLALCHEMY_DATABASE_URI` now uses the value of the `DATABASE_URL` environment variable if it's available. Otherwise, it will use the SQLite URL.
@@ -1682,14 +1684,14 @@ Run the tests to ensure they still pass:
 ```sh
 (env)$ python -m pytest
 
-==================================================== test session starts =====================================================
-platform darwin -- Python 3.10.4, pytest-7.1.2, py-1.9.0, pluggy-0.13.1
+=============================== test session starts ===============================
+platform darwin -- Python 3.10.4, pytest-7.1.2, pluggy-1.0.0
 rootdir: /Users/michael/repos/github/flaskr-tdd
 collected 6 items
 
-tests/app_test.py ......                                                                                               [100%]
+tests/app_test.py ......                                                    [100%]
 
-===================================================== 6 passed in 0.29s ======================================================
+================================ 6 passed in 0.32s ================================
 ```
 
 Try logging in and out, adding a few new entries, and deleting old entries locally.
@@ -1699,8 +1701,8 @@ Before updating Heroku, add [Psycopg2](http://initd.org/psycopg/) -- a Postgres 
 ```
 Flask==2.1.1
 Flask-SQLAlchemy==2.5.1
-gunicorn==20.0.4
-psycopg2-binary==3.0.14
+gunicorn==20.1.0
+psycopg2-binary==2.9.3
 pytest==7.1.2
 ```
 
@@ -1733,7 +1735,6 @@ Run Flake8 and correct any issues:
 ./project/app.py:2:1: F401 'sqlite3' imported but unused
 ./project/app.py:6:1: F401 'flask.g' imported but unused
 ./project/app.py:7:19: E126 continuation line over-indented for hanging indent
-./project/app.py:56:9: F821 undefined name 'abort'
 ```
 
 Update the code formatting per Black:

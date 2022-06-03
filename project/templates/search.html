@@ -14,7 +14,9 @@
       <h1>Flaskr</h1>
       <br /><br />
 
-      <a class="btn btn-info" role="button" href="{{ url_for('search') }}">Search</a>
+      <a class="btn btn-primary" role="button" href="{{ url_for('index') }}">
+        Home
+      </a>
 
       {% if not session.logged_in %}
       <a class="btn btn-success" role="button" href="{{ url_for('login') }}"
@@ -32,50 +34,27 @@
       <div class="flash alert alert-success col-sm-4" role="success">
         {{ message }}
       </div>
-      {% endfor %} {% if session.logged_in %}
-      <form
-        action="{{ url_for('add_entry') }}"
-        method="post"
-        class="add-entry form-group"
-      >
+      {% endfor %}
+
+      <form action="{{ url_for('search') }}" method="get" class="from-group">
         <dl>
-          <dt>Title:</dt>
+          <dt>Search:</dt>
           <dd>
-            <input
-              type="text"
-              size="30"
-              name="title"
-              class="form-control col-sm-4"
-            />
+            <input type="text" name="query" class="form-control col-sm-4" />
           </dd>
-          <dt>Text:</dt>
-          <dd>
-            <textarea
-              name="text"
-              rows="5"
-              cols="40"
-              class="form-control col-sm-4"
-            ></textarea>
-          </dd>
-          <br /><br />
-          <dd>
-            <input type="submit" class="btn btn-primary" value="Share" />
-          </dd>
+          <br />
+          <dd><input type="submit" class="btn btn-info" value="Search" /></dd>
         </dl>
       </form>
-      {% endif %}
-
-      <br />
 
       <ul class="entries">
-        {% for entry in entries %}
+        {% for entry in entries %} {% if query.lower() in entry.title.lower() or
+        query.lower() in entry.text.lower() %}
         <li class="entry">
-          <h2 id="{{ entry.id }}">{{ entry.title }}</h2>
+          <h2 id="{{ entry.post_id }}">{{ entry.title }}</h2>
           {{ entry.text|safe }}
         </li>
-        {% else %}
-        <li><em>No entries yet. Add some!</em></li>
-        {% endfor %}
+        {% endif %} {% endfor %}
       </ul>
     </div>
     <script

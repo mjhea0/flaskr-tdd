@@ -5,40 +5,58 @@
     <link
       rel="stylesheet"
       type="text/css"
-      href="{{ url_for('static', filename='style.css') }}"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
     />
   </head>
   <body>
-    <div class="page">
+    <div class="container">
+      <br /><br />
       <h1>Flaskr</h1>
-
-      <div class="metanav">
-        {% if not session.logged_in %}
-        <a href="{{ url_for('login') }}">log in</a>
-        {% else %}
-        <a href="{{ url_for('logout') }}">log out</a>
-        {% endif %}
-      </div>
+      <br /><br />
 
       {% for message in get_flashed_messages() %}
-      <div class="flash">{{ message }}</div>
-      {% endfor %} {% block body %}{% endblock %}
+      <div class="flash alert alert-success col-sm-4" role="success">
+        {{ message }}
+      </div>
+      {% endfor %}
 
-      <h2>Login</h2>
+      <h3>Login</h3>
 
       {% if error %}
-      <p class="error"><strong>Error:</strong> {{ error }}</p>
+      <p class="alert alert-danger col-sm-4" role="danger">
+        <strong>Error:</strong> {{ error }}
+      </p>
       {% endif %}
 
-      <form action="{{ url_for('login') }}" method="post">
+      <form action="{{ url_for('login') }}" method="post" class="form-group">
         <dl>
           <dt>Username:</dt>
-          <dd><input type="text" name="username" /></dd>
+          <dd>
+            <input
+              type="text"
+              name="username"
+              class="form-control col-sm-4"
+            />
+          </dd>
           <dt>Password:</dt>
-          <dd><input type="password" name="password" /></dd>
-          <dd><input type="submit" value="Login" /></dd>
+          <dd>
+            <input
+              type="password"
+              name="password"
+              class="form-control col-sm-4"
+            />
+          </dd>
+          <br /><br />
+          <dd>
+            <input type="submit" class="btn btn-primary" value="Login" />
+          </dd>
+          <span>Use "admin" for username and password</span>
         </dl>
       </form>
     </div>
+    <script
+      type="text/javascript"
+      src="{{url_for('static', filename='main.js') }}"
+    ></script>
   </body>
 </html>
