@@ -2,4 +2,7 @@ Flask==2.1.1
 Flask-SQLAlchemy==2.5.1
 gunicorn==20.1.0
 psycopg2-binary==2.9.3
+
+black==22.3.0
+flake8==4.0.1
 pytest==7.1.2
