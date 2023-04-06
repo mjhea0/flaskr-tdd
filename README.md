@@ -916,7 +916,7 @@ Open *index.html* and update the first `<li>` like so:
 </li>
 ```
 
-Now, we can use JavaScript to target each `<li`>. First, we need to add the following script to the document just before the closing body tag:
+Now, we can use JavaScript to target each `<li>`. First, we need to add the following script to the document just before the closing body tag:
 
 ```html
 <script
