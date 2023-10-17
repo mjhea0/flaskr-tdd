@@ -1,8 +1,6 @@
 # Flaskr - Intro to Flask, Test-Driven Development, and JavaScript
 
-[Share on Twitter](https://twitter.com/intent/tweet?text=Check%20out%20Flaskr%E2%80%94An%20intro%20to%20Flask%2C%20Test-Driven%20Development%2C%20and%20JavaScript%21%20https%3A%2F%2Fgithub.com%2Fmjhea0%2Fflaskr-tdd%20%23webdev%0A)
-
-As many of you know, Flaskr -- a mini-blog-like-app -- is the app that you build for the official Flask [tutorial](https://flask.palletsprojects.com/tutorial). I've gone through the tutorial more times than I care to admit. Anyway, I wanted to take the tutorial a step further by adding Test-Driven Development (TDD), a bit of JavaScript, and deployment. This post is that tutorial. Enjoy.
+As many of you know, Flaskr -- a mini-blog-like-app -- is the app that you build for the official Flask [tutorial](https://flask.palletsprojects.com/en/3.0.x/tutorial/). I've gone through the tutorial more times than I care to admit. Anyway, I wanted to take the tutorial a step further by adding [Test-Driven Development](https://testdriven.io/test-driven-development/) (TDD), a bit of JavaScript, and deployment. This article is that tutorial. Enjoy.
 
 Also, if you're completely new to Flask and/or web development in general, it's important to grasp these basic fundamental concepts:
 
@@ -20,8 +18,10 @@ You'll be building a simple blogging app in this tutorial:
 
 ## Changelog
 
-This tutorial was last updated on June 3rd, 2022:
+This tutorial was last updated on October 17th, 2023:
 
+- **10/17/2023**:
+  - Updated to Python 3.12.0 and bumped all other dependencies.
 - **06/03/2022**:
   - Updated to Python 3.10.4 and bumped all other dependencies.
 - **10/14/2020**:
@@ -76,14 +76,14 @@ This tutorial was last updated on June 3rd, 2022:
 
 This tutorial utilizes the following requirements:
 
-1. Python v3.10.4
-1. Flask v2.1.1
-1. Flask-SQLAlchemy v2.5.1
-1. Gunicorn v20.1.0
-1. Psycopg2 v2.9.3
-1. Flake8 v4.0.1
-1. Black v22.3.0
-1. pytest v7.1.2
+1. Python v3.12.0
+1. Flask v3.0.0
+1. Flask-SQLAlchemy v3.1.1
+1. Gunicorn v21.2.0
+1. Psycopg2 v2.9.9
+1. Flake8 v6.1.0
+1. Black v23.10.0
+1. pytest v7.4.2
 
 ## Test Driven Development?
 
@@ -102,14 +102,14 @@ TDD usually follows the "Red-Green-Refactor" cycle, as shown in the image above:
 
 ## Download Python
 
-Before beginning make sure you have the latest version of [Python 3.9](https://www.python.org/downloads/release/python-390/) installed, which you can download from [http://www.python.org/download/](http://www.python.org/download/).
+Before beginning make sure you have the latest version of [Python 3.12](https://www.python.org/downloads/release/python-3120/) installed, which you can download from [http://www.python.org/download/](http://www.python.org/download/).
 
-> This tutorial uses Python v3.10.4.
+> This tutorial uses Python v3.12.0.
 
 Along with Python, the following tools are also installed:
 
 - [pip](https://pip.pypa.io/en/stable/) - a [package management](http://en.wikipedia.org/wiki/Package_management_system) system for Python, similar to gem or npm for Ruby and Node, respectively.
-- [venv](https://docs.python.org/3/library/venv.html) - used to create isolated environments for development. This is standard practice. Always, always, ALWAYS utilize virtual environments. If you don't, you will eventually run into problems with dependency conflicts.
+- [venv](https://docs.python.org/3/library/venv.html) - used to create isolated environments for development. This is standard practice. Always, always, ALWAYS utilize virtual environments. If you don't, you'll eventually run into problems with dependency conflicts.
 
 > Feel free to swap out virtualenv and Pip for [Poetry](https://python-poetry.org) or [Pipenv](https://github.com/pypa/pipenv). For more, review [Modern Python Environments](https://testdriven.io/blog/python-environments/).
 
@@ -125,17 +125,17 @@ $ cd flaskr-tdd
 Create and activate a virtual environment:
 
 ```sh
-$ python3.10 -m venv env
+$ python3.12 -m venv env
 $ source env/bin/activate
 (env)$
 ```
 
-> You know that you're in a virtual environment, `env` is now showing before the `$` in your terminal: `(env)$`. To exit the virtual environment, use the command `deactivate`. You can reactivate by navigating back to the project directory and running `source env/bin/activate`.
+> You know that you're in a virtual environment when `env` is displayed before the `$` in your terminal: `(env)$`. To exit the virtual environment, use the command `deactivate`. You can reactivate by navigating back to the project directory and running `source env/bin/activate`.
 
 Install Flask with pip:
 
 ```sh
-(env)$ pip install flask==2.1.1
+(env)$ pip install flask==3.0.0
 ```
 
 ## First Test
@@ -155,10 +155,12 @@ Create the following files and folders:
 
 While the Python standard library comes with a unit testing framework called ùnittest, [pytest](https://pytest.org/) is the go-to testing framework for testing Python code.
 
+> For more on pytest, check out [Pytest for Beginners](https://testdriven.io/blog/pytest-for-beginners/).
+
 Install it:
 
 ```sh
-(env)$ pip install pytest==7.1.2
+(env)$ pip install pytest==7.4.2
 ```
 
 Open *tests/app_test.py* in your favorite text editor -- like [Visual Studio Code](https://code.visualstudio.com/), [Sublime Text](https://www.sublimetext.com/), or [PyCharm](https://www.jetbrains.com/pycharm/) -- and then add the following code:
@@ -211,12 +213,12 @@ if __name__ == "__main__":
 Run the app:
 
 ```sh
-(env)$ FLASK_APP=project/app.py python -m flask run
+(env)$ FLASK_APP=project/app.py python -m flask run -p 5001
 ```
 
 > The `FLASK_APP` environment variable is used to tell Flask to look for the application in a different module.
 
-Then, navigate to [http://localhost:5000/](http://localhost:5000/) in your browser of choice. You should see "Hello, World!" on your screen.
+Then, navigate to [http://localhost:5001/](http://localhost:5001/) in your browser of choice. You should see "Hello, World!" on your screen.
 
 Return to the terminal. Kill the server with Ctrl+C.
 
@@ -226,7 +228,7 @@ Run the test again:
 (env)$ python -m pytest
 
 =============================== test session starts ===============================
-platform darwin -- Python 3.10.4, pytest-7.1.2, pluggy-1.0.0
+platform darwin -- Python 3.10.4, pytest-7.4.2, pluggy-1.0.0
 rootdir: /Users/michael/repos/github/flaskr-tdd
 collected 1 item
 
@@ -464,8 +466,8 @@ Write some tests for this first.
 Take a look at the final code below. I added docstrings for explanation.
 
 ```python
-import pytest
 import os
+import pytest
 from pathlib import Path
 
 from project.app import app, init_db
@@ -552,7 +554,7 @@ Three tests should fail:
 
 ```sh
 =============================== test session starts ===============================
-platform darwin -- Python 3.10.4, pytest-7.1.2, pluggy-1.0.0
+platform darwin -- Python 3.10.4, pytest-7.4.2, pluggy-1.0.0
 rootdir: /Users/michael/repos/github/flaskr-tdd
 collected 5 items
 
@@ -809,7 +811,7 @@ Retest:
 
 ```sh
 =============================== test session starts ===============================
-platform darwin -- Python 3.10.4, pytest-7.1.2, pluggy-1.0.0
+platform darwin -- Python 3.10.4, pytest-7.4.2, pluggy-1.0.0
 rootdir: /Users/michael/repos/github/flaskr-tdd
 collected 5 items
 
@@ -999,7 +1001,7 @@ Then run your automated test suite. It should pass:
 (env)$ python -m pytest
 
 =============================== test session starts ===============================
-platform darwin -- Python 3.10.4, pytest-7.1.2, pluggy-1.0.0
+platform darwin -- Python 3.10.4, pytest-7.4.2, pluggy-1.0.0
 rootdir: /Users/michael/repos/github/flaskr-tdd
 collected 6 items
 
@@ -1015,7 +1017,7 @@ With the app in a working state, let's shift gears and deploy the app to [Heroku
 Next, install a production-grade WSGI web server called [Gunicorn](http://gunicorn.org/):
 
 ```sh
-(env)$ pip install gunicorn==20.0.4
+(env)$ pip install gunicorn==21.2.0
 ```
 
 Create a [Procfile](https://devcenter.heroku.com/articles/procfile) in the project root:
@@ -1039,9 +1041,9 @@ Create a *requirements.txt* file to specify the external dependencies that need 
 Add the requirements:
 
 ```
-Flask==2.1.1
-gunicorn==20.0.4
-pytest==7.1.2
+Flask==3.0.0
+gunicorn==21.2.0
+pytest==7.4.2
 ```
 
 Create a *.gitignore* file in the project root:
@@ -1063,7 +1065,7 @@ test.db
 To specify the correct Python runtime, add a new file to the project root called *runtime.txt*:
 
 ```
-python-3.10.4
+python-3.12.0
 ```
 
 Add a local Git repo:
@@ -1078,7 +1080,7 @@ Deploy to Heroku:
 
 ```sh
 (env)$ heroku create
-(env)$ git push heroku master
+(env)$ git push heroku main
 ```
 
 Let's test this in the cloud. Run `heroku open` to open the app in your default web browser.
@@ -1093,7 +1095,7 @@ First, remove the *style.css* stylesheet from both *index.html* and *login.html*
 <link
   rel="stylesheet"
   type="text/css"
-  href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
 />
 ```
 
@@ -1109,7 +1111,7 @@ Replace the code in *login.html* with:
     <link
       rel="stylesheet"
       type="text/css"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
     />
   </head>
   <body>
@@ -1176,7 +1178,7 @@ And replace the code in *index.html* with:
     <link
       rel="stylesheet"
       type="text/css"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
     />
   </head>
   <body>
@@ -1258,7 +1260,7 @@ And replace the code in *index.html* with:
 Run the app locally:
 
 ```sh
-(env)$ FLASK_APP=project/app.py python -m flask run
+(env)$ FLASK_APP=project/app.py python -m flask run -p 5001
 ```
 
 Check out the changes in the browser!
@@ -1272,7 +1274,7 @@ Let's upgrade to [Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com
 Start by installing Flask-SQLAlchemy:
 
 ```sh
-(env)$ pip install Flask-SQLAlchemy==2.5.1
+(env)$ pip install Flask-SQLAlchemy==3.1.1
 ```
 
 Make sure to add it to your requirements file as well.
@@ -1283,15 +1285,16 @@ Next, add a *create_db.py* file to the project root. Then, add the following cod
 # create_db.py
 
 
-from project.app import db
+from project.app import app, db
 from project.models import Post
 
 
-# create the database and the db table
-db.create_all()
+with app.app_context():
+    # create the database and the db table
+    db.create_all()
 
-# commit the changes
-db.session.commit()
+    # commit the changes
+    db.session.commit()
 ```
 
 This file will be used to create our new database. Go ahead and delete the old database file (*flaskr.db*) along with the *project/schema.sql* file.
@@ -1430,9 +1433,10 @@ def client():
     app.config["DATABASE"] = BASE_DIR.joinpath(TEST_DB)
     app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{BASE_DIR.joinpath(TEST_DB)}"
 
-    db.create_all()  # setup
-    yield app.test_client()  # tests run here
-    db.drop_all()  # teardown
+    with app.app_context():
+        db.create_all()  # setup
+        yield app.test_client()  # tests run here
+        db.drop_all()  # teardown
 ```
 
 Update the imports as well:
@@ -1447,7 +1451,7 @@ Ensure the tests pass:
 (env)$ python -m pytest
 
 =============================== test session starts ===============================
-platform darwin -- Python 3.10.4, pytest-7.1.2, pluggy-1.0.0
+platform darwin -- Python 3.10.4, pytest-7.4.2, pluggy-1.0.0
 rootdir: /Users/michael/repos/github/flaskr-tdd
 collected 6 items
 
@@ -1461,10 +1465,10 @@ Manually test the app as well by running the server and logging in and out, addi
 If all is well, Update the requirements file:
 
 ```
-Flask==2.1.1
-Flask-SQLAlchemy==2.5.1
-gunicorn==20.0.4
-pytest==7.1.2
+Flask==3.0.0
+Flask-SQLAlchemy==3.1.1
+gunicorn==21.2.0
+pytest==7.4.2
 ```
 
 Commit your code, and then push the new version to Heroku!
@@ -1505,7 +1509,7 @@ Now add the following code to *search.html*:
     <link
       rel="stylesheet"
       type="text/css"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
     />
   </head>
   <body>
@@ -1639,10 +1643,10 @@ Test it out locally again. If all is well, commit your code and update the versi
 
 SQLite is a great database to use in order to get an app up and running quickly. That said, it's not intended to be used as a production grade database. So, let's move to using Postgres on Heroku.
 
-Start by provisioning a new [hobby-dev](https://devcenter.heroku.com/articles/heroku-postgres-plans#hobby-tier) plan Postgres database:
+Start by provisioning a new `mini` plan Postgres database:
 
 ```sh
-(env)$ heroku addons:create heroku-postgresql:hobby-dev
+(env)$ heroku addons:create heroku-postgresql:mini
 ```
 
 Once created, the database URL can be access via the `DATABASE_URL` environment variable:
@@ -1654,8 +1658,9 @@ Once created, the database URL can be access via the `DATABASE_URL` environment 
 You should see something similar to:
 
 ```sh
-=== dry-garden-92414 Config Vars
-DATABASE_URL: postgres://wqvcyzyveczscw:df14796eabbf0a1d9eb8a96a206bcd906101162c8ef7f2e7be5e2f7514c22b48@ec2-54-227-250-19.compute-1.amazonaws.com:5432/d64vugb1eio9h1
+=== glacial-savannah-72166 Config Vars
+
+DATABASE_URL: postgres://zebzwxlootewbx:da5c19a66cd4765dd39aed40abb06dff10682c3213501695c4b98612de0dfac9@ec2-54-208-11-146.compute-1.amazonaws.com:5432/d77tnmeavvasm0
 ```
 
 Next, update the `SQLALCHEMY_DATABASE_URI` variable in *app.py* like so:
@@ -1683,7 +1688,7 @@ Run the tests to ensure they still pass:
 (env)$ python -m pytest
 
 =============================== test session starts ===============================
-platform darwin -- Python 3.10.4, pytest-7.1.2, pluggy-1.0.0
+platform darwin -- Python 3.10.4, pytest-7.4.2, pluggy-1.0.0
 rootdir: /Users/michael/repos/github/flaskr-tdd
 collected 6 items
 
@@ -1697,11 +1702,11 @@ Try logging in and out, adding a few new entries, and deleting old entries local
 Before updating Heroku, add [Psycopg2](http://initd.org/psycopg/) -- a Postgres database adapter for Python -- to the requirements file:
 
 ```
-Flask==2.1.1
-Flask-SQLAlchemy==2.5.1
-gunicorn==20.1.0
-psycopg2-binary==2.9.3
-pytest==7.1.2
+Flask==3.0.0
+Flask-SQLAlchemy==3.1.1
+gunicorn==21.2.0
+psycopg2-binary==2.9.9
+pytest==7.4.2
 ```
 
 Commit and push your code up to Heroku.
@@ -1719,8 +1724,8 @@ Test things out.
 Finally, we can lint and auto format our code with [Flake8](http://flake8.pycqa.org/) and [Black](https://black.readthedocs.io/), respectively:
 
 ```sh
-(env)$ pip install flake8==4.0.1
-(env)$ pip install black==22.3.0
+(env)$ pip install flake8==6.1.0
+(env)$ pip install black==23.10.0
 ```
 
 Run Flake8 and correct any issues:
@@ -1751,10 +1756,5 @@ Test everything out once last time!
 ## Conclusion
 
 1. Want my code? Grab it [here](https://github.com/mjhea0/flaskr-tdd).
-1. View my app on [Heroku](https://flaskr-tdd.herokuapp.com/). Cheers!
 1. Want more Flask fun? Check out [TestDriven.io](https://testdriven.io/). Learn how to build, test, and deploy microservices powered by Docker, Flask, and React!
 1. Want something else added to this tutorial? Add an issue to the repo.
-
-> Did you enjoy this tutorial? Please [Share on Twitter](https://twitter.com/intent/tweet?text=Check%20out%20Flaskr%E2%80%94An%20intro%20to%20Flask%2C%20Test-Driven%20Development%2C%20and%20JavaScript%21%20https%3A%2F%2Fgithub.com%2Fmjhea0%2Fflaskr-tdd%20%23webdev%0A).
-
-add github actions
