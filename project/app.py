@@ -1,41 +1,11 @@
-import os
-from functools import wraps
-from pathlib import Path
-
 from flask import (
-    Flask,
-    render_template,
-    request,
-    session,
-    flash,
-    redirect,
-    url_for,
-    abort,
-    jsonify,
+    render_template, request, session, flash,
+    redirect, url_for, abort, jsonify
 )
-from flask_sqlalchemy import SQLAlchemy
-
-basedir = Path(__file__).resolve().parent
-
-# configuration
-DATABASE = "flaskr.db"
-USERNAME = "admin"
-PASSWORD = "admin"
-SECRET_KEY = "change_me"
-url = os.getenv("DATABASE_URL", f"sqlite:///{Path(basedir).joinpath(DATABASE)}")
-
-if url.startswith("postgres://"):
-    url = url.replace("postgres://", "postgresql://", 1)
-
-SQLALCHEMY_DATABASE_URI = url
-SQLALCHEMY_TRACK_MODIFICATIONS = False
-
-# create and initialize a new Flask app
-app = Flask(__name__)
-app.config.from_object(__name__)
-db = SQLAlchemy(app)
-
+from functools import wraps
+from project import app, db
 from project import models
+
 
 def login_required(f):
     @wraps(f)
@@ -46,10 +16,12 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+
 @app.route("/")
 def index():
-    entries = db.session.query(models.Post)
+    entries = db.session.query(models.Post).all()
     return render_template("index.html", entries=entries)
+
 
 @app.route("/add", methods=["POST"])
 def add_entry():
@@ -61,13 +33,14 @@ def add_entry():
     flash("New entry was successfully posted")
     return redirect(url_for("index"))
 
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     error = None
     if request.method == "POST":
-        if request.form["username"] != app.config["USERNAME"]:
+        if request.form["username"] != "admin":  # or get from config
             error = "Invalid username"
-        elif request.form["password"] != app.config["PASSWORD"]:
+        elif request.form["password"] != "admin":  # or get from config
             error = "Invalid password"
         else:
             session["logged_in"] = True
@@ -75,11 +48,13 @@ def login():
             return redirect(url_for("index"))
     return render_template("login.html", error=error)
 
+
 @app.route("/logout")
 def logout():
     session.pop("logged_in", None)
     flash("You were logged out")
     return redirect(url_for("index"))
+
 
 @app.route("/delete/<int:post_id>", methods=["GET"])
 @login_required
@@ -94,13 +69,16 @@ def delete_entry(post_id):
         result = {"status": 0, "message": repr(e)}
     return jsonify(result)
 
+
 @app.route("/search/", methods=["GET"])
 def search():
     query = request.args.get("query")
     entries = db.session.query(models.Post)
     if query:
-        return render_template("search.html", entries=entries, query=query)
+        entries = entries.filter(models.Post.title.contains(query))
+        return render_template("search.html", entries=entries.all(), query=query)
     return render_template("search.html")
+
 
 # === REST API for Notes ===
 
@@ -109,12 +87,14 @@ def get_notes():
     notes = db.session.query(models.Note).all()
     return jsonify([note.to_dict() for note in notes]), 200
 
+
 @app.route("/api/notes/<int:note_id>", methods=["GET"])
 def get_note(note_id):
     note = db.session.get(models.Note, note_id)
     if note:
         return jsonify(note.to_dict()), 200
     return jsonify({"error": "Note not found"}), 404
+
 
 @app.route("/api/notes", methods=["POST"])
 def create_note():
@@ -125,6 +105,7 @@ def create_note():
     db.session.add(note)
     db.session.commit()
     return jsonify(note.to_dict()), 201
+
 
 @app.route("/api/notes/<int:note_id>", methods=["PUT"])
 def update_note(note_id):
@@ -138,6 +119,7 @@ def update_note(note_id):
     db.session.commit()
     return jsonify(note.to_dict()), 200
 
+
 @app.route("/api/notes/<int:note_id>", methods=["DELETE"])
 def delete_note(note_id):
     note = db.session.get(models.Note, note_id)
@@ -147,5 +129,6 @@ def delete_note(note_id):
     db.session.commit()
     return jsonify({"message": "Note deleted"}), 200
 
+
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
