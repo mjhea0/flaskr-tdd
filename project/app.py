@@ -15,7 +15,6 @@ from flask import (
 )
 from flask_sqlalchemy import SQLAlchemy
 
-
 basedir = Path(__file__).resolve().parent
 
 # configuration
@@ -31,16 +30,12 @@ if url.startswith("postgres://"):
 SQLALCHEMY_DATABASE_URI = url
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-
 # create and initialize a new Flask app
 app = Flask(__name__)
-# load the config
 app.config.from_object(__name__)
-# init sqlalchemy
 db = SQLAlchemy(app)
 
 from project import models
-
 
 def login_required(f):
     @wraps(f)
@@ -49,20 +44,15 @@ def login_required(f):
             flash("Please log in.")
             return jsonify({"status": 0, "message": "Please log in."}), 401
         return f(*args, **kwargs)
-
     return decorated_function
-
 
 @app.route("/")
 def index():
-    """Searches the database for entries, then displays them."""
     entries = db.session.query(models.Post)
     return render_template("index.html", entries=entries)
 
-
 @app.route("/add", methods=["POST"])
 def add_entry():
-    """Adds new post to the database."""
     if not session.get("logged_in"):
         abort(401)
     new_entry = models.Post(request.form["title"], request.form["text"])
@@ -71,10 +61,8 @@ def add_entry():
     flash("New entry was successfully posted")
     return redirect(url_for("index"))
 
-
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    """User login/authentication/session management."""
     error = None
     if request.method == "POST":
         if request.form["username"] != app.config["USERNAME"]:
@@ -87,30 +75,24 @@ def login():
             return redirect(url_for("index"))
     return render_template("login.html", error=error)
 
-
 @app.route("/logout")
 def logout():
-    """User logout/authentication/session management."""
     session.pop("logged_in", None)
     flash("You were logged out")
     return redirect(url_for("index"))
 
-
 @app.route("/delete/<int:post_id>", methods=["GET"])
 @login_required
 def delete_entry(post_id):
-    """Deletes post from database."""
     result = {"status": 0, "message": "Error"}
     try:
-        new_id = post_id
-        db.session.query(models.Post).filter_by(id=new_id).delete()
+        db.session.query(models.Post).filter_by(id=post_id).delete()
         db.session.commit()
         result = {"status": 1, "message": "Post Deleted"}
         flash("The entry was deleted.")
     except Exception as e:
         result = {"status": 0, "message": repr(e)}
     return jsonify(result)
-
 
 @app.route("/search/", methods=["GET"])
 def search():
@@ -120,6 +102,50 @@ def search():
         return render_template("search.html", entries=entries, query=query)
     return render_template("search.html")
 
+# === REST API for Notes ===
+
+@app.route("/api/notes", methods=["GET"])
+def get_notes():
+    notes = db.session.query(models.Note).all()
+    return jsonify([note.to_dict() for note in notes]), 200
+
+@app.route("/api/notes/<int:note_id>", methods=["GET"])
+def get_note(note_id):
+    note = db.session.get(models.Note, note_id)
+    if note:
+        return jsonify(note.to_dict()), 200
+    return jsonify({"error": "Note not found"}), 404
+
+@app.route("/api/notes", methods=["POST"])
+def create_note():
+    data = request.get_json()
+    if not data or "content" not in data:
+        return jsonify({"error": "Content is required"}), 400
+    note = models.Note(content=data["content"])
+    db.session.add(note)
+    db.session.commit()
+    return jsonify(note.to_dict()), 201
+
+@app.route("/api/notes/<int:note_id>", methods=["PUT"])
+def update_note(note_id):
+    note = db.session.get(models.Note, note_id)
+    if not note:
+        return jsonify({"error": "Note not found"}), 404
+    data = request.get_json()
+    if not data or "content" not in data:
+        return jsonify({"error": "Content is required"}), 400
+    note.content = data["content"]
+    db.session.commit()
+    return jsonify(note.to_dict()), 200
+
+@app.route("/api/notes/<int:note_id>", methods=["DELETE"])
+def delete_note(note_id):
+    note = db.session.get(models.Note, note_id)
+    if not note:
+        return jsonify({"error": "Note not found"}), 404
+    db.session.delete(note)
+    db.session.commit()
+    return jsonify({"message": "Note deleted"}), 200
 
 if __name__ == "__main__":
     app.run()
