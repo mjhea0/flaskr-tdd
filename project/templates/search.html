@@ -51,7 +51,12 @@
         {% for entry in entries %} {% if query.lower() in entry.title.lower() or
         query.lower() in entry.text.lower() %}
         <li class="entry">
-          <h2 id="{{ entry.post_id }}">{{ entry.title }}</h2>
+          <h2 id="{{ entry.post_id }}">
+            {{ entry.title }}
+            <span class="priority priority-{{ entry.priority|lower }}">
+              {{ entry.priority }}
+            </span>
+          </h2>
           {{ entry.text|safe }}
         </li>
         {% endif %} {% endfor %}

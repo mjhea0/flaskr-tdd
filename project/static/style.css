@@ -72,3 +72,29 @@ body {
     background: #f0d6d6;
     padding: 0.5em;
   }
+
+  .priority {
+    display: inline-block;
+    font-size: 0.65em;
+    font-weight: bold;
+    padding: 0.2em 0.6em;
+    margin-left: 0.5em;
+    border-radius: 0.4em;
+    color: #fff;
+    vertical-align: middle;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .priority-alta {
+    background: #d9534f;
+  }
+
+  .priority-media {
+    background: #f0ad4e;
+    color: #333;
+  }
+
+  .priority-baja {
+    background: #5cb85c;
+  }
