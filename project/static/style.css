@@ -72,3 +72,36 @@ body {
     background: #f0d6d6;
     padding: 0.5em;
   }
+
+  .badge {
+      font-size: 0.85rem;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .priority-high {
+      background-color: #dc3545 !important;
+      box-shadow: 0 2px 6px rgba(220, 53, 69, 0.4);
+      animation: pulse 1.5s infinite;
+    }
+
+    .priority-medium {
+      background-color: #ffc107 !important;
+      color: #212529 !important;
+      box-shadow: 0 2px 6px rgba(255, 193, 7, 0.4);
+    }
+
+    .priority-low {
+      background-color: #198754 !important;
+      box-shadow: 0 2px 6px rgba(25, 135, 84, 0.4);
+    }
+
+    /* Animación para prioridad alta */
+    @keyframes pulse {
+      0%   { transform: scale(1); }
+      50%  { transform: scale(1.07); }
+      100% { transform: scale(1); }
+    }
+  
