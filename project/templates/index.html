@@ -57,6 +57,14 @@
               class="form-control col-sm-4"
             ></textarea>
           </dd>
+          <dt>Prioridad:</dt>
+          <dd>
+            <select name="priority" class="form-control col-sm-4">
+              <option value="Alta">Alta</option>
+              <option value="Media" selected>Media</option>
+              <option value="Baja">Baja</option>
+            </select>
+          </dd>
           <br /><br />
           <dd>
             <input type="submit" class="btn btn-primary" value="Share" />
@@ -70,7 +78,12 @@
       <ul class="entries">
         {% for entry in entries %}
         <li class="entry">
-          <h2 id="{{ entry.id }}">{{ entry.title }}</h2>
+          <h2 id="{{ entry.id }}">
+            {{ entry.title }}
+            <span class="priority priority-{{ entry.priority|lower }}">
+              {{ entry.priority }}
+            </span>
+          </h2>
           {{ entry.text|safe }}
         </li>
         {% else %}
