@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Flaskr</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-    />
-  </head>
+      <title>Flaskr</title>
+      <link rel="stylesheet" type="text/css"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+      <link rel="stylesheet" type="text/css"
+      href="{{ url_for('static', filename='style.css') }}" />
+</head>
   <body>
     <div class="container">
       <br /><br />
@@ -57,6 +56,14 @@
               class="form-control col-sm-4"
             ></textarea>
           </dd>
+          <dt>Priority:</dt>
+<dd>
+  <select name="priority" class="form-select col-sm-4" style="max-width: 320px;">
+    <option value="Baja">🟢 Baja</option>
+    <option value="Media" selected>🟡 Media</option>
+    <option value="Alta">🔴 Alta</option>
+  </select>
+</dd>
           <br /><br />
           <dd>
             <input type="submit" class="btn btn-primary" value="Share" />
@@ -71,6 +78,13 @@
         {% for entry in entries %}
         <li class="entry">
           <h2 id="{{ entry.id }}">{{ entry.title }}</h2>
+          {% if entry.priority == 'Alta' %}
+              <span class="badge bg-danger"> Alta prioridad</span>
+          {% elif entry.priority == 'Media' %}
+              <span class="badge bg-warning text-dark">Media prioridad</span>
+          {% elif entry.priority == 'Baja' %}
+              <span class="badge bg-success">Baja prioridad</span>
+{% endif %}
           {{ entry.text|safe }}
         </li>
         {% else %}
