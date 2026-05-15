@@ -57,6 +57,14 @@
               class="form-control col-sm-4"
             ></textarea>
           </dd>
+          <dt>Priority:</dt>
+<dd>
+  <select name="priority" class="form-control col-sm-4">
+    <option value="Alta">Alta</option>
+    <option value="Media" selected>Media</option>
+    <option value="Baja">Baja</option>
+  </select>
+</dd>
           <br /><br />
           <dd>
             <input type="submit" class="btn btn-primary" value="Share" />
@@ -70,9 +78,23 @@
       <ul class="entries">
         {% for entry in entries %}
         <li class="entry">
-          <h2 id="{{ entry.id }}">{{ entry.title }}</h2>
-          {{ entry.text|safe }}
-        </li>
+  <h2 id="{{ entry.id }}">{{ entry.title }}</h2>
+
+  <p>{{ entry.text|safe }}</p>
+
+  <p>
+    Prioridad:
+    <span
+      {% if entry.priority == "Alta" %} style="color:red"
+      {% elif entry.priority == "Media" %} style="color:orange"
+      {% else %} style="color:green"
+      {% endif %}
+    >
+      {{ entry.priority }}
+    </span>
+  </p>
+
+</li>
         {% else %}
         <li><em>No entries yet. Add some!</em></li>
         {% endfor %}
