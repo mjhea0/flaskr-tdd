@@ -65,7 +65,8 @@ def add_entry():
     """Adds new post to the database."""
     if not session.get("logged_in"):
         abort(401)
-    new_entry = models.Post(request.form["title"], request.form["text"])
+    priority = request.form.get("priority", "Media")
+    new_entry = models.Post(request.form["title"], request.form["text"], priority)
     db.session.add(new_entry)
     db.session.commit()
     flash("New entry was successfully posted")
