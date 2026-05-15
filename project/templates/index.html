@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <title>Flaskr</title>
@@ -14,7 +14,9 @@
       <h1>Flaskr</h1>
       <br /><br />
 
-      <a class="btn btn-info" role="button" href="{{ url_for('search') }}">Search</a>
+      <a class="btn btn-info" role="button" href="{{ url_for('search') }}"
+        >Search</a
+      >
 
       {% if not session.logged_in %}
       <a class="btn btn-success" role="button" href="{{ url_for('login') }}"
@@ -58,8 +60,13 @@
             ></textarea>
           </dd>
           <br /><br />
+          <dt>Prioridad:</dt>
           <dd>
-            <input type="submit" class="btn btn-primary" value="Share" />
+            <select name="priority" class="form-control col-sm-4">
+              <option value="Alta">Alta</option>
+              <option value="Media" selected>Media</option>
+              <option value="Baja">Baja</option>
+            </select>
           </dd>
         </dl>
       </form>
@@ -72,6 +79,11 @@
         <li class="entry">
           <h2 id="{{ entry.id }}">{{ entry.title }}</h2>
           {{ entry.text|safe }}
+          <span
+            class="badge {% if entry.priority == 'Alta' %}bg-danger {% elif entry.priority == 'Media' %}bg-warning text-dark {% else %}bg-success{% endif %}"
+          >
+            {{ entry.priority }}
+          </span>
         </li>
         {% else %}
         <li><em>No entries yet. Add some!</em></li>
