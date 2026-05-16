@@ -72,3 +72,44 @@ body {
     background: #f0d6d6;
     padding: 0.5em;
   }
+.badge {
+  font-size: 0.9rem;
+  padding: 7px 14px;
+  border-radius: 18px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  transition: all 0.25s ease;
+}
+
+
+/* Prioridad alta */
+.priority-high {
+  background: linear-gradient(135deg, #dc3545, #b02a37) !important;
+  color: #fff;
+  box-shadow: 0 3px 8px rgba(220, 53, 69, 0.35);
+  animation: pulse 1.8s infinite;
+}
+
+
+/* Prioridad media */
+.priority-medium {
+  background: linear-gradient(135deg, #ffc107, #e0a800) !important;
+  color: #212529 !important;
+  box-shadow: 0 3px 8px rgba(255, 193, 7, 0.35);
+}
+
+
+/* Prioridad baja */
+.priority-low {
+  background: linear-gradient(135deg, #198754, #146c43) !important;
+  color: #fff;
+  box-shadow: 0 3px 8px rgba(25, 135, 84, 0.35);
+}
+
+
+/* Animación suave para prioridad alta */
+@keyframes pulse {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
