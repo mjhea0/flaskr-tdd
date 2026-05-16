@@ -1,14 +1,23 @@
 from project.app import db
 
 
+
+
 class Post(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String, nullable=False)
-    text = db.Column(db.String, nullable=False)
+    __tablename__ = "post"
 
-    def __init__(self, title, text):
-        self.title = title
-        self.text = text
 
-    def __repr__(self):
-        return f"<title {self.title}>"
+    post_id = db.Column(db.Integer, primary_key=True)
+    post_title = db.Column(db.String(150), nullable=False)
+    post_text = db.Column(db.String(500), nullable=False)
+    post_priority = db.Column(
+        db.String(20),
+        nullable=False,
+        default="Media"
+    )
+
+
+    def __init__(self, title, text, priority="Media"):
+        self.post_title = title
+        self.post_text = text
+        self.post_priority = priority
