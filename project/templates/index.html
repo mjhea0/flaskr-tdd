@@ -57,6 +57,15 @@
               class="form-control col-sm-4"
             ></textarea>
           </dd>
+          <!-- ✅ CAMPO PRIORIDAD AGREGADO -->
+          <dt>Prioridad:</dt>
+          <dd>
+            <select name="priority" class="form-control col-sm-4">
+              <option value="Alta">Alta</option>
+              <option value="Media" selected>Media</option>
+              <option value="Baja">Baja</option>
+            </select>
+          </dd>
           <br /><br />
           <dd>
             <input type="submit" class="btn btn-primary" value="Share" />
@@ -71,6 +80,13 @@
         {% for entry in entries %}
         <li class="entry">
           <h2 id="{{ entry.id }}">{{ entry.title }}</h2>
+          <!-- ✅ PRIORIDAD MOSTRADA CON COLOR -->
+          <span style="color: 
+            {% if entry.priority == 'Alta' %}red
+            {% elif entry.priority == 'Media' %}orange
+            {% else %}green{% endif %}">
+            Prioridad: {{ entry.priority }}
+          </span>
           {{ entry.text|safe }}
         </li>
         {% else %}
